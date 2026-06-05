@@ -262,6 +262,3 @@ const styles: Record<string, React.CSSProperties> = {
     fontStyle: 'italic',
   },
 }
-
-
-export { LandingPage }

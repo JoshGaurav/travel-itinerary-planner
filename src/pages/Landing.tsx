@@ -28,7 +28,7 @@ const FEATURED = [
     destination: 'New York, USA',
     days: 3,
     persona: 'Budget',
-    image: 'https://images.pexels.com/photos/凄/pexels-photo-凄.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image: 'https://images.pexels.com/photos/802024/pexels-photo-802024.jpeg?auto=compress&cs=tinysrgb&w=600',
     highlights: ['Central Park morning', 'Brooklyn Bridge walk', 'Times Square evening', 'Pizza in Little Italy'],
   },
 ]

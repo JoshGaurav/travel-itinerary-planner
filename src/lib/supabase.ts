@@ -33,4 +33,7 @@ export interface Activity {
   end_time: string | null
   location: string
   sort_order: number
+  activity_type: string
+  latitude: number | null
+  longitude: number | null
 }

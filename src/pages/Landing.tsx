@@ -68,8 +68,8 @@ export function LandingPage() {
             <Button size="lg" onClick={() => navigate('/dashboard')}>My Trips</Button>
           ) : (
             <>
-              <button onClick={() => navigate('/login')} style={styles.navGhost}>Sign in</button>
-              <Button onClick={() => navigate('/signup')}>Start free</Button>
+              <button onClick={() => navigate('/login')} style={styles.navGhost}>Login</button>
+              <Button onClick={() => navigate('/signup')}>Sign Up</Button>
             </>
           )}
         </div>
@@ -107,8 +107,8 @@ export function LandingPage() {
               <Button size="lg" onClick={() => navigate('/dashboard')}>Go to My Trips →</Button>
             ) : (
               <>
-                <Button size="lg" onClick={() => navigate('/signup')}>Start planning free</Button>
-                <button style={styles.ghostBtn} onClick={() => navigate('/login')}>Sign in</button>
+                <Button size="lg" onClick={() => navigate('/signup')}>Sign Up</Button>
+                <button style={styles.ghostBtn} onClick={() => navigate('/login')}>Login</button>
               </>
             )}
           </div>
@@ -230,8 +230,8 @@ export function LandingPage() {
             <h2 style={styles.bannerHeading}>Ready to plan your next trip?</h2>
             <p style={styles.bannerSub}>Itinera is free to start. No credit card required.</p>
             <div style={styles.bannerCtas}>
-              <Button size="lg" onClick={() => navigate('/signup')}>Start for free →</Button>
-              <button style={styles.ghostBtn} onClick={() => navigate('/login')}>Already have an account</button>
+              <Button size="lg" onClick={() => navigate('/signup')}>Sign Up →</Button>
+              <button style={styles.ghostBtn} onClick={() => navigate('/login')}>Login</button>
             </div>
           </div>
         </section>

@@ -110,6 +110,7 @@ export function CreateTripPage() {
   const [mustHaves, setMustHaves] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [loadingMsg, setLoadingMsg] = useState('Creating your trip...')
 
   const handleDateSelect = (date: Date) => {
     if (!startDate || (startDate && endDate)) {
@@ -140,6 +141,7 @@ export function CreateTripPage() {
     if (!persona) return setError('Please select a travel persona')
 
     setLoading(true)
+    setLoadingMsg('Creating your trip...')
 
     const { data: trip, error: insertError } = await supabase
       .from('trips')
@@ -160,14 +162,64 @@ export function CreateTripPage() {
     }
 
     const dates = getDatesInRange(startDate, endDate)
-    await supabase.from('itinerary_days').insert(
-      dates.map((d, i) => ({
-        trip_id: trip.id,
-        day_date: formatDate(d),
-        day_number: i + 1,
-        notes: '',
-      }))
-    )
+    const { data: insertedDays } = await supabase
+      .from('itinerary_days')
+      .insert(
+        dates.map((d, i) => ({
+          trip_id: trip.id,
+          day_date: formatDate(d),
+          day_number: i + 1,
+          notes: '',
+        }))
+      )
+      .select()
+
+    // Call AI edge function
+    setLoadingMsg('AI is crafting your itinerary... ✨')
+    try {
+      const { data: aiData } = await supabase.functions.invoke('generate-itinerary', {
+        body: {
+          destination: destination.trim(),
+          start_date: formatDate(startDate),
+          end_date: formatDate(endDate),
+          persona,
+          must_haves: mustHaves.trim(),
+          adults_male,
+          adults_female,
+          kids,
+        },
+      })
+
+      if (aiData?.itinerary && insertedDays) {
+        const dayMap = new Map(insertedDays.map((d: any, i: number) => [i + 1, d.id]))
+
+        const activities = aiData.itinerary.days.flatMap((day: any) =>
+          day.activities.map((act: any, idx: number) => ({
+            day_id: dayMap.get(day.day_number),
+            title: act.title,
+            activity_type: act.type,
+            start_time: act.start_time || null,
+            location: act.location || '',
+            description: act.description || '',
+            latitude: act.latitude || null,
+            longitude: act.longitude || null,
+            sort_order: idx,
+          }))
+        ).filter((a: any) => a.day_id)
+
+        await supabase.from('activities').insert(activities)
+
+        await supabase.from('ai_suggestions').insert({
+          trip_id: trip.id,
+          prompt_text: `${destination} - ${persona} - ${mustHaves}`,
+          response_json: aiData.itinerary,
+          model_used: 'gpt-4o',
+        })
+      }
+    } catch (e) {
+      console.error('AI generation failed:', e)
+    }
+
     navigate(`/trips/${trip.id}`)
   }
 
@@ -184,7 +236,6 @@ export function CreateTripPage() {
 
         {error && <div style={s.error}>{error}</div>}
 
-        {/* Destination */}
         <div style={s.section}>
           <label style={s.label}>Where to?</label>
           <input
@@ -195,7 +246,6 @@ export function CreateTripPage() {
           />
         </div>
 
-        {/* Date range */}
         <div style={s.section}>
           <label style={s.label}>When?</label>
           {startDate && (
@@ -207,13 +257,12 @@ export function CreateTripPage() {
           <CalendarPicker startDate={startDate} endDate={endDate} onSelect={handleDateSelect} />
         </div>
 
-        {/* Demographics */}
         <div style={s.section}>
           <label style={s.label}>Who's coming?</label>
           <div style={s.demoBox}>
             {[
-              { label: 'Adults (Male)', val: adults_male, set: setAdultsMale },
-              { label: 'Adults (Female)', val: adults_female, set: setAdultsFemale },
+              { label: 'Adults (Male)', sub: '', val: adults_male, set: setAdultsMale },
+              { label: 'Adults (Female)', sub: '', val: adults_female, set: setAdultsFemale },
               { label: 'Kids', sub: 'under 18', val: kids, set: setKids },
             ].map(({ label, sub, val, set }) => (
               <div key={label} style={s.demoRow}>
@@ -227,7 +276,6 @@ export function CreateTripPage() {
           </div>
         </div>
 
-        {/* Persona */}
         <div style={s.section}>
           <label style={s.label}>Travel persona</label>
           <p style={s.sub}>Defines your activity + accommodation tier</p>
@@ -249,7 +297,6 @@ export function CreateTripPage() {
           </div>
         </div>
 
-        {/* Must haves */}
         <div style={s.section}>
           <label style={s.label}>Must-haves <span style={{ fontWeight: 400, opacity: 0.6 }}>(optional)</span></label>
           <textarea
@@ -266,7 +313,7 @@ export function CreateTripPage() {
           loading={loading}
           style={{ width: '100%', marginTop: '8px' }}
         >
-          Create Trip
+          {loading ? loadingMsg : '✨ Generate AI Itinerary'}
         </Button>
       </div>
     </div>

@@ -25,6 +25,33 @@
   --gradient-end: #d4836b;
 }
 
+:root.light {
+  --bg-primary: #faf6f0;
+  --bg-secondary: #f3ece3;
+  --bg-card: #ffffff;
+  --bg-card-hover: #fdf8f3;
+  --bg-input: #f8f3ed;
+  --border: #e2d8ce;
+  --border-focus: #c4845c;
+  --text-primary: #2a1f14;
+  --text-secondary: #6b5748;
+  --text-muted: #9c8779;
+  --accent: #c4845c;
+  --accent-hover: #b37348;
+  --accent-glow: rgba(196, 132, 92, 0.15);
+  --coral: #c4635a;
+  --coral-hover: #b35248;
+  --amber: #a8843c;
+  --amber-glow: rgba(168, 132, 60, 0.12);
+  --success: #4a9960;
+  --warning: #b8862a;
+  --error: #b04848;
+  --cream: #2a1f14;
+  --warm-white: #1a1210;
+  --gradient-start: #c4845c;
+  --gradient-end: #c4635a;
+}
+
 * {
   margin: 0;
   padding: 0;

@@ -1,6 +1,7 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { supabase } from '../lib/supabase'
+import { ThemeToggle } from './ui/theme-toggle'
 
 export function Navbar() {
   const { user } = useAuth()
@@ -17,6 +18,7 @@ export function Navbar() {
         Odysseus
       </NavLink>
       <div style={styles.links}>
+        <ThemeToggle />
         {user ? (
           <>
             <NavLink to="/dashboard" style={({ isActive }) => ({ ...styles.link, ...(isActive ? styles.activeLink : {}) })}>

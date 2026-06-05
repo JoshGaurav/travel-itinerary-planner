@@ -14,7 +14,7 @@ export function Navbar() {
   return (
     <nav style={styles.nav}>
       <NavLink to="/" style={styles.logo}>
-        Itinera
+        Odysseus
       </NavLink>
       <div style={styles.links}>
         {user ? (

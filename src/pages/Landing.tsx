@@ -62,7 +62,7 @@ export function LandingPage() {
 
       {/* ── NAV ── */}
       <nav style={styles.nav}>
-        <span style={styles.navLogo}>Itinera</span>
+        <span style={styles.navLogo}>Odysseus</span>
         <div style={styles.navLinks}>
           {user ? (
             <Button size="lg" onClick={() => navigate('/dashboard')}>My Trips</Button>
@@ -239,9 +239,9 @@ export function LandingPage() {
 
       {/* ── FOOTER ── */}
       <footer style={styles.footer}>
-        <span style={styles.footerLogo}>Itinera</span>
+        <span style={styles.footerLogo}>Odysseus</span>
         <span style={styles.footerText}>Travel beautifully planned.</span>
-        <span style={styles.footerRight}>© 2025 Itinera</span>
+        <span style={styles.footerRight}>© 2025 Odysseus</span>
       </footer>
 
       {/* Hover styles injected globally */}

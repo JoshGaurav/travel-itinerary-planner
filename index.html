@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Itinera — AI Travel Planner</title>
+  <title>Odysseus — AI Travel Planner</title>
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -151,21 +151,83 @@ function money(usd, cur) {
   return c.symbol + rounded.toLocaleString("en-US");
 }
 
-// Typeahead corpus — destinations, airports, local spots
-const PLACES = [
-  { name: "Kyoto, Japan",        kind: "city",    airport: "KIX · Kansai Intl", emoji: "🏯" },
-  { name: "Lisbon, Portugal",    kind: "city",    airport: "LIS · Humberto Delgado", emoji: "🚋" },
-  { name: "Reykjavík, Iceland",  kind: "city",    airport: "KEF · Keflavík Intl", emoji: "🌋" },
-  { name: "Bali, Indonesia",     kind: "island",  airport: "DPS · Ngurah Rai Intl", emoji: "🌴" },
-  { name: "Marrakech, Morocco",  kind: "city",    airport: "RAK · Menara", emoji: "🕌" },
-  { name: "Santorini, Greece",   kind: "island",  airport: "JTR · Santorini Natl", emoji: "🏖️" },
-  { name: "Queenstown, NZ",      kind: "city",    airport: "ZQN · Queenstown", emoji: "🏔️" },
-  { name: "Barcelona, Spain",    kind: "city",    airport: "BCN · El Prat", emoji: "🎨" },
-  { name: "Fushimi Inari Shrine",kind: "spot",    near: "Kyoto", emoji: "⛩️" },
-  { name: "Belém Tower",         kind: "spot",    near: "Lisbon", emoji: "🗼" },
-  { name: "Blue Lagoon",         kind: "spot",    near: "Reykjavík", emoji: "♨️" },
-  { name: "Jemaa el-Fnaa",       kind: "spot",    near: "Marrakech", emoji: "🪔" },
+// ── City knowledge base (50 cities) ──────────────────────────────────────────
+const CITY_KB = [
+  { id:"paris-fr", city:"Paris", country:"France", aliases:["Paris","Lutetia","La Ville Lumiere","Paris, France"], airports:[{iata:"CDG",name:"Charles de Gaulle Airport",priority:1},{iata:"ORY",name:"Orly Airport",priority:1},{iata:"BVA",name:"Beauvais-Tillé Airport",priority:2}], popular_spots:[{name:"Eiffel Tower",must_see:true,priority:1},{name:"Louvre Museum",must_see:true,priority:2},{name:"Notre-Dame Cathedral",must_see:true,priority:3},{name:"Arc de Triomphe",must_see:true,priority:4},{name:"Palace of Versailles",must_see:true,priority:5},{name:"Sacré-Cœur Basilica",must_see:false,priority:6},{name:"Musée d'Orsay",must_see:false,priority:7},{name:"Sainte-Chapelle",must_see:false,priority:8},{name:"Jardin du Luxembourg",must_see:false,priority:9},{name:"Champs-Élysées",must_see:false,priority:10}] },
+  { id:"london-gb", city:"London", country:"United Kingdom", aliases:["London","Londres","Londra","London, UK","London, England"], airports:[{iata:"LHR",name:"Heathrow Airport",priority:1},{iata:"LGW",name:"Gatwick Airport",priority:1},{iata:"STN",name:"Stansted Airport",priority:2}], popular_spots:[{name:"British Museum",must_see:true,priority:1},{name:"Tower of London",must_see:true,priority:2},{name:"Tower Bridge",must_see:true,priority:3},{name:"London Eye",must_see:true,priority:4},{name:"Westminster Abbey",must_see:true,priority:5},{name:"Palace of Westminster",must_see:true,priority:6},{name:"Buckingham Palace",must_see:false,priority:7},{name:"St. Paul's Cathedral",must_see:false,priority:8},{name:"National Gallery",must_see:false,priority:9},{name:"Victoria and Albert Museum",must_see:false,priority:10}] },
+  { id:"rome-it", city:"Rome", country:"Italy", aliases:["Roma","The Eternal City","Rome, Italy"], airports:[{iata:"FCO",name:"Leonardo da Vinci–Fiumicino Airport",priority:1},{iata:"CIA",name:"Ciampino Airport",priority:2}], popular_spots:[{name:"Colosseum",must_see:true,priority:1},{name:"Vatican Museums",must_see:true,priority:2},{name:"St. Peter's Basilica",must_see:true,priority:3},{name:"Trevi Fountain",must_see:true,priority:4},{name:"Pantheon",must_see:true,priority:5},{name:"Roman Forum",must_see:false,priority:6},{name:"Piazza Navona",must_see:false,priority:7},{name:"Spanish Steps",must_see:false,priority:8},{name:"Castel Sant'Angelo",must_see:false,priority:9},{name:"Borghese Gallery",must_see:false,priority:10}] },
+  { id:"barcelona-es", city:"Barcelona", country:"Spain", aliases:["BCN","Barcelona, Spain","Barcelona, Catalunya","Barna"], airports:[{iata:"BCN",name:"Josep Tarradellas Barcelona-El Prat Airport",priority:1},{iata:"GRO",name:"Girona-Costa Brava Airport",priority:2}], popular_spots:[{name:"La Sagrada Familia",must_see:true,priority:1},{name:"Park Güell",must_see:true,priority:2},{name:"Casa Batlló",must_see:true,priority:3},{name:"La Rambla",must_see:true,priority:4},{name:"Gothic Quarter",must_see:true,priority:5},{name:"Casa Milà",must_see:false,priority:6},{name:"Montjuïc Hill",must_see:false,priority:7},{name:"Picasso Museum",must_see:false,priority:8},{name:"Camp Nou",must_see:false,priority:9},{name:"La Boqueria Market",must_see:false,priority:10}] },
+  { id:"amsterdam-nl", city:"Amsterdam", country:"Netherlands", aliases:["Amsterdam","Mokum","Amsterdam, Netherlands","Amsterdam, Holland"], airports:[{iata:"AMS",name:"Amsterdam Airport Schiphol",priority:1},{iata:"RTM",name:"Rotterdam The Hague Airport",priority:2}], popular_spots:[{name:"Rijksmuseum",must_see:true,priority:1},{name:"Van Gogh Museum",must_see:true,priority:2},{name:"Anne Frank House",must_see:true,priority:3},{name:"Canal Ring",must_see:true,priority:4},{name:"Vondelpark",must_see:false,priority:5},{name:"Jordaan District",must_see:false,priority:6},{name:"Red Light District",must_see:false,priority:7},{name:"Dam Square",must_see:false,priority:8},{name:"Albert Cuyp Market",must_see:false,priority:9},{name:"Zaanse Schans",must_see:true,priority:10}] },
+  { id:"berlin-de", city:"Berlin", country:"Germany", aliases:["Berlin","Berlin, Germany","Berlin, Deutschland"], airports:[{iata:"BER",name:"Berlin Brandenburg Airport",priority:1}], popular_spots:[{name:"Brandenburg Gate",must_see:true,priority:1},{name:"Reichstag Building",must_see:true,priority:2},{name:"East Side Gallery",must_see:true,priority:3},{name:"Museum Island",must_see:true,priority:4},{name:"Berlin TV Tower",must_see:false,priority:5},{name:"Checkpoint Charlie",must_see:false,priority:6},{name:"Charlottenburg Palace",must_see:false,priority:7},{name:"Holocaust Memorial",must_see:false,priority:8},{name:"Tiergarten",must_see:false,priority:9},{name:"Potsdam Day Trip",must_see:true,priority:10}] },
+  { id:"prague-cz", city:"Prague", country:"Czech Republic", aliases:["Praha","Prag","Prague, Czech Republic"], airports:[{iata:"PRG",name:"Václav Havel Airport Prague",priority:1}], popular_spots:[{name:"Charles Bridge",must_see:true,priority:1},{name:"Prague Castle",must_see:true,priority:2},{name:"Old Town Square",must_see:true,priority:3},{name:"Prague Astronomical Clock",must_see:true,priority:4},{name:"St. Vitus Cathedral",must_see:false,priority:5},{name:"Wenceslas Square",must_see:false,priority:6},{name:"Dancing House",must_see:false,priority:7},{name:"Jewish Quarter",must_see:false,priority:8},{name:"Kutná Hora Day Trip",must_see:true,priority:9},{name:"Petřín Lookout Tower",must_see:false,priority:10}] },
+  { id:"vienna-at", city:"Vienna", country:"Austria", aliases:["Wien","Vienne","Vienna, Austria"], airports:[{iata:"VIE",name:"Vienna International Airport",priority:1}], popular_spots:[{name:"Schönbrunn Palace",must_see:true,priority:1},{name:"St. Stephen's Cathedral",must_see:true,priority:2},{name:"Belvedere Palace",must_see:true,priority:3},{name:"Hofburg Palace",must_see:true,priority:4},{name:"Prater",must_see:false,priority:5},{name:"Vienna State Opera",must_see:false,priority:6},{name:"Kunsthistorisches Museum",must_see:false,priority:7},{name:"Naschmarkt",must_see:false,priority:8},{name:"Melk Abbey Day Trip",must_see:true,priority:9},{name:"Karlskirche",must_see:false,priority:10}] },
+  { id:"madrid-es", city:"Madrid", country:"Spain", aliases:["Madrid","Madrid, Spain"], airports:[{iata:"MAD",name:"Adolfo Suárez Madrid–Barajas Airport",priority:1}], popular_spots:[{name:"Prado Museum",must_see:true,priority:1},{name:"Royal Palace of Madrid",must_see:true,priority:2},{name:"Plaza Mayor",must_see:true,priority:3},{name:"Buen Retiro Park",must_see:true,priority:4},{name:"Reina Sofía Museum",must_see:false,priority:5},{name:"Puerta del Sol",must_see:false,priority:6},{name:"Gran Vía",must_see:false,priority:7},{name:"Temple of Debod",must_see:false,priority:8},{name:"Toledo Day Trip",must_see:true,priority:9},{name:"Mercado de San Miguel",must_see:false,priority:10}] },
+  { id:"lisbon-pt", city:"Lisbon", country:"Portugal", aliases:["Lisboa","Lisbon","Lisbon, Portugal"], airports:[{iata:"LIS",name:"Humberto Delgado Airport",priority:1}], popular_spots:[{name:"Jerónimos Monastery",must_see:true,priority:1},{name:"Belém Tower",must_see:true,priority:2},{name:"São Jorge Castle",must_see:true,priority:3},{name:"Sintra Day Trip",must_see:true,priority:4},{name:"Alfama District",must_see:true,priority:5},{name:"Praça do Comércio",must_see:false,priority:6},{name:"Santa Justa Lift",must_see:false,priority:7},{name:"Tram 28",must_see:false,priority:8},{name:"Lisbon Oceanarium",must_see:false,priority:9},{name:"Time Out Market",must_see:false,priority:10}] },
+  { id:"athens-gr", city:"Athens", country:"Greece", aliases:["Athina","Atenas","Athens, Greece"], airports:[{iata:"ATH",name:"Athens Eleftherios Venizelos International Airport",priority:1}], popular_spots:[{name:"Acropolis of Athens",must_see:true,priority:1},{name:"Parthenon",must_see:true,priority:2},{name:"Acropolis Museum",must_see:true,priority:3},{name:"Plaka",must_see:true,priority:4},{name:"National Archaeological Museum",must_see:false,priority:5},{name:"Ancient Agora",must_see:false,priority:6},{name:"Temple of Olympian Zeus",must_see:false,priority:7},{name:"Panathenaic Stadium",must_see:false,priority:8},{name:"Mount Lycabettus",must_see:false,priority:9},{name:"Cape Sounion Day Trip",must_see:true,priority:10}] },
+  { id:"budapest-hu", city:"Budapest", country:"Hungary", aliases:["Budapest","Budapest, Hungary"], airports:[{iata:"BUD",name:"Budapest Ferenc Liszt International Airport",priority:1}], popular_spots:[{name:"Hungarian Parliament Building",must_see:true,priority:1},{name:"Buda Castle",must_see:true,priority:2},{name:"Fisherman's Bastion",must_see:true,priority:3},{name:"Chain Bridge",must_see:true,priority:4},{name:"Széchenyi Thermal Bath",must_see:true,priority:5},{name:"St. Stephen's Basilica",must_see:false,priority:6},{name:"Heroes' Square",must_see:false,priority:7},{name:"Gellért Hill",must_see:false,priority:8},{name:"Great Market Hall",must_see:false,priority:9},{name:"Ruin Bars (Szimpla Kert)",must_see:false,priority:10}] },
+  { id:"florence-it", city:"Florence", country:"Italy", aliases:["Firenze","Florence","Florence, Italy"], airports:[{iata:"FLR",name:"Florence Airport",priority:1},{iata:"PSA",name:"Pisa International Airport",priority:2}], popular_spots:[{name:"Florence Cathedral",must_see:true,priority:1},{name:"Uffizi Gallery",must_see:true,priority:2},{name:"Ponte Vecchio",must_see:true,priority:3},{name:"Accademia Gallery",must_see:true,priority:4},{name:"Piazzale Michelangelo",must_see:true,priority:5},{name:"Piazza della Signoria",must_see:false,priority:6},{name:"Palazzo Vecchio",must_see:false,priority:7},{name:"Boboli Gardens",must_see:false,priority:8},{name:"Siena Day Trip",must_see:true,priority:9},{name:"San Lorenzo Market",must_see:false,priority:10}] },
+  { id:"venice-it", city:"Venice", country:"Italy", aliases:["Venezia","Venice","Venice, Italy"], airports:[{iata:"VCE",name:"Venice Marco Polo Airport",priority:1}], popular_spots:[{name:"St. Mark's Basilica",must_see:true,priority:1},{name:"Doge's Palace",must_see:true,priority:2},{name:"St. Mark's Square",must_see:true,priority:3},{name:"Rialto Bridge",must_see:true,priority:4},{name:"Grand Canal",must_see:true,priority:5},{name:"Bridge of Sighs",must_see:false,priority:6},{name:"Peggy Guggenheim Collection",must_see:false,priority:7},{name:"Campanile di San Marco",must_see:false,priority:8},{name:"Murano Island Day Trip",must_see:true,priority:9},{name:"Gondola Ride",must_see:false,priority:10}] },
+  { id:"dublin-ie", city:"Dublin", country:"Ireland", aliases:["Dublin","Baile Atha Cliath","Dublin, Ireland"], airports:[{iata:"DUB",name:"Dublin Airport",priority:1}], popular_spots:[{name:"Guinness Storehouse",must_see:true,priority:1},{name:"Book of Kells",must_see:true,priority:2},{name:"Temple Bar District",must_see:true,priority:3},{name:"Dublin Castle",must_see:true,priority:4},{name:"Kilmainham Gaol",must_see:true,priority:5},{name:"St. Patrick's Cathedral",must_see:false,priority:6},{name:"Phoenix Park",must_see:false,priority:7},{name:"Christ Church Cathedral",must_see:false,priority:8},{name:"Grafton Street",must_see:false,priority:9},{name:"Chester Beatty Library",must_see:false,priority:10}] },
+  { id:"tokyo-jp", city:"Tokyo", country:"Japan", aliases:["Tokyo","Tokyo Metropolis","Tōkyō","Edo"], airports:[{iata:"HND",name:"Haneda Airport",priority:1},{iata:"NRT",name:"Narita International Airport",priority:1}], popular_spots:[{name:"Senso-ji Temple",must_see:true,priority:1},{name:"Tokyo Skytree",must_see:true,priority:2},{name:"Meiji Jingu Shrine",must_see:true,priority:3},{name:"Shibuya Crossing",must_see:true,priority:4},{name:"TeamLab Planets",must_see:true,priority:5},{name:"Tokyo Tower",must_see:false,priority:6},{name:"Shinjuku Gyoen Garden",must_see:false,priority:7},{name:"Imperial Palace",must_see:false,priority:8},{name:"Harajuku (Takeshita Street)",must_see:false,priority:9},{name:"Mount Fuji Day Trip",must_see:true,priority:10}] },
+  { id:"kyoto-jp", city:"Kyoto", country:"Japan", aliases:["Kyoto","Heian-kyo","Kyōto"], airports:[{iata:"KIX",name:"Kansai International Airport",priority:1},{iata:"ITM",name:"Osaka Itami Airport",priority:2}], popular_spots:[{name:"Fushimi Inari-taisha Shrine",must_see:true,priority:1},{name:"Kinkaku-ji (Golden Pavilion)",must_see:true,priority:2},{name:"Kiyomizu-dera Temple",must_see:true,priority:3},{name:"Arashiyama Bamboo Grove",must_see:true,priority:4},{name:"Nijo Castle",must_see:false,priority:5},{name:"Gion District",must_see:false,priority:6},{name:"Ginkaku-ji (Silver Pavilion)",must_see:false,priority:7},{name:"Nishiki Market",must_see:false,priority:8},{name:"Philosopher's Path",must_see:false,priority:9},{name:"Nara Park Day Trip",must_see:true,priority:10}] },
+  { id:"singapore-sg", city:"Singapore", country:"Singapore", aliases:["Singapore","Singapura","Lion City","Temasek"], airports:[{iata:"SIN",name:"Singapore Changi Airport",priority:1}], popular_spots:[{name:"Gardens by the Bay",must_see:true,priority:1},{name:"Marina Bay Sands",must_see:true,priority:2},{name:"Singapore Botanic Gardens",must_see:true,priority:3},{name:"Sentosa Island",must_see:true,priority:4},{name:"Chinatown Singapore",must_see:true,priority:5},{name:"Singapore Flyer",must_see:false,priority:6},{name:"National Gallery Singapore",must_see:false,priority:7},{name:"Night Safari",must_see:false,priority:8},{name:"Kampong Glam",must_see:false,priority:9},{name:"Orchard Road",must_see:false,priority:10}] },
+  { id:"bangkok-th", city:"Bangkok", country:"Thailand", aliases:["Krung Thep","Bangkok","Bangkok, Thailand"], airports:[{iata:"BKK",name:"Suvarnabhumi Airport",priority:1},{iata:"DMK",name:"Don Mueang International Airport",priority:1}], popular_spots:[{name:"Grand Palace",must_see:true,priority:1},{name:"Wat Phra Kaew",must_see:true,priority:2},{name:"Wat Arun",must_see:true,priority:3},{name:"Wat Pho",must_see:true,priority:4},{name:"Chatuchak Weekend Market",must_see:true,priority:5},{name:"Jim Thompson House",must_see:false,priority:6},{name:"Khao San Road",must_see:false,priority:7},{name:"Chinatown Bangkok",must_see:false,priority:8},{name:"Ayutthaya Day Trip",must_see:true,priority:9},{name:"Lumphini Park",must_see:false,priority:10}] },
+  { id:"phuket-th", city:"Phuket", country:"Thailand", aliases:["Phuket","Phuket Island","Phuket, Thailand"], airports:[{iata:"HKT",name:"Phuket International Airport",priority:1}], popular_spots:[{name:"Patong Beach",must_see:true,priority:1},{name:"Phuket Big Buddha",must_see:true,priority:2},{name:"Wat Chalong",must_see:true,priority:3},{name:"Phuket Old Town",must_see:true,priority:4},{name:"Phi Phi Islands Day Trip",must_see:true,priority:5},{name:"Phang Nga Bay Day Trip",must_see:true,priority:6},{name:"Karon Beach",must_see:false,priority:7},{name:"Kata Noi Beach",must_see:false,priority:8},{name:"Promthep Cape",must_see:false,priority:9},{name:"Bangla Road",must_see:false,priority:10}] },
+  { id:"kuala-lumpur-my", city:"Kuala Lumpur", country:"Malaysia", aliases:["KL","Kuala Lumpur","Kuala Lumpur, Malaysia"], airports:[{iata:"KUL",name:"Kuala Lumpur International Airport",priority:1},{iata:"SZB",name:"Sultan Abdul Aziz Shah Airport",priority:2}], popular_spots:[{name:"Petronas Twin Towers",must_see:true,priority:1},{name:"Batu Caves",must_see:true,priority:2},{name:"KL Tower",must_see:true,priority:3},{name:"Merdeka Square",must_see:true,priority:4},{name:"Thean Hou Temple",must_see:false,priority:5},{name:"Jalan Alor Food Street",must_see:true,priority:6},{name:"Chinatown Kuala Lumpur",must_see:false,priority:7},{name:"Central Market KL",must_see:false,priority:8},{name:"Bukit Bintang",must_see:false,priority:9},{name:"Malacca Day Trip",must_see:true,priority:10}] },
+  { id:"seoul-kr", city:"Seoul", country:"South Korea", aliases:["Seoul","Hanyang","Seoul Metropolis","Seoul, South Korea"], airports:[{iata:"ICN",name:"Incheon International Airport",priority:1},{iata:"GMP",name:"Gimpo International Airport",priority:1}], popular_spots:[{name:"Gyeongbokgung Palace",must_see:true,priority:1},{name:"N Seoul Tower",must_see:true,priority:2},{name:"Bukchon Hanok Village",must_see:true,priority:3},{name:"Myeong-dong",must_see:true,priority:4},{name:"Insadong",must_see:false,priority:5},{name:"Changdeokgung Palace",must_see:false,priority:6},{name:"Dongdaemun Design Plaza",must_see:false,priority:7},{name:"Hongdae",must_see:false,priority:8},{name:"DMZ Day Trip",must_see:true,priority:9},{name:"Namdaemun Market",must_see:false,priority:10}] },
+  { id:"hong-kong-hk", city:"Hong Kong", country:"Hong Kong", aliases:["Hong Kong","HK","Hong Kong SAR","Fragrant Harbour"], airports:[{iata:"HKG",name:"Hong Kong International Airport",priority:1}], popular_spots:[{name:"Victoria Peak",must_see:true,priority:1},{name:"Tian Tan Buddha",must_see:true,priority:2},{name:"Star Ferry",must_see:true,priority:3},{name:"Lantau Island",must_see:false,priority:4},{name:"Tsim Sha Tsui Promenade",must_see:true,priority:5},{name:"Hong Kong Disneyland",must_see:false,priority:6},{name:"Ladies' Market",must_see:false,priority:7},{name:"Ocean Park Hong Kong",must_see:false,priority:8},{name:"Man Mo Temple",must_see:false,priority:9},{name:"Macau Day Trip",must_see:true,priority:10}] },
+  { id:"taipei-tw", city:"Taipei", country:"Taiwan", aliases:["Taipei","Taipei City","Tâi-pak","Taipei, Taiwan"], airports:[{iata:"TPE",name:"Taiwan Taoyuan International Airport",priority:1},{iata:"TSA",name:"Taipei Songshan Airport",priority:1}], popular_spots:[{name:"Taipei 101",must_see:true,priority:1},{name:"National Palace Museum",must_see:true,priority:2},{name:"Chiang Kai-shek Memorial Hall",must_see:true,priority:3},{name:"Shilin Night Market",must_see:true,priority:4},{name:"Longshan Temple",must_see:true,priority:5},{name:"Elephant Mountain",must_see:false,priority:6},{name:"Jiufen Day Trip",must_see:true,priority:7},{name:"Ximending",must_see:false,priority:8},{name:"Raohe Street Night Market",must_see:false,priority:9},{name:"Yangmingshan National Park",must_see:false,priority:10}] },
+  { id:"bali-id", city:"Bali", country:"Indonesia", aliases:["Bali","Denpasar","Ngurah Rai","Bali Island","Denpasar, Bali"], airports:[{iata:"DPS",name:"Ngurah Rai International Airport",priority:1}], popular_spots:[{name:"Ubud Monkey Forest",must_see:true,priority:1},{name:"Tanah Lot Temple",must_see:true,priority:2},{name:"Uluwatu Temple",must_see:true,priority:3},{name:"Tegallalang Rice Terraces",must_see:true,priority:4},{name:"Seminyak Beach",must_see:false,priority:5},{name:"Nusa Penida Day Trip",must_see:true,priority:6},{name:"Mount Batur Sunrise Trek",must_see:false,priority:7},{name:"Pura Ulun Danu Bratan",must_see:false,priority:8},{name:"Ubud Art Market",must_see:false,priority:9},{name:"Tirta Empul Temple",must_see:false,priority:10}] },
+  { id:"new-delhi-in", city:"New Delhi", country:"India", aliases:["Delhi","New Delhi","Dilli","NCR","National Capital Region"], airports:[{iata:"DEL",name:"Indira Gandhi International Airport",priority:1}], popular_spots:[{name:"Taj Mahal Day Trip",must_see:true,priority:1},{name:"Qutub Minar",must_see:true,priority:2},{name:"Humayun's Tomb",must_see:true,priority:3},{name:"India Gate",must_see:true,priority:4},{name:"Red Fort",must_see:true,priority:5},{name:"Lotus Temple",must_see:false,priority:6},{name:"Akshardham Temple",must_see:false,priority:7},{name:"Jama Masjid",must_see:false,priority:8},{name:"Chandni Chowk",must_see:true,priority:9},{name:"Gurudwara Bangla Sahib",must_see:false,priority:10}] },
+  { id:"mumbai-in", city:"Mumbai", country:"India", aliases:["Bombay","Mumbai, India","Bombay, India"], airports:[{iata:"BOM",name:"Chhatrapati Shivaji Maharaj International Airport",priority:1}], popular_spots:[{name:"Gateway of India",must_see:true,priority:1},{name:"Chhatrapati Shivaji Terminus",must_see:true,priority:2},{name:"Elephanta Caves",must_see:true,priority:3},{name:"Marine Drive",must_see:true,priority:4},{name:"Haji Ali Dargah",must_see:true,priority:5},{name:"Prince of Wales Museum",must_see:false,priority:6},{name:"Colaba Causeway",must_see:false,priority:7},{name:"Juhu Beach",must_see:false,priority:8},{name:"Dhobi Ghat",must_see:false,priority:9},{name:"Bandra-Worli Sea Link",must_see:false,priority:10}] },
+  { id:"shanghai-cn", city:"Shanghai", country:"China", aliases:["Shanghai","Shanghai, China","Hu","Shen"], airports:[{iata:"PVG",name:"Shanghai Pudong International Airport",priority:1},{iata:"SHA",name:"Shanghai Hongqiao International Airport",priority:1}], popular_spots:[{name:"The Bund",must_see:true,priority:1},{name:"Yu Garden",must_see:true,priority:2},{name:"Shanghai Tower",must_see:true,priority:3},{name:"Nanjing Road",must_see:true,priority:4},{name:"Oriental Pearl TV Tower",must_see:true,priority:5},{name:"Shanghai Museum",must_see:false,priority:6},{name:"Jade Buddha Temple",must_see:false,priority:7},{name:"Zhujiajiao Water Town Day Trip",must_see:true,priority:8},{name:"Xintiandi",must_see:false,priority:9},{name:"French Concession",must_see:false,priority:10}] },
+  { id:"dubai-ae", city:"Dubai", country:"United Arab Emirates", aliases:["Dubai","Dubayy","Dubai, UAE","Dubai, United Arab Emirates"], airports:[{iata:"DXB",name:"Dubai International Airport",priority:1},{iata:"DWC",name:"Al Maktoum International Airport",priority:2},{iata:"SHJ",name:"Sharjah International Airport",priority:2}], popular_spots:[{name:"Burj Khalifa",must_see:true,priority:1},{name:"The Dubai Mall",must_see:true,priority:2},{name:"Palm Jumeirah",must_see:true,priority:3},{name:"Burj Al Arab",must_see:true,priority:4},{name:"Dubai Fountain",must_see:true,priority:5},{name:"Museum of the Future",must_see:true,priority:6},{name:"Desert Safari Day Trip",must_see:true,priority:7},{name:"Dubai Marina",must_see:false,priority:8},{name:"Gold Souk",must_see:false,priority:9},{name:"Al Fahidi Historical Neighbourhood",must_see:false,priority:10}] },
+  { id:"istanbul-tr", city:"Istanbul", country:"Turkey", aliases:["Constantinople","Byzantium","Istanbul","İstanbul","Istanbul, Turkey"], airports:[{iata:"IST",name:"Istanbul Airport",priority:1},{iata:"SAW",name:"Sabiha Gökçen International Airport",priority:1}], popular_spots:[{name:"Hagia Sophia",must_see:true,priority:1},{name:"The Blue Mosque",must_see:true,priority:2},{name:"Topkapi Palace",must_see:true,priority:3},{name:"Grand Bazaar",must_see:true,priority:4},{name:"Basilica Cistern",must_see:true,priority:5},{name:"Bosphorus Cruise",must_see:true,priority:6},{name:"Galata Tower",must_see:false,priority:7},{name:"Dolmabahçe Palace",must_see:false,priority:8},{name:"Spice Bazaar",must_see:false,priority:9},{name:"Princes' Islands Day Trip",must_see:false,priority:10}] },
+  { id:"abu-dhabi-ae", city:"Abu Dhabi", country:"United Arab Emirates", aliases:["Abu Dhabi","Abu Zaby","Abu Dhabi, UAE"], airports:[{iata:"AUH",name:"Zayed International Airport",priority:1}], popular_spots:[{name:"Sheikh Zayed Grand Mosque",must_see:true,priority:1},{name:"Louvre Abu Dhabi",must_see:true,priority:2},{name:"Qasr Al Watan",must_see:true,priority:3},{name:"Ferrari World Abu Dhabi",must_see:false,priority:4},{name:"Yas Island",must_see:false,priority:5},{name:"Emirates Palace",must_see:false,priority:6},{name:"Abu Dhabi Corniche",must_see:false,priority:7},{name:"Qasr Al Hosn",must_see:false,priority:8},{name:"Falcon Hospital Day Trip",must_see:false,priority:9},{name:"Observation Deck at 300",must_see:false,priority:10}] },
+  { id:"doha-qa", city:"Doha", country:"Qatar", aliases:["Ad-Dawhah","Doha","Doha, Qatar"], airports:[{iata:"DOH",name:"Hamad International Airport",priority:1}], popular_spots:[{name:"Souq Waqif",must_see:true,priority:1},{name:"Museum of Islamic Art",must_see:true,priority:2},{name:"National Museum of Qatar",must_see:true,priority:3},{name:"Katara Cultural Village",must_see:true,priority:4},{name:"The Pearl-Qatar",must_see:true,priority:5},{name:"Doha Corniche",must_see:false,priority:6},{name:"Inland Sea Day Trip",must_see:true,priority:7},{name:"Mathaf: Arab Museum",must_see:false,priority:8},{name:"State Grand Mosque",must_see:false,priority:9},{name:"Falcon Souq",must_see:false,priority:10}] },
+  { id:"cape-town-za", city:"Cape Town", country:"South Africa", aliases:["Cape Town","Kaapstad","Ikapa","Mother City","Cape Town, South Africa"], airports:[{iata:"CPT",name:"Cape Town International Airport",priority:1}], popular_spots:[{name:"Table Mountain",must_see:true,priority:1},{name:"Victoria & Alfred Waterfront",must_see:true,priority:2},{name:"Cape Point Day Trip",must_see:true,priority:3},{name:"Boulders Beach Penguin Colony",must_see:true,priority:4},{name:"Kirstenbosch Botanical Garden",must_see:true,priority:5},{name:"Robben Island",must_see:true,priority:6},{name:"Stellenbosch Winelands Day Trip",must_see:true,priority:7},{name:"Camps Bay Beach",must_see:false,priority:8},{name:"Bo-Kaap",must_see:false,priority:9},{name:"Signal Hill and Lion's Head",must_see:false,priority:10}] },
+  { id:"marrakech-ma", city:"Marrakech", country:"Morocco", aliases:["Marrakesh","Marrakech","Marrakech, Morocco"], airports:[{iata:"RAK",name:"Marrakesh Menara Airport",priority:1}], popular_spots:[{name:"Jemaa el-Fnaa",must_see:true,priority:1},{name:"Jardin Majorelle",must_see:true,priority:2},{name:"Bahia Palace",must_see:true,priority:3},{name:"Koutoubia Mosque",must_see:true,priority:4},{name:"Marrakech Medina & Souks",must_see:true,priority:5},{name:"Saadian Tombs",must_see:false,priority:6},{name:"Ben Youssef Madrasa",must_see:false,priority:7},{name:"Ourika Valley Day Trip",must_see:true,priority:8},{name:"YSL Museum Marrakech",must_see:false,priority:9},{name:"Menara Gardens",must_see:false,priority:10}] },
+  { id:"cairo-eg", city:"Cairo", country:"Egypt", aliases:["Cairo","Al-Qahirah","Cairo, Egypt","El Qahira"], airports:[{iata:"CAI",name:"Cairo International Airport",priority:1},{iata:"SPX",name:"Sphinx International Airport",priority:2}], popular_spots:[{name:"Giza Pyramid Complex",must_see:true,priority:1},{name:"The Egyptian Museum",must_see:true,priority:2},{name:"Khan el-Khalili",must_see:true,priority:3},{name:"Cairo Citadel",must_see:true,priority:4},{name:"Mosque of Muhammad Ali",must_see:false,priority:5},{name:"Grand Egyptian Museum",must_see:true,priority:6},{name:"National Museum of Egyptian Civilization",must_see:false,priority:7},{name:"Coptic Cairo",must_see:false,priority:8},{name:"Saqqara Day Trip",must_see:true,priority:9},{name:"Cairo Tower",must_see:false,priority:10}] },
+  { id:"johannesburg-za", city:"Johannesburg", country:"South Africa", aliases:["Joburg","Jozi","Egoli","Johannesburg, South Africa"], airports:[{iata:"JNB",name:"O. R. Tambo International Airport",priority:1},{iata:"HLA",name:"Lanseria International Airport",priority:2}], popular_spots:[{name:"Apartheid Museum",must_see:true,priority:1},{name:"Soweto & Mandela House Day Trip",must_see:true,priority:2},{name:"Cradle of Humankind Day Trip",must_see:true,priority:3},{name:"Constitution Hill",must_see:true,priority:4},{name:"Gold Reef City",must_see:false,priority:5},{name:"Maboneng Precinct",must_see:false,priority:6},{name:"Nelson Mandela Square",must_see:false,priority:7},{name:"Carlton Centre Viewpoint",must_see:false,priority:8},{name:"Walter Sisulu Botanical Garden",must_see:false,priority:9},{name:"Hector Pieterson Memorial",must_see:false,priority:10}] },
+  { id:"new-york-us", city:"New York", country:"United States", aliases:["New York City","NYC","The Big Apple","New York, USA"], airports:[{iata:"JFK",name:"John F. Kennedy International Airport",priority:1},{iata:"LGA",name:"LaGuardia Airport",priority:1},{iata:"EWR",name:"Newark Liberty International Airport",priority:1}], popular_spots:[{name:"Statue of Liberty",must_see:true,priority:1},{name:"Central Park",must_see:true,priority:2},{name:"Metropolitan Museum of Art",must_see:true,priority:3},{name:"Empire State Building",must_see:true,priority:4},{name:"Times Square",must_see:true,priority:5},{name:"Brooklyn Bridge",must_see:true,priority:6},{name:"MoMA",must_see:false,priority:7},{name:"9/11 Memorial & Museum",must_see:true,priority:8},{name:"High Line",must_see:false,priority:9},{name:"Rockefeller Center",must_see:false,priority:10}] },
+  { id:"los-angeles-us", city:"Los Angeles", country:"United States", aliases:["LA","L.A.","City of Angels","Los Angeles, USA"], airports:[{iata:"LAX",name:"Los Angeles International Airport",priority:1},{iata:"BUR",name:"Hollywood Burbank Airport",priority:2}], popular_spots:[{name:"Hollywood Walk of Fame",must_see:true,priority:1},{name:"Griffith Observatory",must_see:true,priority:2},{name:"Getty Center",must_see:true,priority:3},{name:"Santa Monica Pier",must_see:true,priority:4},{name:"Universal Studios Hollywood",must_see:true,priority:5},{name:"Disneyland Resort Day Trip",must_see:true,priority:6},{name:"LACMA",must_see:false,priority:7},{name:"Venice Beach",must_see:false,priority:8},{name:"Rodeo Drive",must_see:false,priority:9},{name:"The Broad",must_see:false,priority:10}] },
+  { id:"san-francisco-us", city:"San Francisco", country:"United States", aliases:["SF","San Fran","The City by the Bay","San Francisco, USA"], airports:[{iata:"SFO",name:"San Francisco International Airport",priority:1},{iata:"OAK",name:"Oakland International Airport",priority:2}], popular_spots:[{name:"Golden Gate Bridge",must_see:true,priority:1},{name:"Alcatraz Island",must_see:true,priority:2},{name:"Fisherman's Wharf",must_see:true,priority:3},{name:"Golden Gate Park",must_see:true,priority:4},{name:"Lombard Street",must_see:false,priority:5},{name:"Chinatown San Francisco",must_see:true,priority:6},{name:"Muir Woods Day Trip",must_see:true,priority:7},{name:"Palace of Fine Arts",must_see:false,priority:8},{name:"Coit Tower",must_see:false,priority:9},{name:"SFMOMA",must_see:false,priority:10}] },
+  { id:"miami-us", city:"Miami", country:"United States", aliases:["Miami","Miami Beach","Magic City","Miami, USA"], airports:[{iata:"MIA",name:"Miami International Airport",priority:1},{iata:"FLL",name:"Fort Lauderdale-Hollywood International Airport",priority:2}], popular_spots:[{name:"South Beach",must_see:true,priority:1},{name:"Art Deco Historic District",must_see:true,priority:2},{name:"Wynwood Walls",must_see:true,priority:3},{name:"Little Havana",must_see:true,priority:4},{name:"Vizcaya Museum and Gardens",must_see:true,priority:5},{name:"Everglades National Park Day Trip",must_see:true,priority:6},{name:"Bayside Marketplace",must_see:false,priority:7},{name:"Key West Day Trip",must_see:false,priority:8},{name:"Pérez Art Museum Miami",must_see:false,priority:9},{name:"Coral Gables Venetian Pool",must_see:false,priority:10}] },
+  { id:"las-vegas-us", city:"Las Vegas", country:"United States", aliases:["Vegas","Sin City","Las Vegas, USA"], airports:[{iata:"LAS",name:"Harry Reid International Airport",priority:1}], popular_spots:[{name:"The Las Vegas Strip",must_see:true,priority:1},{name:"Bellagio Fountains",must_see:true,priority:2},{name:"Fremont Street Experience",must_see:true,priority:3},{name:"Grand Canyon Helicopter Tour",must_see:true,priority:4},{name:"Hoover Dam Day Trip",must_see:true,priority:5},{name:"High Roller Observation Wheel",must_see:false,priority:6},{name:"Mob Museum",must_see:false,priority:7},{name:"The Neon Museum",must_see:false,priority:8},{name:"Red Rock Canyon Day Trip",must_see:false,priority:9},{name:"Valley of Fire Day Trip",must_see:false,priority:10}] },
+  { id:"orlando-us", city:"Orlando", country:"United States", aliases:["Orlando","Theme Park Capital","The City Beautiful","Orlando, USA"], airports:[{iata:"MCO",name:"Orlando International Airport",priority:1}], popular_spots:[{name:"Walt Disney World Resort",must_see:true,priority:1},{name:"Universal Orlando Resort",must_see:true,priority:2},{name:"SeaWorld Orlando",must_see:true,priority:3},{name:"Kennedy Space Center Day Trip",must_see:true,priority:4},{name:"Discovery Cove",must_see:false,priority:5},{name:"Gatorland",must_see:false,priority:6},{name:"ICON Park",must_see:false,priority:7},{name:"Harry P. Leu Gardens",must_see:false,priority:8},{name:"Lake Eola Park",must_see:false,priority:9},{name:"Winter Park Scenic Boat Tour",must_see:false,priority:10}] },
+  { id:"cancun-mx", city:"Cancun", country:"Mexico", aliases:["Cancun","Cancún","Riviera Maya","Cancun, Mexico"], airports:[{iata:"CUN",name:"Cancún International Airport",priority:1}], popular_spots:[{name:"Cancun Hotel Zone Beach",must_see:true,priority:1},{name:"Chichen Itza Day Trip",must_see:true,priority:2},{name:"Tulum Ruins Day Trip",must_see:true,priority:3},{name:"Isla Mujeres Day Trip",must_see:true,priority:4},{name:"Cenote Ik Kil Day Trip",must_see:true,priority:5},{name:"Playa Delfines",must_see:false,priority:6},{name:"Xcaret Park Day Trip",must_see:true,priority:7},{name:"MUSA Underwater Museum",must_see:false,priority:8},{name:"Cancun Maya Museum",must_see:false,priority:9},{name:"Mercado 28",must_see:false,priority:10}] },
+  { id:"mexico-city-mx", city:"Mexico City", country:"Mexico", aliases:["CDMX","Ciudad de México","Mexico City","México D.F."], airports:[{iata:"MEX",name:"Benito Juárez International Airport",priority:1},{iata:"NLU",name:"Felipe Ángeles International Airport",priority:2}], popular_spots:[{name:"Zócalo",must_see:true,priority:1},{name:"Frida Kahlo Museum",must_see:true,priority:2},{name:"Teotihuacan Pyramids Day Trip",must_see:true,priority:3},{name:"National Museum of Anthropology",must_see:true,priority:4},{name:"Chapultepec Castle",must_see:true,priority:5},{name:"Palacio de Bellas Artes",must_see:true,priority:6},{name:"Xochimilco Floating Gardens",must_see:true,priority:7},{name:"Coyoacán",must_see:false,priority:8},{name:"Basilica of Our Lady of Guadalupe",must_see:false,priority:9},{name:"Paseo de la Reforma",must_see:false,priority:10}] },
+  { id:"rio-de-janeiro-br", city:"Rio de Janeiro", country:"Brazil", aliases:["Rio","Rio de Janeiro","Cidade Maravilhosa","Rio, Brazil"], airports:[{iata:"GIG",name:"Galeão International Airport",priority:1},{iata:"SDU",name:"Santos Dumont Airport",priority:1}], popular_spots:[{name:"Christ the Redeemer",must_see:true,priority:1},{name:"Sugarloaf Mountain",must_see:true,priority:2},{name:"Copacabana Beach",must_see:true,priority:3},{name:"Ipanema Beach",must_see:true,priority:4},{name:"Selarón Steps",must_see:true,priority:5},{name:"Tijuca National Park",must_see:false,priority:6},{name:"Rio Botanical Garden",must_see:false,priority:7},{name:"Maracanã Stadium",must_see:false,priority:8},{name:"Museum of Tomorrow",must_see:false,priority:9},{name:"Angra dos Reis Day Trip",must_see:true,priority:10}] },
+  { id:"buenos-aires-ar", city:"Buenos Aires", country:"Argentina", aliases:["Buenos Aires","Capital Federal","CABA","Buenos Aires, Argentina"], airports:[{iata:"EZE",name:"Ministro Pistarini International Airport",priority:1},{iata:"AEP",name:"Jorge Newbery Airfield",priority:1}], popular_spots:[{name:"Plaza de Mayo",must_see:true,priority:1},{name:"Recoleta Cemetery",must_see:true,priority:2},{name:"La Boca and Caminito",must_see:true,priority:3},{name:"Teatro Colón",must_see:true,priority:4},{name:"Palermo Soho",must_see:true,priority:5},{name:"San Telmo Fair",must_see:true,priority:6},{name:"Puerto Madero",must_see:false,priority:7},{name:"Tigre Delta Day Trip",must_see:true,priority:8},{name:"MALBA",must_see:false,priority:9},{name:"Obelisco de Buenos Aires",must_see:false,priority:10}] },
+  { id:"toronto-ca", city:"Toronto", country:"Canada", aliases:["Toronto","TO","T-Dot","YYZ","Toronto, Canada"], airports:[{iata:"YYZ",name:"Toronto Pearson International Airport",priority:1},{iata:"YTZ",name:"Billy Bishop Toronto City Airport",priority:2}], popular_spots:[{name:"CN Tower",must_see:true,priority:1},{name:"Royal Ontario Museum",must_see:true,priority:2},{name:"Ripley's Aquarium of Canada",must_see:true,priority:3},{name:"Distillery Historic District",must_see:true,priority:4},{name:"Toronto Islands",must_see:true,priority:5},{name:"Niagara Falls Day Trip",must_see:true,priority:6},{name:"Art Gallery of Ontario",must_see:false,priority:7},{name:"Casa Loma",must_see:false,priority:8},{name:"St. Lawrence Market",must_see:false,priority:9},{name:"Hockey Hall of Fame",must_see:false,priority:10}] },
+  { id:"sydney-au", city:"Sydney", country:"Australia", aliases:["Sydney","The Harbour City","Sydney, NSW","Sydney, Australia"], airports:[{iata:"SYD",name:"Sydney Kingsford Smith Airport",priority:1}], popular_spots:[{name:"Sydney Opera House",must_see:true,priority:1},{name:"Sydney Harbour Bridge",must_see:true,priority:2},{name:"Bondi Beach",must_see:true,priority:3},{name:"Darling Harbour",must_see:true,priority:4},{name:"Royal Botanic Garden Sydney",must_see:true,priority:5},{name:"The Rocks",must_see:true,priority:6},{name:"Blue Mountains Day Trip",must_see:true,priority:7},{name:"Taronga Zoo Sydney",must_see:false,priority:8},{name:"Manly Beach and Ferry",must_see:false,priority:9},{name:"Sydney Tower Eye",must_see:false,priority:10}] },
+  { id:"melbourne-au", city:"Melbourne", country:"Australia", aliases:["Melbourne","Melbourne, Victoria","Cultural Capital of Australia"], airports:[{iata:"MEL",name:"Melbourne Airport",priority:1},{iata:"AVV",name:"Avalon Airport",priority:2}], popular_spots:[{name:"Federation Square",must_see:true,priority:1},{name:"Royal Botanic Gardens Victoria",must_see:true,priority:2},{name:"National Gallery of Victoria",must_see:true,priority:3},{name:"Queen Victoria Market",must_see:true,priority:4},{name:"Melbourne Laneways",must_see:true,priority:5},{name:"Great Ocean Road Day Trip",must_see:true,priority:6},{name:"Melbourne Cricket Ground",must_see:false,priority:7},{name:"Shrine of Remembrance",must_see:false,priority:8},{name:"Phillip Island Penguin Parade Day Trip",must_see:false,priority:9},{name:"St Kilda Beach",must_see:false,priority:10}] },
+  { id:"auckland-nz", city:"Auckland", country:"New Zealand", aliases:["Auckland","Tāmaki Makaurau","City of Sails","Auckland, NZ"], airports:[{iata:"AKL",name:"Auckland Airport",priority:1}], popular_spots:[{name:"Sky Tower",must_see:true,priority:1},{name:"Auckland War Memorial Museum",must_see:true,priority:2},{name:"Waiheke Island Day Trip",must_see:true,priority:3},{name:"Mount Eden",must_see:true,priority:4},{name:"Viaduct Harbour",must_see:true,priority:5},{name:"Rangitoto Island Day Trip",must_see:false,priority:6},{name:"Auckland Art Gallery",must_see:false,priority:7},{name:"Piha Beach Day Trip",must_see:false,priority:8},{name:"One Tree Hill",must_see:false,priority:9},{name:"Hobbiton Movie Set Day Trip",must_see:true,priority:10}] },
 ];
+
+// Helper: search cities from knowledge base
+function searchCityKB(query) {
+  const q = (query || "").toLowerCase().trim();
+  const featured = ["tokyo-jp","paris-fr","dubai-ae","barcelona-es","new-york-us","bali-id"];
+  if (!q) {
+    const featuredSet = new Set(featured);
+    return [
+      ...CITY_KB.filter(c => featuredSet.has(c.id)),
+      ...CITY_KB.filter(c => !featuredSet.has(c.id)).sort((a,b) => a.city.localeCompare(b.city))
+    ];
+  }
+  return CITY_KB.filter(c =>
+    c.city.toLowerCase().includes(q) ||
+    c.country.toLowerCase().includes(q) ||
+    c.aliases.some(a => a.toLowerCase().includes(q))
+  ).sort((a, b) => {
+    const aS = a.city.toLowerCase().startsWith(q);
+    const bS = b.city.toLowerCase().startsWith(q);
+    return (aS === bS) ? a.city.localeCompare(b.city) : aS ? -1 : 1;
+  });
+}
+
+Object.assign(window, { CITY_KB, searchCityKB });
 
 // Gradient cover per destination (CSS background)
 const COVERS = {
@@ -423,7 +485,7 @@ function buildPacking(form) {
 }
 
 Object.assign(window, {
-  CATEGORIES, KIDS, CURRENCIES, money, PLACES, COVERS, TRIPS,
+  CATEGORIES, KIDS, CURRENCIES, money, COVERS, TRIPS,
   generateItinerary, buildPacking,
 });
 
@@ -653,7 +715,7 @@ function Landing({ onOpenTrip, onPlan, cur }) {
         </h1>
         <p className="anim-rise" style={{ fontSize: "clamp(16px,2vw,19px)", color: "rgb(var(--muted))", maxWidth: 560,
           margin: "0 auto 30px", lineHeight: 1.5, animationDelay: "120ms" }}>
-          Tell <span className="grad-text" style={{ fontWeight: 700 }}>Itinera</span> your destination, dates and vibe —
+          Tell <span className="grad-text" style={{ fontWeight: 700 }}>Odysseus</span> your destination, dates and vibe —
           get a smart, day-by-day itinerary with live pricing and a packing list.
         </p>
         <div className="anim-rise" style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", animationDelay: "180ms" }}>
@@ -797,15 +859,14 @@ const calBtnSt = {
   border:"1px solid rgb(var(--border))", background:"rgb(var(--surface))", cursor:"pointer",
 };
 
-function DestinationField({ value, onChange }) {
+function DestinationField({ onCitySelect }) {
   const [open, setOpen] = React.useState(false);
-  const [q, setQ] = React.useState(value || "");
+  const [q, setQ] = React.useState("");
+  const [results, setResults] = React.useState(() => window.searchCityKB(""));
   const ref = React.useRef(null);
 
-  const results = React.useMemo(() => {
-    if (q.length < 1) return window.PLACES.filter(p => p.kind === "city").slice(0, 6);
-    const lower = q.toLowerCase();
-    return window.PLACES.filter(p => p.name.toLowerCase().includes(lower)).slice(0, 7);
+  React.useEffect(() => {
+    setResults(window.searchCityKB(q));
   }, [q]);
 
   React.useEffect(() => {
@@ -814,15 +875,25 @@ function DestinationField({ value, onChange }) {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-  const select = (p) => { setQ(p.name); onChange(p.name); setOpen(false); };
+  const select = (city) => {
+    setQ(city.city + ", " + city.country);
+    onCitySelect(city);
+    setOpen(false);
+  };
+
+  const handleChange = (e) => {
+    setQ(e.target.value);
+    onCitySelect(null);
+    setOpen(true);
+  };
 
   return (
     <div ref={ref} style={{ position: "relative" }}>
       <div style={{ position: "relative" }}>
         <Icon name="globe" size={18} style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)",
           color:"rgb(var(--muted))", pointerEvents:"none" }} />
-        <input type="text" value={q} placeholder="Where are you going?"
-          onChange={e => { setQ(e.target.value); onChange(e.target.value); setOpen(true); }}
+        <input type="text" value={q} placeholder="e.g. Paris, France"
+          onChange={handleChange}
           onFocus={() => setOpen(true)}
           className="focus-ring"
           style={{ width:"100%", padding:"14px 14px 14px 44px", borderRadius:16, fontSize:15, fontWeight:500,
@@ -834,26 +905,156 @@ function DestinationField({ value, onChange }) {
         <Icon name="search" size={16} style={{ position:"absolute", right:14, top:"50%", transform:"translateY(-50%)",
           color:"rgb(var(--faint))", pointerEvents:"none" }} />
       </div>
-      {open && results.length > 0 && (
-        <div className="card elev-lg anim-pop" style={{ position:"absolute", top:"calc(100% + 8px)", left:0, right:0, zIndex:999, overflow:"hidden", padding:6 }}>
-          {results.map((p, i) => (
-            <button key={i} type="button" onClick={() => select(p)}
-              style={{ display:"flex", alignItems:"center", gap:12, width:"100%", textAlign:"left",
+      {open && (
+        <div className="card elev-lg anim-pop" style={{ position:"absolute", top:"calc(100% + 8px)", left:0, right:0,
+          zIndex:999, padding:6, maxHeight:300, overflowY:"auto" }}>
+          {results.length === 0 ? (
+            <div style={{ padding:"12px 14px", fontSize:13, color:"rgb(var(--muted))", fontStyle:"italic" }}>
+              City not in our list — you can still continue
+            </div>
+          ) : results.map((c, i) => (
+            <button key={c.id} type="button" onClick={() => select(c)}
+              style={{ display:"flex", alignItems:"center", gap:10, width:"100%", textAlign:"left",
                 padding:"10px 12px", borderRadius:12, border:"none", background:"transparent", cursor:"pointer", color:"rgb(var(--text))" }}
               onMouseEnter={e => e.currentTarget.style.background = "rgb(var(--surface-2))"}
               onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-              <span style={{ fontSize:22, lineHeight:1 }}>{p.emoji}</span>
-              <div>
-                <div style={{ fontWeight:600, fontSize:14 }}>{p.name}</div>
-                {p.airport && <div style={{ fontSize:12, color:"rgb(var(--muted))", marginTop:2 }}>{p.airport}</div>}
-                {p.near && <div style={{ fontSize:12, color:"rgb(var(--muted))", marginTop:2 }}>Near {p.near}</div>}
+              <div style={{ flex:1 }}>
+                <span style={{ fontWeight:600, fontSize:14 }}>{c.city}</span>
+                <span style={{ fontSize:13, color:"rgb(var(--muted))", marginLeft:6 }}>· {c.country}</span>
               </div>
-              <span style={{ marginLeft:"auto", fontSize:11, fontWeight:600, padding:"3px 8px", borderRadius:999,
+              <span style={{ fontSize:11, fontWeight:600, padding:"3px 8px", borderRadius:999, flexShrink:0,
                 background:"rgb(var(--surface-2))", color:"rgb(var(--muted))", border:"1px solid rgb(var(--border))" }}>
-                {p.kind}
+                {c.airports[0] ? c.airports[0].iata : ""}
               </span>
             </button>
           ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function AirportSelect({ label, airports, disabled, value, onChange }) {
+  const [open, setOpen] = React.useState(false);
+  const [manual, setManual] = React.useState(false);
+  const ref = React.useRef(null);
+
+  React.useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const sorted = [...(airports || [])].sort((a, b) => a.priority - b.priority);
+
+  if (manual) return (
+    <div>
+      <div style={{ fontSize:11, fontWeight:700, color:"rgb(var(--muted))", textTransform:"uppercase",
+        letterSpacing:"0.05em", marginBottom:5 }}>{label}</div>
+      <input autoFocus value={value} onChange={e => onChange(e.target.value)}
+        placeholder="Enter IATA code or airport name"
+        className="focus-ring"
+        style={{ width:"100%", padding:"11px 14px", borderRadius:12, border:"1.5px solid rgb(var(--border))",
+          background:"rgb(var(--surface))", color:"rgb(var(--text))", fontSize:14, outline:"none", boxSizing:"border-box" }} />
+    </div>
+  );
+
+  return (
+    <div ref={ref} style={{ position:"relative" }}>
+      <div style={{ fontSize:11, fontWeight:700, color:"rgb(var(--muted))", textTransform:"uppercase",
+        letterSpacing:"0.05em", marginBottom:5 }}>{label}</div>
+      <button type="button" onClick={() => !disabled && setOpen(o => !o)}
+        className="focus-ring"
+        style={{ width:"100%", padding:"11px 14px", borderRadius:12, border:"1.5px solid rgb(var(--border))",
+          background:"rgb(var(--surface))", color: value ? "rgb(var(--text))" : "rgb(var(--faint))",
+          fontSize:14, textAlign:"left", cursor: disabled ? "not-allowed" : "pointer",
+          opacity: disabled ? 0.45 : 1, display:"flex", justifyContent:"space-between", alignItems:"center", boxSizing:"border-box" }}>
+        <span>{value || "Select city first"}</span>
+        <span style={{ fontSize:11, opacity:0.5 }}>▾</span>
+      </button>
+      {open && (
+        <div className="card elev-lg" style={{ position:"absolute", top:"calc(100% + 6px)", left:0, right:0,
+          zIndex:999, padding:6, maxHeight:240, overflowY:"auto" }}>
+          {sorted.map(ap => (
+            <button key={ap.iata} type="button"
+              onMouseDown={() => { onChange(ap.iata + " · " + ap.name); setOpen(false); }}
+              style={{ display:"flex", alignItems:"center", gap:8, width:"100%", textAlign:"left",
+                padding:"9px 12px", borderRadius:10, border:"none", background:"transparent", cursor:"pointer", color:"rgb(var(--text))" }}
+              onMouseEnter={e => e.currentTarget.style.background = "rgb(var(--surface-2))"}
+              onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+              <span style={{ fontWeight:700, fontSize:14, minWidth:38 }}>{ap.iata}</span>
+              <span style={{ fontSize:13, color:"rgb(var(--muted))" }}>· {ap.name}</span>
+            </button>
+          ))}
+          <div style={{ height:1, background:"rgb(var(--border))", margin:"4px 0" }} />
+          <button type="button" onMouseDown={() => { setManual(true); setOpen(false); }}
+            style={{ width:"100%", textAlign:"left", padding:"9px 12px", borderRadius:10, border:"none",
+              background:"transparent", cursor:"pointer", color:"rgb(var(--muted))", fontSize:13 }}
+            onMouseEnter={e => e.currentTarget.style.background = "rgb(var(--surface-2))"}
+            onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+            ✏️ Enter airport manually
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function MustDoSelect({ spots, disabled, selected, onChange }) {
+  const [open, setOpen] = React.useState(false);
+  const ref = React.useRef(null);
+
+  React.useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const toggle = (name) => {
+    onChange(selected.includes(name) ? selected.filter(s => s !== name) : [...selected, name]);
+  };
+
+  return (
+    <div ref={ref} style={{ position:"relative" }}>
+      <button type="button" onClick={() => !disabled && setOpen(o => !o)}
+        style={{ width:"100%", minHeight:48, padding: selected.length ? "8px 12px" : "13px 14px",
+          borderRadius:16, border:"1.5px solid rgb(var(--border))",
+          background:"rgb(var(--surface))", cursor: disabled ? "not-allowed" : "pointer",
+          textAlign:"left", display:"flex", flexWrap:"wrap", alignItems:"center", gap:6, boxSizing:"border-box",
+          opacity: disabled ? 0.45 : 1 }}>
+        {selected.length === 0 ? (
+          <span style={{ fontSize:14.5, color:"rgb(var(--faint))" }}>
+            {disabled ? "Select a city to see options" : "Select must-do experiences…"}
+          </span>
+        ) : selected.map(s => (
+          <span key={s} style={{ display:"inline-flex", alignItems:"center", gap:4, fontSize:12, fontWeight:600,
+            padding:"3px 8px", borderRadius:6, background:"rgb(var(--accent) / .18)",
+            border:"1px solid rgb(var(--accent) / .4)", color:"rgb(var(--text))" }}>
+            {s}
+            <span onMouseDown={e => { e.stopPropagation(); toggle(s); }}
+              style={{ cursor:"pointer", opacity:0.6, fontSize:14, lineHeight:1 }}>×</span>
+          </span>
+        ))}
+      </button>
+      {open && (
+        <div className="card elev-lg" style={{ position:"absolute", top:"calc(100% + 6px)", left:0, right:0,
+          zIndex:999, padding:6, maxHeight:280, overflowY:"auto" }}>
+          {(spots || []).map(s => {
+            const checked = selected.includes(s.name);
+            return (
+              <button key={s.name} type="button" onMouseDown={() => toggle(s.name)}
+                style={{ display:"flex", alignItems:"center", gap:8, width:"100%", textAlign:"left",
+                  padding:"9px 12px", borderRadius:10, border:"none", background:"transparent",
+                  cursor:"pointer", color:"rgb(var(--text))", fontWeight: checked ? 700 : 400, fontSize:14 }}
+                onMouseEnter={e => e.currentTarget.style.background = "rgb(var(--surface-2))"}
+                onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+                <span style={{ fontSize:15, opacity: checked ? 1 : 0.25 }}>✓</span>
+                {s.name}
+                {s.must_see && <span style={{ marginLeft:"auto", fontSize:10, fontWeight:700, padding:"2px 6px",
+                  borderRadius:999, background:"rgb(var(--accent) / .15)", color:"rgb(var(--accent))" }}>Must-see</span>}
+              </button>
+            );
+          })}
         </div>
       )}
     </div>
@@ -946,40 +1147,70 @@ function FormSection({ label, children, hint }) {
 }
 
 function TripForm({ onGenerate, personaStyle }) {
+  const [selectedCity, setSelectedCity] = React.useState(null);
   const [dest, setDest] = React.useState("");
+  const [arrivalAirport, setArrivalAirport] = React.useState("");
+  const [departureAirport, setDepartureAirport] = React.useState("");
   const [startDate, setStartDate] = React.useState(null);
   const [endDate, setEndDate] = React.useState(null);
-  const [adults_m, setAdultsM] = React.useState(1);
-  const [adults_f, setAdultsF] = React.useState(1);
+  const [adults_m, setAdultsM] = React.useState(0);
+  const [adults_f, setAdultsF] = React.useState(0);
   const [kids, setKids] = React.useState(0);
   const [persona, setPersona] = React.useState("Mid-range");
-  const [mustHave, setMustHave] = React.useState("");
+  const [mustDo, setMustDo] = React.useState([]);
   const [loading, setLoading] = React.useState(false);
 
   const days = (startDate && endDate) ? Math.max(1, Math.round((endDate - startDate) / 86400000)) : 0;
+  const totalTravellers = adults_m + adults_f + kids;
+  const canGenerate = totalTravellers >= 1 && !!dest;
+
+  const handleCitySelect = (city) => {
+    setSelectedCity(city);
+    setDest(city ? city.city + ", " + city.country : "");
+    setMustDo([]);
+    setArrivalAirport("");
+    setDepartureAirport("");
+  };
 
   const handleGenerate = () => {
     if (!dest) { alert("Please enter a destination."); return; }
+    if (!canGenerate) { alert("Add at least 1 traveller to continue."); return; }
     setLoading(true);
     setTimeout(() => {
-      const form = { destination: dest, startDate, endDate, days: days || 3, adults_m, adults_f, kids, persona, mustHave };
+      const form = { destination: dest, startDate, endDate, days: days || 3,
+        adults_m, adults_f, kids, persona, mustHave: mustDo.join(", "),
+        arrivalAirport, departureAirport };
       onGenerate(form);
       setLoading(false);
     }, 1400);
   };
 
-  return (
-    <div className="anim-fade" style={{ maxWidth: 780, margin: "0 auto", padding: "32px 24px 80px" }}>
-      <h2 style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-.03em", margin: "0 0 6px" }}>Plan your trip</h2>
-      <p style={{ fontSize: 15, color: "rgb(var(--muted))", margin: "0 0 36px" }}>Fill in the details below — our AI handles the rest.</p>
+  const airports = selectedCity ? [...selectedCity.airports].sort((a,b) => a.priority - b.priority) : [];
+  const spots = selectedCity ? [...selectedCity.popular_spots].sort((a,b) => a.priority - b.priority) : [];
 
-      <div style={{ display:"flex", flexDirection:"column", gap:32 }}>
-        <FormSection label="Where to?" hint="Search a city, island or local spot">
-          <DestinationField value={dest} onChange={setDest} />
+  return (
+    <div className="anim-fade" style={{ maxWidth: 860, margin: "0 auto", padding: "32px 24px 80px" }}>
+      <h2 style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-.03em", margin: "0 0 6px" }}>Plan your trip</h2>
+      <p style={{ fontSize: 15, color: "rgb(var(--muted))", margin: "0 0 28px" }}>Fill in the details below — our AI handles the rest.</p>
+
+      <div style={{ display:"flex", flexDirection:"column", gap:26 }}>
+
+        {/* WHERE TO */}
+        <FormSection label="Where to?" hint="Search from 50 cities worldwide">
+          <DestinationField onCitySelect={handleCitySelect} />
         </FormSection>
+
+        {/* AIRPORTS */}
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12 }}>
+          <AirportSelect key={"arr-" + (selectedCity?.id || "none")} label="Arrival Airport" airports={airports} disabled={!selectedCity}
+            value={arrivalAirport} onChange={setArrivalAirport} />
+          <AirportSelect key={"dep-" + (selectedCity?.id || "none")} label="Departure Airport" airports={airports} disabled={!selectedCity}
+            value={departureAirport} onChange={setDepartureAirport} />
+        </div>
 
         <div style={{ height:1, background:"rgb(var(--border))" }} />
 
+        {/* WHEN */}
         <FormSection label="When?" hint={days > 0 ? `${days} night${days !== 1 ? "s" : ""}` : "Click a start then end date"}>
           <DateRangePicker startDate={startDate} endDate={endDate}
             onChange={(s, e) => { setStartDate(s); setEndDate(e); }} />
@@ -987,12 +1218,18 @@ function TripForm({ onGenerate, personaStyle }) {
 
         <div style={{ height:1, background:"rgb(var(--border))" }} />
 
+        {/* WHO'S COMING */}
         <FormSection label="Who's coming?">
+          {totalTravellers === 0 && (
+            <p style={{ fontSize:12, color:"rgb(var(--accent))", margin:"0 0 8px" }}>
+              Add at least 1 traveller to continue
+            </p>
+          )}
           <div className="card" style={{ padding:"0 20px", overflow:"hidden" }}>
             {[
-              { label:"Adults (Male)",   sub:"18+",  val:adults_m, set:setAdultsM },
-              { label:"Adults (Female)", sub:"18+",  val:adults_f, set:setAdultsF },
-              { label:"Kids",            sub:"under 18", val:kids, set:setKids },
+              { label:"Adults (Male)",   sub:"18+",      val:adults_m, set:setAdultsM },
+              { label:"Adults (Female)", sub:"18+",      val:adults_f, set:setAdultsF },
+              { label:"Kids",            sub:"under 18", val:kids,     set:setKids },
             ].map((r, i) => (
               <div key={i}>
                 {i > 0 && <div style={{ height:1, background:"rgb(var(--border))" }} />}
@@ -1004,30 +1241,24 @@ function TripForm({ onGenerate, personaStyle }) {
 
         <div style={{ height:1, background:"rgb(var(--border))" }} />
 
-        <FormSection label="Travel persona" hint="Defines your activity + accommodation tier">
+        {/* TRAVEL PERSONA */}
+        <FormSection label="Travel persona" hint="Optional — defines activity + accommodation tier">
           <PersonaGrid value={persona} onChange={setPersona} style={personaStyle} />
         </FormSection>
 
         <div style={{ height:1, background:"rgb(var(--border))" }} />
 
-        <FormSection label="Must-haves" hint="Optional — anything specific you don't want to miss">
-          <textarea value={mustHave} onChange={e => setMustHave(e.target.value)}
-            placeholder="e.g. a rooftop dinner, a day at the beach, skip temples..."
-            rows={3} className="focus-ring"
-            style={{ resize:"vertical", padding:"14px 16px", borderRadius:16, fontSize:14.5,
-              background:"rgb(var(--surface))", border:"1.5px solid rgb(var(--border))",
-              color:"rgb(var(--text))", outline:"none", fontFamily:"inherit", lineHeight:1.6,
-              width:"100%", boxSizing:"border-box", transition:"border-color .2s" }}
-            onMouseEnter={e => e.target.style.borderColor = "rgb(var(--muted))"}
-            onMouseLeave={e => e.target.style.borderColor = "rgb(var(--border))"}
-          />
+        {/* MUST-DO */}
+        <FormSection label="Must-do" hint="Optional — pick experiences from this city">
+          <MustDoSelect spots={spots} disabled={!selectedCity} selected={mustDo} onChange={setMustDo} />
         </FormSection>
 
-        <button type="button" onClick={handleGenerate} disabled={loading}
+        <button type="button" onClick={handleGenerate} disabled={loading || !canGenerate}
           className="btn-accent focus-ring"
           style={{ padding:"18px 0", borderRadius:18, fontSize:17, fontWeight:800,
-            cursor: loading ? "wait" : "pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:12,
-            opacity: loading ? .8 : 1, transition:"opacity .2s" }}>
+            cursor: (!canGenerate || loading) ? "not-allowed" : "pointer",
+            display:"flex", alignItems:"center", justifyContent:"center", gap:12,
+            opacity: (!canGenerate || loading) ? 0.45 : 1, transition:"opacity .2s" }}>
           {loading ? (
             <>
               <svg width="20" height="20" viewBox="0 0 24 24" style={{ animation:"spin .9s linear infinite" }}>
@@ -1330,7 +1561,7 @@ function Logo({ onClick }) {
         </defs>
       </svg>
       <span style={{ fontWeight: 800, fontSize: 20, letterSpacing: "-.03em" }}>
-        Itin<span className="grad-text">era</span>
+        Odys<span className="grad-text">seus</span>
       </span>
     </div>
   );

@@ -10,6 +10,7 @@ import { DashboardPage } from './pages/Dashboard'
 import { CreateTripPage } from './pages/CreateTrip'
 import { ItineraryPage } from './pages/Itinerary'
 import { ProtectedRoute } from './pages/ProtectedRoute'
+import { AICompanion } from './components/AICompanion'
 import './index.css'
 
 createRoot(document.getElementById('root')!).render(
@@ -46,6 +47,7 @@ createRoot(document.getElementById('root')!).render(
             }
           />
         </Routes>
+        <AICompanion />
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>

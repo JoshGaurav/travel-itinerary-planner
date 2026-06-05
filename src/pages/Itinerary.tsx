@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { supabase, Trip, ItineraryDay, Activity } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
@@ -28,6 +28,102 @@ function TypePill({ type }: { type: string }) {
   )
 }
 
+function TripMap({ destination, activities }: { destination: string, activities: Activity[] }) {
+  const mapRef = useRef<HTMLDivElement>(null)
+  const mapInstanceRef = useRef<any>(null)
+
+  useEffect(() => {
+    if (!mapRef.current || mapInstanceRef.current) return
+
+    const initMap = async () => {
+      const L = await import('leaflet')
+      await import('leaflet/dist/leaflet.css')
+
+      // Fix default marker icons
+      delete (L.Icon.Default.prototype as any)._getIconUrl
+      L.Icon.Default.mergeOptions({
+        iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
+        iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
+        shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png',
+      })
+
+      // Geocode destination using free Nominatim API
+      let center: [number, number] = [20, 0]
+      let zoom = 2
+      try {
+        const res = await fetch(
+          `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(destination)}&format=json&limit=1`
+        )
+        const data = await res.json()
+        if (data[0]) {
+          center = [parseFloat(data[0].lat), parseFloat(data[0].lon)]
+          zoom = 12
+        }
+      } catch {}
+
+      const map = L.map(mapRef.current!).setView(center, zoom)
+      mapInstanceRef.current = map
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors',
+      }).addTo(map)
+
+      // Add markers for activities with lat/lng
+      const activitiesWithCoords = activities.filter(a => a.latitude && a.longitude)
+      activitiesWithCoords.forEach(activity => {
+        const type = ACTIVITY_TYPES.find(t => t.id === activity.activity_type) || ACTIVITY_TYPES[ACTIVITY_TYPES.length - 1]!
+        const icon = L.divIcon({
+          html: `<div style="
+            width:28px;height:28px;border-radius:50%;
+            background:${type.color};border:2px solid white;
+            display:flex;align-items:center;justify-content:center;
+            font-size:12px;box-shadow:0 2px 6px rgba(0,0,0,0.3);
+          "></div>`,
+          className: '',
+          iconSize: [28, 28],
+          iconAnchor: [14, 14],
+        })
+        L.marker([activity.latitude!, activity.longitude!], { icon })
+          .addTo(map)
+          .bindPopup(`
+            <div style="font-family:sans-serif;min-width:140px;">
+              <strong style="font-size:13px;">${activity.title}</strong>
+              ${activity.start_time ? `<br/><span style="color:#888;font-size:11px;">${activity.start_time}</span>` : ''}
+              ${activity.location ? `<br/><span style="font-size:11px;">${activity.location}</span>` : ''}
+            </div>
+          `)
+      })
+
+      // If no activity coords, just show destination
+      if (activitiesWithCoords.length === 0 && zoom === 12) {
+        L.marker(center)
+          .addTo(map)
+          .bindPopup(`<strong>${destination}</strong>`)
+          .openPopup()
+      }
+    }
+
+    initMap()
+
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove()
+        mapInstanceRef.current = null
+      }
+    }
+  }, [destination, activities])
+
+  return (
+    <div style={s.mapWrap}>
+      <div style={s.mapLabel}>
+        📍 Map view
+        <span style={s.mapSub}>Activities with coordinates appear as pins</span>
+      </div>
+      <div ref={mapRef} style={s.mapContainer} />
+    </div>
+  )
+}
+
 interface DayWithActivities extends ItineraryDay {
   activities: Activity[]
 }
@@ -45,6 +141,8 @@ export function ItineraryPage() {
   const [newLocation, setNewLocation] = useState('')
   const [newDescription, setNewDescription] = useState('')
   const [newType, setNewType] = useState('sightseeing')
+  const [newLat, setNewLat] = useState('')
+  const [newLng, setNewLng] = useState('')
 
   useEffect(() => {
     if (!user || !id) return
@@ -70,6 +168,8 @@ export function ItineraryPage() {
     setLoading(false)
   }
 
+  const allActivities = days.flatMap(d => d.activities)
+
   const handleAddActivity = async (dayId: string) => {
     if (!newTitle.trim()) return
     const day = days.find(d => d.id === dayId)
@@ -80,6 +180,8 @@ export function ItineraryPage() {
       location: newLocation.trim(),
       description: newDescription.trim(),
       activity_type: newType,
+      latitude: newLat ? parseFloat(newLat) : null,
+      longitude: newLng ? parseFloat(newLng) : null,
       sort_order: day ? day.activities.length : 0,
     }).select().single()
     if (data) {
@@ -90,6 +192,7 @@ export function ItineraryPage() {
     setAddingTo(null)
     setNewTitle(''); setNewTime(''); setNewLocation('')
     setNewDescription(''); setNewType('sightseeing')
+    setNewLat(''); setNewLng('')
   }
 
   const handleDeleteActivity = async (activityId: string, dayId: string) => {
@@ -126,7 +229,10 @@ export function ItineraryPage() {
         {trip.notes && <p style={s.notes}>{trip.notes}</p>}
       </div>
 
-      {/* Activity type legend */}
+      {/* Map */}
+      <TripMap destination={trip.destination} activities={allActivities} />
+
+      {/* Legend */}
       <div style={s.legend}>
         {ACTIVITY_TYPES.filter(t => t.id !== 'other').map(t => (
           <span key={t.id} style={{ ...s.legendPill, background: t.bg, color: t.color, border: `1px solid ${t.color}33` }}>
@@ -155,74 +261,42 @@ export function ItineraryPage() {
                       <h4 style={s.activityTitle}>{activity.title}</h4>
                       <TypePill type={activity.activity_type || 'other'} />
                     </div>
-                    {activity.location && (
-                      <p style={s.activityLocation}>📍 {activity.location}</p>
-                    )}
-                    {activity.description && (
-                      <p style={s.activityDesc}>{activity.description}</p>
-                    )}
+                    {activity.location && <p style={s.activityLocation}>📍 {activity.location}</p>}
+                    {activity.description && <p style={s.activityDesc}>{activity.description}</p>}
                   </div>
-                  <button
-                    onClick={() => handleDeleteActivity(activity.id, day.id)}
-                    style={s.removeBtn}
-                  >×</button>
+                  <button onClick={() => handleDeleteActivity(activity.id, day.id)} style={s.removeBtn}>×</button>
                 </div>
               ))}
 
               {addingTo === day.id ? (
                 <div style={s.addForm}>
-                  <Input
-                    placeholder="Activity title"
-                    value={newTitle}
-                    onChange={e => setNewTitle(e.target.value)}
-                    autoFocus
-                  />
-                  {/* Type selector */}
+                  <Input placeholder="Activity title" value={newTitle} onChange={e => setNewTitle(e.target.value)} autoFocus />
                   <div style={s.typeGrid}>
                     {ACTIVITY_TYPES.map(t => (
-                      <button
-                        key={t.id}
-                        onClick={() => setNewType(t.id)}
-                        style={{
-                          ...s.typeBtn,
-                          background: newType === t.id ? t.bg : 'transparent',
-                          color: newType === t.id ? t.color : 'var(--text-secondary)',
-                          border: newType === t.id ? `1px solid ${t.color}55` : '1px solid var(--border)',
-                        }}
-                      >
-                        {t.label}
-                      </button>
+                      <button key={t.id} onClick={() => setNewType(t.id)} style={{
+                        ...s.typeBtn,
+                        background: newType === t.id ? t.bg : 'transparent',
+                        color: newType === t.id ? t.color : 'var(--text-secondary)',
+                        border: newType === t.id ? `1px solid ${t.color}55` : '1px solid var(--border)',
+                      }}>{t.label}</button>
                     ))}
                   </div>
                   <div style={s.addRow}>
-                    <Input
-                      placeholder="Time"
-                      type="time"
-                      value={newTime}
-                      onChange={e => setNewTime(e.target.value)}
-                      style={{ flex: 1 }}
-                    />
-                    <Input
-                      placeholder="Location"
-                      value={newLocation}
-                      onChange={e => setNewLocation(e.target.value)}
-                      style={{ flex: 1 }}
-                    />
+                    <Input placeholder="Time" type="time" value={newTime} onChange={e => setNewTime(e.target.value)} style={{ flex: 1 }} />
+                    <Input placeholder="Location name" value={newLocation} onChange={e => setNewLocation(e.target.value)} style={{ flex: 1 }} />
                   </div>
-                  <TextArea
-                    placeholder="Description (optional)"
-                    value={newDescription}
-                    onChange={e => setNewDescription(e.target.value)}
-                  />
+                  <div style={s.addRow}>
+                    <Input placeholder="Latitude (optional)" value={newLat} onChange={e => setNewLat(e.target.value)} style={{ flex: 1 }} />
+                    <Input placeholder="Longitude (optional)" value={newLng} onChange={e => setNewLng(e.target.value)} style={{ flex: 1 }} />
+                  </div>
+                  <TextArea placeholder="Description (optional)" value={newDescription} onChange={e => setNewDescription(e.target.value)} />
                   <div style={s.addActions}>
                     <Button size="sm" onClick={() => handleAddActivity(day.id)}>Add Activity</Button>
                     <Button size="sm" variant="ghost" onClick={() => setAddingTo(null)}>Cancel</Button>
                   </div>
                 </div>
               ) : (
-                <button onClick={() => setAddingTo(day.id)} style={s.addBtn}>
-                  + Add activity
-                </button>
+                <button onClick={() => setAddingTo(day.id)} style={s.addBtn}>+ Add activity</button>
               )}
             </div>
           </div>
@@ -240,6 +314,10 @@ const s: Record<string, React.CSSProperties> = {
   heading: { fontFamily: "'Playfair Display', serif", fontSize: '40px', fontWeight: 700, letterSpacing: '-1px', marginBottom: '8px', color: 'var(--cream)' },
   dates: { color: 'var(--text-secondary)', fontSize: '15px', marginBottom: '4px' },
   notes: { color: 'var(--text-muted)', fontSize: '14px', marginTop: '8px', fontStyle: 'italic' },
+  mapWrap: { background: 'var(--bg-card)', border: '1px solid var(--border)', borderRadius: '20px', overflow: 'hidden', marginBottom: '28px' },
+  mapLabel: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '14px 20px', borderBottom: '1px solid var(--border)', fontSize: '14px', fontWeight: 600, color: 'var(--cream)' },
+  mapSub: { fontSize: '12px', color: 'var(--text-muted)', fontWeight: 400 },
+  mapContainer: { height: '320px', width: '100%' },
   legend: { display: 'flex', flexWrap: 'wrap', gap: '8px', marginBottom: '28px' },
   legendPill: { fontSize: '11px', fontWeight: 600, padding: '4px 12px', borderRadius: '20px', letterSpacing: '0.03em' },
   timeline: { display: 'flex', flexDirection: 'column', gap: '28px' },

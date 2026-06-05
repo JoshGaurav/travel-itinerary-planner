@@ -22,12 +22,18 @@ export function Navbar() {
             <NavLink to="/dashboard" style={({ isActive }) => ({ ...styles.link, ...(isActive ? styles.activeLink : {}) })}>
               My Trips
             </NavLink>
+            <NavLink to="/assistant" style={({ isActive }) => ({ ...styles.link, ...(isActive ? styles.activeLink : {}) })}>
+              AI Assistant
+            </NavLink>
             <button onClick={handleLogout} style={styles.logoutBtn}>
               Sign out
             </button>
           </>
         ) : (
           <>
+            <NavLink to="/assistant" style={({ isActive }) => ({ ...styles.link, ...(isActive ? styles.activeLink : {}) })}>
+              AI Assistant
+            </NavLink>
             <NavLink to="/login" style={({ isActive }) => ({ ...styles.link, ...(isActive ? styles.activeLink : {}) })}>
               Sign in
             </NavLink>

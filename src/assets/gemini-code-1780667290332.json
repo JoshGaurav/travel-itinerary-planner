@@ -1,0 +1,1254 @@
+{
+  "cities": [
+    {
+      "id": "paris-fr",
+      "city": "Paris",
+      "aliases": ["Paris", "Lutetia", "La Ville Lumiere", "Paris, France"],
+      "country": "France",
+      "country_code": "FR",
+      "region": "Île-de-France",
+      "airports": [
+        {"iata": "CDG", "icao": "LFPG", "name": "Charles de Gaulle Airport", "type": "International", "distance_km": 25, "intl_visitor_use": true, "priority": 1},
+        {"iata": "ORY", "icao": "LFPO", "name": "Orly Airport", "type": "International", "distance_km": 13, "intl_visitor_use": true, "priority": 1},
+        {"iata": "BVA", "icao": "LFOB", "name": "Beauvais-Tillé Airport", "type": "International", "distance_km": 85, "intl_visitor_use": true, "priority": 2}
+      ],
+      "popular_spots": [
+        {"name": "Eiffel Tower", "alt_name": "La Tour Eiffel", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Louvre Museum", "alt_name": "Musée du Louvre", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Notre-Dame Cathedral", "alt_name": "Cathédrale Notre-Dame", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Arc de Triomphe", "alt_name": null, "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Palace of Versailles", "alt_name": "Château de Versailles", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Sacré-Cœur Basilica", "alt_name": "Basilique du Sacré-Cœur", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Musée d'Orsay", "alt_name": "Orsay Museum", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Sainte-Chapelle", "alt_name": null, "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Jardin du Luxembourg", "alt_name": "Luxembourg Gardens", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Champs-Élysées", "alt_name": "Avenue des Champs-Élysées", "category": "Shopping", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "london-gb",
+      "city": "London",
+      "aliases": ["London", "Londres", "Londra", "London, UK", "London, England"],
+      "country": "United Kingdom",
+      "country_code": "GB",
+      "region": "Greater London",
+      "airports": [
+        {"iata": "LHR", "icao": "EGLL", "name": "Heathrow Airport", "type": "International", "distance_km": 23, "intl_visitor_use": true, "priority": 1},
+        {"iata": "LGW", "icao": "EGKK", "name": "Gatwick Airport", "type": "International", "distance_km": 45, "intl_visitor_use": true, "priority": 1},
+        {"iata": "STN", "icao": "EGSS", "name": "Stansted Airport", "type": "International", "distance_km": 56, "intl_visitor_use": true, "priority": 2}
+      ],
+      "popular_spots": [
+        {"name": "British Museum", "alt_name": null, "category": "Museum", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Tower of London", "alt_name": "Her Majesty's Royal Palace", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Tower Bridge", "alt_name": null, "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "London Eye", "alt_name": "Millennium Wheel", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Westminster Abbey", "alt_name": null, "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Palace of Westminster", "alt_name": "Big Ben and Parliament", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Buckingham Palace", "alt_name": null, "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "St. Paul's Cathedral", "alt_name": null, "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "National Gallery", "alt_name": null, "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Victoria and Albert Museum", "alt_name": "V&A", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "rome-it",
+      "city": "Rome",
+      "aliases": ["Roma", "The Eternal City", "Rome, Italy"],
+      "country": "Italy",
+      "country_code": "IT",
+      "region": "Lazio",
+      "airports": [
+        {"iata": "FCO", "icao": "LIRF", "name": "Leonardo da Vinci–Fiumicino Airport", "type": "International", "distance_km": 30, "intl_visitor_use": true, "priority": 1},
+        {"iata": "CIA", "icao": "LIRA", "name": "Ciampino–G. B. Pastine International Airport", "type": "International", "distance_km": 15, "intl_visitor_use": true, "priority": 2},
+        {"iata": "NAP", "icao": "LIRN", "name": "Naples International Airport", "type": "International", "distance_km": 220, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Colosseum", "alt_name": "Flavian Amphitheatre", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Vatican Museums", "alt_name": "Musei Vaticani", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "St. Peter's Basilica", "alt_name": "Basilica di San Pietro", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Trevi Fountain", "alt_name": "Fontana di Trevi", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Pantheon", "alt_name": null, "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Roman Forum", "alt_name": "Forum Romanum", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Piazza Navona", "alt_name": null, "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Spanish Steps", "alt_name": "Scalinata di Trinità dei Monti", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Castel Sant'Angelo", "alt_name": "Mausoleum of Hadrian", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Borghese Gallery and Museum", "alt_name": "Galleria Borghese", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "barcelona-es",
+      "city": "Barcelona",
+      "aliases": ["BCN", "Barcelona, Spain", "Barcelona, Catalunya", "Barna"],
+      "country": "Spain",
+      "country_code": "ES",
+      "region": "Catalonia",
+      "airports": [
+        {"iata": "BCN", "icao": "LEBL", "name": "Josep Tarradellas Barcelona-El Prat Airport", "type": "International", "distance_km": 12, "intl_visitor_use": true, "priority": 1},
+        {"iata": "GRO", "icao": "LEGE", "name": "Girona-Costa Brava Airport", "type": "International", "distance_km": 90, "intl_visitor_use": true, "priority": 2},
+        {"iata": "REU", "icao": "LERS", "name": "Reus Airport", "type": "International", "distance_km": 100, "intl_visitor_use": true, "priority": 2}
+      ],
+      "popular_spots": [
+        {"name": "La Sagrada Familia", "alt_name": "Basílica de la Sagrada Família", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Park Güell", "alt_name": "Parque Guell", "category": "Park", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Casa Batlló", "alt_name": null, "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "La Rambla", "alt_name": "Las Ramblas", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Gothic Quarter", "alt_name": "Barri Gòtic", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Casa Milà", "alt_name": "La Pedrera", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Montjuïc Hill", "alt_name": "Montjuic", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Picasso Museum", "alt_name": "Museu Picasso", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Camp Nou", "alt_name": "Barcelona Stadium", "category": "Entertainment", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "La Boqueria Market", "alt_name": "Mercat de la Boqueria", "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "amsterdam-nl",
+      "city": "Amsterdam",
+      "aliases": ["Amsterdam", "Mokum", "Amsterdam, Netherlands", "Amsterdam, Holland"],
+      "country": "Netherlands",
+      "country_code": "NL",
+      "region": "North Holland",
+      "airports": [
+        {"iata": "AMS", "icao": "EHAM", "name": "Amsterdam Airport Schiphol", "type": "International", "distance_km": 15, "intl_visitor_use": true, "priority": 1},
+        {"iata": "RTM", "icao": "EHRD", "name": "Rotterdam The Hague Airport", "type": "International", "distance_km": 60, "intl_visitor_use": true, "priority": 2},
+        {"iata": "EIN", "icao": "EHEH", "name": "Eindhoven Airport", "type": "International", "distance_km": 120, "intl_visitor_use": true, "priority": 2}
+      ],
+      "popular_spots": [
+        {"name": "Rijksmuseum", "alt_name": "National Museum", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Van Gogh Museum", "alt_name": null, "category": "Museum", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Anne Frank House", "alt_name": "Anne Frank Huis", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Canal Ring", "alt_name": "Grachtengordel", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Vondelpark", "alt_name": null, "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Jordaan District", "alt_name": "Jordaan", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Red Light District", "alt_name": "De Wallen", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Dam Square", "alt_name": null, "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Albert Cuyp Market", "alt_name": null, "category": "Market", "tier": "Popular Local Experience", "must_see": false, "priority": 9},
+        {"name": "Zaanse Schans", "alt_name": "Windmills of Zaanse Schans", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 10}
+      ]
+    },
+    {
+      "id": "berlin-de",
+      "city": "Berlin",
+      "aliases": ["Berlin", "Berlin, Germany", "Berlin, Deutschland"],
+      "country": "Germany",
+      "country_code": "DE",
+      "region": "Berlin",
+      "airports": [
+        {"iata": "BER", "icao": "EDDB", "name": "Berlin Brandenburg Airport", "type": "International", "distance_km": 18, "intl_visitor_use": true, "priority": 1},
+        {"iata": "LEJ", "icao": "EDDP", "name": "Leipzig/Halle Airport", "type": "International", "distance_km": 160, "intl_visitor_use": false, "priority": 3},
+        {"iata": "DRS", "icao": "EDDC", "name": "Dresden Airport", "type": "International", "distance_km": 170, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Brandenburg Gate", "alt_name": "Brandenburger Tor", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Reichstag Building", "alt_name": "Bundestag", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "East Side Gallery", "alt_name": "Berlin Wall", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Museum Island", "alt_name": "Museumsinsel", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Berlin Television Tower", "alt_name": "Berliner Fernsehturm", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Checkpoint Charlie", "alt_name": null, "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Charlottenburg Palace", "alt_name": "Schloss Charlottenburg", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Memorial to the Murdered Jews of Europe", "alt_name": "Holocaust Memorial", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Tiergarten", "alt_name": "Großer Tiergarten", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Potsdam Day Trip", "alt_name": "Sanssouci Palace", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 10}
+      ]
+    },
+    {
+      "id": "prague-cz",
+      "city": "Prague",
+      "aliases": ["Praha", "Prag", "Prague, Czech Republic"],
+      "country": "Czech Republic",
+      "country_code": "CZ",
+      "region": "Prague",
+      "airports": [
+        {"iata": "PRG", "icao": "LKPR", "name": "Václav Havel Airport Prague", "type": "International", "distance_km": 10, "intl_visitor_use": true, "priority": 1},
+        {"iata": "PED", "icao": "LKPD", "name": "Pardubice Airport", "type": "International", "distance_km": 100, "intl_visitor_use": false, "priority": 3},
+        {"iata": "DRS", "icao": "EDDC", "name": "Dresden Airport", "type": "International", "distance_km": 120, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Charles Bridge", "alt_name": "Karlův most", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Prague Castle", "alt_name": "Pražský hrad", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Old Town Square", "alt_name": "Staroměstské náměstí", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Prague Astronomical Clock", "alt_name": "Pražský orloj", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "St. Vitus Cathedral", "alt_name": "Katedrála svatého Víta", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Wenceslas Square", "alt_name": "Václavské náměstí", "category": "Shopping", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Dancing House", "alt_name": "Fred and Ginger", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Jewish Quarter", "alt_name": "Josefov", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Kutná Hora", "alt_name": "Sedlec Ossuary", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 9},
+        {"name": "Petřín Lookout Tower", "alt_name": "Petřínská rozhledna", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "vienna-at",
+      "city": "Vienna",
+      "aliases": ["Wien", "Vienne", "Vienna, Austria"],
+      "country": "Austria",
+      "country_code": "AT",
+      "region": "Vienna",
+      "airports": [
+        {"iata": "VIE", "icao": "LOWW", "name": "Vienna International Airport", "type": "International", "distance_km": 18, "intl_visitor_use": true, "priority": 1},
+        {"iata": "BTS", "icao": "LZIB", "name": "M. R. Štefánik Airport", "type": "International", "distance_km": 60, "intl_visitor_use": true, "priority": 2},
+        {"iata": "GRZ", "icao": "LOWG", "name": "Graz Airport", "type": "International", "distance_km": 180, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Schönbrunn Palace", "alt_name": "Schloss Schönbrunn", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "St. Stephen's Cathedral", "alt_name": "Stephansdom", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Belvedere Palace", "alt_name": "Schloss Belvedere", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Hofburg Palace", "alt_name": "Hofburg", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Prater", "alt_name": "Wurstelprater", "category": "Entertainment", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Vienna State Opera", "alt_name": "Wiener Staatsoper", "category": "Cultural Experience", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Kunsthistorisches Museum", "alt_name": "Museum of Fine Arts", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Naschmarkt", "alt_name": null, "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Melk Abbey", "alt_name": "Stift Melk", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 9},
+        {"name": "Karlskirche", "alt_name": "St. Charles Church", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "madrid-es",
+      "city": "Madrid",
+      "aliases": ["Madrid", "Madrid, Spain"],
+      "country": "Spain",
+      "country_code": "ES",
+      "region": "Madrid",
+      "airports": [
+        {"iata": "MAD", "icao": "LEMD", "name": "Adolfo Suárez Madrid–Barajas Airport", "type": "International", "distance_km": 13, "intl_visitor_use": true, "priority": 1},
+        {"iata": "TOJ", "icao": "LETO", "name": "Madrid–Torrejón Airport", "type": "Regional", "distance_km": 24, "intl_visitor_use": false, "priority": 3},
+        {"iata": "VLL", "icao": "LEVD", "name": "Valladolid Airport", "type": "Regional", "distance_km": 190, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Prado Museum", "alt_name": "Museo del Prado", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Royal Palace of Madrid", "alt_name": "Palacio Real de Madrid", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Plaza Mayor", "alt_name": null, "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Buen Retiro Park", "alt_name": "El Retiro", "category": "Park", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Reina Sofía Museum", "alt_name": "Museo Reina Sofía", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Puerta del Sol", "alt_name": "Gate of the Sun", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Gran Vía", "alt_name": "Gran Via", "category": "Shopping", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Temple of Debod", "alt_name": "Templo de Debod", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Toledo Day Trip", "alt_name": "Toledo, Spain", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 9},
+        {"name": "Mercado de San Miguel", "alt_name": "San Miguel Market", "category": "Market", "tier": "Popular Local Experience", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "lisbon-pt",
+      "city": "Lisbon",
+      "aliases": ["Lisboa", "Lisbon", "Lisbon, Portugal"],
+      "country": "Portugal",
+      "country_code": "PT",
+      "region": "Lisbon District",
+      "airports": [
+        {"iata": "LIS", "icao": "LPPT", "name": "Humberto Delgado Airport", "type": "International", "distance_km": 7, "intl_visitor_use": true, "priority": 1},
+        {"iata": "OPO", "icao": "LPPR", "name": "Francisco Sá Carneiro Airport", "type": "International", "distance_km": 280, "intl_visitor_use": true, "priority": 3},
+        {"iata": "FAO", "icao": "LPFR", "name": "Faro Airport", "type": "International", "distance_km": 220, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Jerónimos Monastery", "alt_name": "Mosteiro dos Jerónimos", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Belém Tower", "alt_name": "Torre de Belém", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "São Jorge Castle", "alt_name": "Castelo de São Jorge", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Sintra Day Trip", "alt_name": "Pena Palace", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Alfama District", "alt_name": "Alfama", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Praça do Comércio", "alt_name": "Terreiro do Paço", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Santa Justa Lift", "alt_name": "Elevador de Santa Justa", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Tram 28", "alt_name": "Elétrico 28", "category": "Cultural Experience", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Lisbon Oceanarium", "alt_name": "Oceanário de Lisboa", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Time Out Market", "alt_name": "Mercado da Ribeira", "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "athens-gr",
+      "city": "Athens",
+      "aliases": ["Athina", "Atenas", "Athens, Greece"],
+      "country": "Greece",
+      "country_code": "GR",
+      "region": "Attica",
+      "airports": [
+        {"iata": "ATH", "icao": "LGAV", "name": "Athens Eleftherios Venizelos International Airport", "type": "International", "distance_km": 20, "intl_visitor_use": true, "priority": 1},
+        {"iata": "JMK", "icao": "LGMK", "name": "Mykonos Airport", "type": "International", "distance_km": 150, "intl_visitor_use": true, "priority": 3},
+        {"iata": "JTR", "icao": "LGSR", "name": "Santorini National Airport", "type": "International", "distance_km": 230, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Acropolis of Athens", "alt_name": "Acropolis", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Parthenon", "alt_name": null, "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Acropolis Museum", "alt_name": "New Acropolis Museum", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Plaka", "alt_name": "Neighborhood of the Gods", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "National Archaeological Museum", "alt_name": null, "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Ancient Agora of Athens", "alt_name": "Agora", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Temple of Olympian Zeus", "alt_name": "Olympieion", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Panathenaic Stadium", "alt_name": "Kallimarmaro", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Mount Lycabettus", "alt_name": "Lycabettus Hill", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Cape Sounion Day Trip", "alt_name": "Temple of Poseidon", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 10}
+      ]
+    },
+    {
+      "id": "budapest-hu",
+      "city": "Budapest",
+      "aliases": ["Budapest", "Budapest, Hungary"],
+      "country": "Hungary",
+      "country_code": "HU",
+      "region": "Central Hungary",
+      "airports": [
+        {"iata": "BUD", "icao": "LHBP", "name": "Budapest Ferenc Liszt International Airport", "type": "International", "distance_km": 16, "intl_visitor_use": true, "priority": 1},
+        {"iata": "DEB", "icao": "LHUD", "name": "Debrecen International Airport", "type": "International", "distance_km": 220, "intl_visitor_use": false, "priority": 3},
+        {"iata": "BTS", "icao": "LZIB", "name": "M. R. Štefánik Airport", "type": "International", "distance_km": 200, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Hungarian Parliament Building", "alt_name": "Országház", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Buda Castle", "alt_name": "Royal Palace", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Fisherman's Bastion", "alt_name": "Halászbástya", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Chain Bridge", "alt_name": "Széchenyi lánchíd", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Széchenyi Thermal Bath", "alt_name": "Szechenyi Bath", "category": "Cultural Experience", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "St. Stephen's Basilica", "alt_name": "Szent István-bazilika", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Heroes' Square", "alt_name": "Hősök tere", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Gellért Hill", "alt_name": "Citadella", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Great Market Hall", "alt_name": "Nagyvásárcsarnok", "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Ruin Bars (Szimpla Kert)", "alt_name": "Szimpla Kert", "category": "Entertainment", "tier": "Popular Local Experience", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "florence-it",
+      "city": "Florence",
+      "aliases": ["Firenze", "Florence", "Florence, Italy"],
+      "country": "Italy",
+      "country_code": "IT",
+      "region": "Tuscany",
+      "airports": [
+        {"iata": "FLR", "icao": "LIRQ", "name": "Florence Airport, Peretola", "type": "International", "distance_km": 4, "intl_visitor_use": true, "priority": 1},
+        {"iata": "PSA", "icao": "LIRP", "name": "Pisa International Airport", "type": "International", "distance_km": 80, "intl_visitor_use": true, "priority": 2},
+        {"iata": "BLQ", "icao": "LIPE", "name": "Bologna Guglielmo Marconi Airport", "type": "International", "distance_km": 100, "intl_visitor_use": true, "priority": 2}
+      ],
+      "popular_spots": [
+        {"name": "Florence Cathedral", "alt_name": "Duomo di Firenze", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Uffizi Gallery", "alt_name": "Galleria degli Uffizi", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Ponte Vecchio", "alt_name": "Old Bridge", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Accademia Gallery", "alt_name": "Galleria dell'Accademia", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Piazzale Michelangelo", "alt_name": null, "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Piazza della Signoria", "alt_name": null, "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Palazzo Vecchio", "alt_name": null, "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Boboli Gardens", "alt_name": "Giardino di Boboli", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Siena and San Gimignano Day Trip", "alt_name": "Tuscany Day Trip", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 9},
+        {"name": "San Lorenzo Market", "alt_name": "Mercato Centrale", "category": "Market", "tier": "Popular Local Experience", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "venice-it",
+      "city": "Venice",
+      "aliases": ["Venezia", "Venice", "Venice, Italy"],
+      "country": "Italy",
+      "country_code": "IT",
+      "region": "Veneto",
+      "airports": [
+        {"iata": "VCE", "icao": "LIPZ", "name": "Venice Marco Polo Airport", "type": "International", "distance_km": 8, "intl_visitor_use": true, "priority": 1},
+        {"iata": "TSF", "icao": "LIPH", "name": "Treviso Airport", "type": "International", "distance_km": 30, "intl_visitor_use": true, "priority": 2},
+        {"iata": "VRN", "icao": "LIPX", "name": "Verona Villafranca Airport", "type": "International", "distance_km": 115, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "St. Mark's Basilica", "alt_name": "Basilica di San Marco", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Doge's Palace", "alt_name": "Palazzo Ducale", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "St. Mark's Square", "alt_name": "Piazza San Marco", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Rialto Bridge", "alt_name": "Ponte di Rialto", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Grand Canal", "alt_name": "Canal Grande", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Bridge of Sighs", "alt_name": "Ponte dei Sospiri", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Peggy Guggenheim Collection", "alt_name": null, "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Campanile di San Marco", "alt_name": "St Mark's Campanile", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Murano Island Day Trip", "alt_name": "Glassblowing Island", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 9},
+        {"name": "Gondola Ride", "alt_name": "Venetian Gondola Experience", "category": "Cultural Experience", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "dublin-ie",
+      "city": "Dublin",
+      "aliases": ["Dublin", "Baile Atha Cliath", "Dublin, Ireland"],
+      "country": "Ireland",
+      "country_code": "IE",
+      "region": "Leinster",
+      "airports": [
+        {"iata": "DUB", "icao": "EIDW", "name": "Dublin Airport", "type": "International", "distance_km": 10, "intl_visitor_use": true, "priority": 1},
+        {"iata": "ORK", "icao": "EICK", "name": "Cork Airport", "type": "International", "distance_km": 250, "intl_visitor_use": false, "priority": 3},
+        {"iata": "SNN", "icao": "EINN", "name": "Shannon Airport", "type": "International", "distance_km": 220, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Guinness Storehouse", "alt_name": "St. James's Gate Brewery", "category": "Cultural Experience", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Trinity College Library and Book of Kells", "alt_name": "Book of Kells", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Temple Bar District", "alt_name": "Temple Bar", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Dublin Castle", "alt_name": null, "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Kilmainham Gaol", "alt_name": null, "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "St. Patrick's Cathedral", "alt_name": null, "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Phoenix Park", "alt_name": null, "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Christ Church Cathedral", "alt_name": "Cathedral of the Holy Trinity", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Grafton Street", "alt_name": null, "category": "Shopping", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Chester Beatty Library", "alt_name": "Chester Beatty Museum", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "tokyo-jp",
+      "city": "Tokyo",
+      "aliases": ["Tokyo", "Tokyo Metropolis", "Tōkyō", "Edo"],
+      "country": "Japan",
+      "country_code": "JP",
+      "region": "Kanto",
+      "airports": [
+        {"iata": "HND", "icao": "RJTT", "name": "Haneda Airport", "type": "International", "distance_km": 15, "intl_visitor_use": true, "priority": 1},
+        {"iata": "NRT", "icao": "RJAA", "name": "Narita International Airport", "type": "International", "distance_km": 60, "intl_visitor_use": true, "priority": 1},
+        {"iata": "IBR", "icao": "RJAH", "name": "Ibaraki Airport", "type": "Regional", "distance_km": 85, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Senso-ji Temple", "alt_name": "Asakusa Kannon Temple", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Tokyo Skytree", "alt_name": "Skytree", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Meiji Jingu Shrine", "alt_name": "Meiji Shrine", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Shibuya Crossing", "alt_name": "Shibuya Scramble", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "TeamLab Planets", "alt_name": "teamLab Planets TOKYO", "category": "Cultural Experience", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Tokyo Tower", "alt_name": "Nippon Television Tower", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Shinjuku Gyoen National Garden", "alt_name": "Shinjuku Gyoen", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Imperial Palace", "alt_name": "Kōkyo", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Harajuku (Takeshita Street)", "alt_name": "Takeshita-dori", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Mount Fuji Day Trip", "alt_name": "Hakone Day Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 10}
+      ]
+    },
+    {
+      "id": "kyoto-jp",
+      "city": "Kyoto",
+      "aliases": ["Kyoto", "Heian-kyo", "Kyōto"],
+      "country": "Japan",
+      "country_code": "JP",
+      "region": "Kansai",
+      "airports": [
+        {"iata": "KIX", "icao": "RJBB", "name": "Kansai International Airport", "type": "International", "distance_km": 100, "intl_visitor_use": true, "priority": 1},
+        {"iata": "ITM", "icao": "RJOO", "name": "Osaka Itami Airport", "type": "International", "distance_km": 50, "intl_visitor_use": true, "priority": 2},
+        {"iata": "UKB", "icao": "RJBE", "name": "Kobe Airport", "type": "Regional", "distance_km": 80, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Fushimi Inari-taisha Shrine", "alt_name": "Fushimi Inari", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Kinkaku-ji", "alt_name": "Golden Pavilion", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Kiyomizu-dera Temple", "alt_name": "Kiyomizudera", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Arashiyama Bamboo Grove", "alt_name": "Arashiyama Bamboo Forest", "category": "Park", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Nijo Castle", "alt_name": "Nijojo", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Gion District", "alt_name": "Gion", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Ginkaku-ji", "alt_name": "Silver Pavilion", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Nishiki Market", "alt_name": "Kyoto's Kitchen", "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Philosopher's Path", "alt_name": "Tetsugaku-no-Michi", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Nara Park Day Trip", "alt_name": "Todai-ji Temple Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 10}
+      ]
+    },
+    {
+      "id": "singapore-sg",
+      "city": "Singapore",
+      "aliases": ["Singapore", "Singapura", "Lion City", "Temasek"],
+      "country": "Singapore",
+      "country_code": "SG",
+      "region": "Central Region",
+      "airports": [
+        {"iata": "SIN", "icao": "WSSS", "name": "Singapore Changi Airport", "type": "International", "distance_km": 17, "intl_visitor_use": true, "priority": 1},
+        {"iata": "XSP", "icao": "WSSL", "name": "Seletar Airport", "type": "Regional", "distance_km": 16, "intl_visitor_use": false, "priority": 3},
+        {"iata": "JHB", "icao": "WMKJ", "name": "Senai International Airport", "type": "International", "distance_km": 40, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Gardens by the Bay", "alt_name": "Gardens", "category": "Park", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Marina Bay Sands", "alt_name": "MBS", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Singapore Botanic Gardens", "alt_name": "Orchid Garden", "category": "Park", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Sentosa Island", "alt_name": "Sentosa", "category": "Beach", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Chinatown Singapore", "alt_name": "Chinatown", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Singapore Flyer", "alt_name": null, "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "National Gallery Singapore", "alt_name": "National Gallery", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Night Safari", "alt_name": "Singapore Night Safari", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Kampong Glam", "alt_name": "Arab Street", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Orchard Road", "alt_name": "Orchard", "category": "Shopping", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "bangkok-th",
+      "city": "Bangkok",
+      "aliases": ["Krung Thep", "Bangkok", "Bangkok, Thailand", "Krung Thep Maha Nakhon"],
+      "country": "Thailand",
+      "country_code": "TH",
+      "region": "Bangkok",
+      "airports": [
+        {"iata": "BKK", "icao": "VTBS", "name": "Suvarnabhumi Airport", "type": "International", "distance_km": 30, "intl_visitor_use": true, "priority": 1},
+        {"iata": "DMK", "icao": "VTBD", "name": "Don Mueang International Airport", "type": "International", "distance_km": 24, "intl_visitor_use": true, "priority": 1},
+        {"iata": "UTP", "icao": "VTBU", "name": "U-Tapao International Airport", "type": "International", "distance_km": 140, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Grand Palace", "alt_name": "Phra Borom Maha Ratchawang", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Wat Phra Kaew", "alt_name": "Temple of the Emerald Buddha", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Wat Arun", "alt_name": "Temple of Dawn", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Wat Pho", "alt_name": "Temple of the Reclining Buddha", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Chatuchak Weekend Market", "alt_name": "JJ Market", "category": "Market", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Jim Thompson House", "alt_name": "Jim Thompson Museum", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Khao San Road", "alt_name": "Khaosan Road", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Chinatown Bangkok", "alt_name": "Yaowarat Road", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Ayutthaya Day Trip", "alt_name": "Historic City of Ayutthaya", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 9},
+        {"name": "Lumphini Park", "alt_name": "Lumpini Park", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "phuket-th",
+      "city": "Phuket",
+      "aliases": ["Phuket", "Phuket Island", "Phuket, Thailand"],
+      "country": "Thailand",
+      "country_code": "TH",
+      "region": "Phuket",
+      "airports": [
+        {"iata": "HKT", "icao": "VTSP", "name": "Phuket International Airport", "type": "International", "distance_km": 32, "intl_visitor_use": true, "priority": 1},
+        {"iata": "KBV", "icao": "VTSG", "name": "Krabi International Airport", "type": "International", "distance_km": 140, "intl_visitor_use": true, "priority": 3},
+        {"iata": "URT", "icao": "VTSB", "name": "Surat Thani Airport", "type": "Domestic", "distance_km": 240, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Patong Beach", "alt_name": "Patong", "category": "Beach", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Phuket Big Buddha", "alt_name": "The Great Buddha of Phuket", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Wat Chalong", "alt_name": "Chalong Temple", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Phuket Old Town", "alt_name": "Old Phuket Town", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Phi Phi Islands Day Trip", "alt_name": "Koh Phi Phi Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Phang Nga Bay Day Trip", "alt_name": "James Bond Island Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Karon Beach", "alt_name": "Karon", "category": "Beach", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Kata Noi Beach", "alt_name": "Kata Noi", "category": "Beach", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Promthep Cape", "alt_name": "Laem Promthep", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Bangla Road", "alt_name": "Soi Bangla", "category": "Entertainment", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "kuala-lumpur-my",
+      "city": "Kuala Lumpur",
+      "aliases": ["KL", "Kuala Lumpur", "Kuala Lumpur, Malaysia"],
+      "country": "Malaysia",
+      "country_code": "MY",
+      "region": "Federal Territory of Kuala Lumpur",
+      "airports": [
+        {"iata": "KUL", "icao": "WMKK", "name": "Kuala Lumpur International Airport", "type": "International", "distance_km": 45, "intl_visitor_use": true, "priority": 1},
+        {"iata": "SZB", "icao": "WMSA", "name": "Sultan Abdul Aziz Shah Airport", "type": "International", "distance_km": 15, "intl_visitor_use": true, "priority": 2},
+        {"iata": "MKZ", "icao": "WMKM", "name": "Malacca International Airport", "type": "Regional", "distance_km": 115, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Petronas Twin Towers", "alt_name": "Petronas Towers", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Batu Caves", "alt_name": "Batu Caves Temple", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Kuala Lumpur Tower", "alt_name": "KL Tower", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Merdeka Square", "alt_name": "Dataran Merdeka", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Thean Hou Temple", "alt_name": "Thean Hou", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Jalan Alor", "alt_name": "Jalan Alor Food Street", "category": "Market", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Chinatown Kuala Lumpur", "alt_name": "Petaling Street", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Central Market Kuala Lumpur", "alt_name": "Pasar Seni", "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Bukit Bintang", "alt_name": "Starhill", "category": "Shopping", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Malacca Day Trip", "alt_name": "Historic Melaka", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 10}
+      ]
+    },
+    {
+      "id": "seoul-kr",
+      "city": "Seoul",
+      "aliases": ["Seoul", "Hanyang", "Seoul Metropolis", "Seoul, South Korea"],
+      "country": "South Korea",
+      "country_code": "KR",
+      "region": "Seoul Capital Area",
+      "airports": [
+        {"iata": "ICN", "icao": "RKSI", "name": "Incheon International Airport", "type": "International", "distance_km": 48, "intl_visitor_use": true, "priority": 1},
+        {"iata": "GMP", "icao": "RKSS", "name": "Gimpo International Airport", "type": "International", "distance_km": 15, "intl_visitor_use": true, "priority": 1},
+        {"iata": "CJJ", "icao": "RKTU", "name": "Cheongju International Airport", "type": "International", "distance_km": 110, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Gyeongbokgung Palace", "alt_name": "Gyeongbok Palace", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "N Seoul Tower", "alt_name": "Namsan Tower", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Bukchon Hanok Village", "alt_name": "Bukchon", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Myeong-dong", "alt_name": "Myeongdong Shopping Street", "category": "Shopping", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Insadong", "alt_name": "Insa-dong", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Changdeokgung Palace", "alt_name": "Changdeok Palace", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Dongdaemun Design Plaza", "alt_name": "DDP", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Hongdae", "alt_name": "Hongik University District", "category": "Neighborhood", "tier": "Popular Local Experience", "must_see": false, "priority": 8},
+        {"name": "DMZ Day Trip", "alt_name": "Demilitarized Zone", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 9},
+        {"name": "Namdaemun Market", "alt_name": "Namdaemun", "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "hong-kong-hk",
+      "city": "Hong Kong",
+      "aliases": ["Hong Kong", "HK", "Hong Kong SAR", "Fragrant Harbour"],
+      "country": "Hong Kong",
+      "country_code": "HK",
+      "region": "Hong Kong",
+      "airports": [
+        {"iata": "HKG", "icao": "VHHH", "name": "Hong Kong International Airport", "type": "International", "distance_km": 34, "intl_visitor_use": true, "priority": 1},
+        {"iata": "MFM", "icao": "VMMC", "name": "Macau International Airport", "type": "International", "distance_km": 40, "intl_visitor_use": true, "priority": 3},
+        {"iata": "SZX", "icao": "ZGSZ", "name": "Shenzhen Bao'an International Airport", "type": "International", "distance_km": 50, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Victoria Peak", "alt_name": "The Peak", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Tian Tan Buddha", "alt_name": "Big Buddha", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Star Ferry", "alt_name": "Victoria Harbour Star Ferry", "category": "Cultural Experience", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Lantau Island", "alt_name": "Lantau", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 4},
+        {"name": "Tsim Sha Tsui Promenade", "alt_name": "TST Promenade", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Hong Kong Disneyland", "alt_name": "Disneyland", "category": "Entertainment", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Ladies' Market", "alt_name": "Tung Choi Street", "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Ocean Park Hong Kong", "alt_name": "Ocean Park", "category": "Entertainment", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Man Mo Temple", "alt_name": "Sheung Wan Man Mo Temple", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Macau Day Trip", "alt_name": "Historic Centre of Macau", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 10}
+      ]
+    },
+    {
+      "id": "taipei-tw",
+      "city": "Taipei",
+      "aliases": ["Taipei", "Taipei City", "Tâi-pak", "Taipei, Taiwan"],
+      "country": "Taiwan",
+      "country_code": "TW",
+      "region": "Northern Taiwan",
+      "airports": [
+        {"iata": "TPE", "icao": "RCTP", "name": "Taiwan Taoyuan International Airport", "type": "International", "distance_km": 40, "intl_visitor_use": true, "priority": 1},
+        {"iata": "TSA", "icao": "RCSS", "name": "Taipei Songshan Airport", "type": "International", "distance_km": 5, "intl_visitor_use": true, "priority": 1},
+        {"iata": "RMQ", "icao": "RCMQ", "name": "Taichung International Airport", "type": "International", "distance_km": 110, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Taipei 101", "alt_name": "Taipei Financial Center", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "National Palace Museum", "alt_name": "Gu Gong", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Chiang Kai-shek Memorial Hall", "alt_name": "CKS Memorial", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Shilin Night Market", "alt_name": "Shilin Market", "category": "Market", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Longshan Temple", "alt_name": "Mengjia Longshan Temple", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Elephant Mountain", "alt_name": "Nangang Hiking Trail", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Jiufen Day Trip", "alt_name": "Jiufen Old Street", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 7},
+        {"name": "Ximending", "alt_name": "Ximen Pedestrian Area", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Raohe Street Night Market", "alt_name": "Raohe Market", "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Yangmingshan National Park", "alt_name": "Yangmingshan", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "bali-id",
+      "city": "Bali (Denpasar)",
+      "aliases": ["Bali", "Denpasar", "Ngurah Rai", "Bali Island", "Denpasar, Bali"],
+      "country": "Indonesia",
+      "country_code": "ID",
+      "region": "Bali",
+      "airports": [
+        {"iata": "DPS", "icao": "WADD", "name": "Ngurah Rai International Airport", "type": "International", "distance_km": 13, "intl_visitor_use": true, "priority": 1},
+        {"iata": "LOP", "icao": "WADL", "name": "Lombok International Airport", "type": "International", "distance_km": 120, "intl_visitor_use": true, "priority": 3},
+        {"iata": "BWX", "icao": "WADY", "name": "Banyuwangi International Airport", "type": "Domestic", "distance_km": 110, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Ubud Monkey Forest", "alt_name": "Sacred Monkey Forest Sanctuary", "category": "Park", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Tanah Lot Temple", "alt_name": "Pura Tanah Lot", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Uluwatu Temple", "alt_name": "Pura Luhur Uluwatu", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Tegallalang Rice Terraces", "alt_name": "Ubud Rice Terraces", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Seminyak Beach", "alt_name": "Seminyak", "category": "Beach", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Nusa Penida Day Trip", "alt_name": "Kelingking Beach Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Mount Batur Sunrise Trek", "alt_name": "Gunung Batur Trek", "category": "Cultural Experience", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Pura Ulun Danu Bratan", "alt_name": "Lake Temple", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Ubud Art Market", "alt_name": "Pasar Seni Ubud", "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Tirta Empul Temple", "alt_name": "Holy Water Temple", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "new-delhi-in",
+      "city": "New Delhi",
+      "aliases": ["Delhi", "New Delhi", "Dilli", "NCR", "National Capital Region"],
+      "country": "India",
+      "country_code": "IN",
+      "region": "National Capital Territory of Delhi",
+      "airports": [
+        {"iata": "DEL", "icao": "VIDP", "name": "Indira Gandhi International Airport", "type": "International", "distance_km": 16, "intl_visitor_use": true, "priority": 1},
+        {"iata": "ATQ", "icao": "VIAR", "name": "Sri Guru Ram Dass Jee International Airport", "type": "International", "distance_km": 400, "intl_visitor_use": false, "priority": 3},
+        {"iata": "JAI", "icao": "VIJP", "name": "Jaipur International Airport", "type": "International", "distance_km": 230, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Taj Mahal Day Trip", "alt_name": "Agra Taj Mahal Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Qutub Minar", "alt_name": "Qutb Minar Complex", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Humayun's Tomb", "alt_name": "Maqbara e Humayun", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "India Gate", "alt_name": "All India War Memorial", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Red Fort", "alt_name": "Lal Qila", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Lotus Temple", "alt_name": "Bahá'í House of Worship", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Swaminarayan Akshardham", "alt_name": "Akshardham Temple", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Jama Masjid", "alt_name": "Masjid e Jahan Numa", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Chandni Chowk", "alt_name": "Moonlight Square", "category": "Market", "tier": "Must See", "must_see": true, "priority": 9},
+        {"name": "Gurudwara Bangla Sahib", "alt_name": "Bangla Sahib", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "mumbai-in",
+      "city": "Mumbai",
+      "aliases": ["Bombay", "Mumbai, India", "Bombay, India"],
+      "country": "India",
+      "country_code": "IN",
+      "region": "Maharashtra",
+      "airports": [
+        {"iata": "BOM", "icao": "VABB", "name": "Chhatrapati Shivaji Maharaj International Airport", "type": "International", "distance_km": 15, "intl_visitor_use": true, "priority": 1},
+        {"iata": "PNQ", "icao": "VAPO", "name": "Pune Airport", "type": "International", "distance_km": 120, "intl_visitor_use": false, "priority": 3},
+        {"iata": "IXU", "icao": "VAAU", "name": "Aurangabad Airport", "type": "Domestic", "distance_km": 270, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Gateway of India", "alt_name": null, "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Chhatrapati Shivaji Maharaj Terminus", "alt_name": "Victoria Terminus", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Elephanta Caves", "alt_name": "Elephanta Island Gharapuri", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Marine Drive", "alt_name": "Queen's Necklace", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Haji Ali Dargah", "alt_name": "Haji Ali", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Chhatrapati Shivaji Maharaj Vastu Sangrahalaya", "alt_name": "Prince of Wales Museum", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Colaba Causeway", "alt_name": "Colaba Market", "category": "Shopping", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Juhu Beach", "alt_name": "Juhu", "category": "Beach", "tier": "Popular Local Experience", "must_see": false, "priority": 8},
+        {"name": "Dhobi Ghat", "alt_name": "Mahalaxmi Dhobi Ghat", "category": "Cultural Experience", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Bandra-Worli Sea Link", "alt_name": "Rajiv Gandhi Sea Link", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "shanghai-cn",
+      "city": "Shanghai",
+      "aliases": ["Shanghai", "Shanghai, China", "Hu", "Shen"],
+      "country": "China",
+      "country_code": "CN",
+      "region": "Shanghai Municipality",
+      "airports": [
+        {"iata": "PVG", "icao": "ZSPD", "name": "Shanghai Pudong International Airport", "type": "International", "distance_km": 30, "intl_visitor_use": true, "priority": 1},
+        {"iata": "SHA", "icao": "ZSSS", "name": "Shanghai Hongqiao International Airport", "type": "International", "distance_km": 13, "intl_visitor_use": true, "priority": 1},
+        {"iata": "HGH", "icao": "ZSHC", "name": "Hangzhou Xiaoshan International Airport", "type": "International", "distance_km": 150, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "The Bund", "alt_name": "Wai Tan", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Yu Garden", "alt_name": "Yuyuan Garden", "category": "Park", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Shanghai Tower", "alt_name": null, "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Nanjing Road", "alt_name": "Nanjing Lu", "category": "Shopping", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Oriental Pearl TV Tower", "alt_name": "Oriental Pearl", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Shanghai Museum", "alt_name": "Shanghai Bowuguan", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Jade Buddha Temple", "alt_name": "Yufo Si", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Zhujiajiao Water Town Day Trip", "alt_name": "Zhujiajiao Ancient Town", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 8},
+        {"name": "Xintiandi", "alt_name": "French Concession Xintiandi", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "French Concession", "alt_name": "Former French Concession", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "dubai-ae",
+      "city": "Dubai",
+      "aliases": ["Dubai", "Dubayy", "Dubai, UAE", "Dubai, United Arab Emirates"],
+      "country": "United Arab Emirates",
+      "country_code": "AE",
+      "region": "Emirate of Dubai",
+      "airports": [
+        {"iata": "DXB", "icao": "OMDB", "name": "Dubai International Airport", "type": "International", "distance_km": 5, "intl_visitor_use": true, "priority": 1},
+        {"iata": "DWC", "icao": "OMDW", "name": "Al Maktoum International Airport", "type": "International", "distance_km": 37, "intl_visitor_use": true, "priority": 2},
+        {"iata": "SHJ", "icao": "OMSJ", "name": "Sharjah International Airport", "type": "International", "distance_km": 25, "intl_visitor_use": true, "priority": 2}
+      ],
+      "popular_spots": [
+        {"name": "Burj Khalifa", "alt_name": "Burj Dubai", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "The Dubai Mall", "alt_name": "Dubai Mall", "category": "Shopping", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Palm Jumeirah", "alt_name": "The Palm", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Burj Al Arab", "alt_name": "Burj Al Arab Jumeirah", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Dubai Fountain", "alt_name": "The Fountains", "category": "Entertainment", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Museum of the Future", "alt_name": "MOTF", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Desert Safari Day Trip", "alt_name": "Dubai Desert Safari", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 7},
+        {"name": "Dubai Marina", "alt_name": "Marina Walk", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Gold Souk", "alt_name": "Deira Gold Souk", "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Al Fahidi Historical Neighbourhood", "alt_name": "Al Bastakiya", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "istanbul-tr",
+      "city": "Istanbul",
+      "aliases": ["Constantinople", "Byzantium", "Istanbul", "İstanbul", "Istanbul, Turkey"],
+      "country": "Turkey",
+      "country_code": "TR",
+      "region": "Istanbul Province",
+      "airports": [
+        {"iata": "IST", "icao": "LTFM", "name": "Istanbul Airport", "type": "International", "distance_km": 35, "intl_visitor_use": true, "priority": 1},
+        {"iata": "SAW", "icao": "LTFJ", "name": "Sabiha Gökçen International Airport", "type": "International", "distance_km": 40, "intl_visitor_use": true, "priority": 1},
+        {"iata": "ISL", "icao": "LTBA", "name": "Atatürk Airport", "type": "Regional", "distance_km": 15, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Hagia Sophia", "alt_name": "Ayasofya-i Kebir Cami-i Şerifi", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "The Blue Mosque", "alt_name": "Sultan Ahmed Mosque", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Topkapi Palace", "alt_name": "Topkapı Sarayı", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Grand Bazaar", "alt_name": "Kapalıçarşı", "category": "Market", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Basilica Cistern", "alt_name": "Yerebatan Sarnıcı", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Bosphorus Cruise", "alt_name": "Bosphorus Strait Boat Tour", "category": "Cultural Experience", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Galata Tower", "alt_name": "Galata Kulesi", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Dolmabahçe Palace", "alt_name": "Dolmabahce Palace", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Spice Bazaar", "alt_name": "Mısır Çarşısı", "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Princes' Islands Day Trip", "alt_name": "Adalar", "category": "Day Trip", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "abu-dhabi-ae",
+      "city": "Abu Dhabi",
+      "aliases": ["Abu Dhabi", "Abu Zaby", "Abu Dhabi, UAE", "Abu Dhabi, United Arab Emirates"],
+      "country": "United Arab Emirates",
+      "country_code": "AE",
+      "region": "Emirate of Abu Dhabi",
+      "airports": [
+        {"iata": "AUH", "icao": "OMAA", "name": "Zayed International Airport", "type": "International", "distance_km": 30, "intl_visitor_use": true, "priority": 1},
+        {"iata": "AZI", "icao": "OMAD", "name": "Al Bateen Executive Airport", "type": "Regional", "distance_km": 12, "intl_visitor_use": false, "priority": 3},
+        {"iata": "DXB", "icao": "OMDB", "name": "Dubai International Airport", "type": "International", "distance_km": 130, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Sheikh Zayed Grand Mosque", "alt_name": "Grand Mosque", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Louvre Abu Dhabi", "alt_name": "The Louvre", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Qasr Al Watan", "alt_name": "Palace of the Nation", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Ferrari World Abu Dhabi", "alt_name": "Ferrari World", "category": "Entertainment", "tier": "Highly Recommended", "must_see": false, "priority": 4},
+        {"name": "Yas Island", "alt_name": "Yas", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Emirates Palace", "alt_name": "Emirates Palace Mandarin Oriental", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Abu Dhabi Corniche", "alt_name": "Corniche Road", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Qasr Al Hosn", "alt_name": "White Fort", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Falcon Hospital Day Trip", "alt_name": "Abu Dhabi Falcon Hospital", "category": "Day Trip", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Observation Deck at 300", "alt_name": "Etihad Towers Observation Deck", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "doha-qa",
+      "city": "Doha",
+      "aliases": ["Ad-Dawhah", "Doha", "Doha, Qatar"],
+      "country": "Qatar",
+      "country_code": "QA",
+      "region": "Ad-Dawhah",
+      "airports": [
+        {"iata": "DOH", "icao": "OTHH", "name": "Hamad International Airport", "type": "International", "distance_km": 15, "intl_visitor_use": true, "priority": 1},
+        {"iata": "DIA", "icao": "OTBD", "name": "Doha International Airport", "type": "International", "distance_km": 8, "intl_visitor_use": true, "priority": 2},
+        {"iata": "BAH", "icao": "OBBI", "name": "Bahrain International Airport", "type": "International", "distance_km": 140, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Souq Waqif", "alt_name": "Standing Market", "category": "Market", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Museum of Islamic Art", "alt_name": "MIA", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "National Museum of Qatar", "alt_name": "NMoQ", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Katara Cultural Village", "alt_name": "Katara", "category": "Cultural Experience", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "The Pearl-Qatar", "alt_name": "The Pearl", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Doha Corniche", "alt_name": "The Corniche", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Inland Sea Day Trip", "alt_name": "Khor Al Adaid Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 7},
+        {"name": "Mathaf: Arab Museum of Modern Art", "alt_name": "Mathaf", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "State Grand Mosque", "alt_name": "Imam Abdul Wahhab Mosque", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Falcon Souq", "alt_name": "Souq Waqif Falcon Market", "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "cape-town-za",
+      "city": "Cape Town",
+      "aliases": ["Cape Town", "Kaapstad", "Ikapa", "Mother City", "Cape Town, South Africa"],
+      "country": "South Africa",
+      "country_code": "ZA",
+      "region": "Western Cape",
+      "airports": [
+        {"iata": "CPT", "icao": "FACT", "name": "Cape Town International Airport", "type": "International", "distance_km": 20, "intl_visitor_use": true, "priority": 1},
+        {"iata": "FASH", "icao": "FASH", "name": "Stellenbosch Aerodrome", "type": "Regional", "distance_km": 30, "intl_visitor_use": false, "priority": 3},
+        {"iata": "GRJ", "icao": "FAGG", "name": "George Airport", "type": "Domestic", "distance_km": 350, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Table Mountain", "alt_name": "Table Mountain Cableway", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Victoria & Alfred Waterfront", "alt_name": "V&A Waterfront", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Cape Point and Cape of Good Hope Day Trip", "alt_name": "Cape Peninsula Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Boulders Beach Penguin Colony", "alt_name": "Boulders Beach Simon's Town", "category": "Beach", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Kirstenbosch National Botanical Garden", "alt_name": "Kirstenbosch Gardens", "category": "Park", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Robben Island", "alt_name": "Robben Island Museum", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Stellenbosch Winelands Day Trip", "alt_name": "Cape Winelands Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 7},
+        {"name": "Camps Bay Beach", "alt_name": "Camps Bay Strip", "category": "Beach", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Bo-Kaap", "alt_name": "Malay Quarter", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Signal Hill and Lion's Head", "alt_name": "Lion's Head Hike", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "marrakech-ma",
+      "city": "Marrakech",
+      "aliases": ["Marrakesh", "Marrakech", "Marrakech, Morocco"],
+      "country": "Morocco",
+      "country_code": "MA",
+      "region": "Marrakech-Safi",
+      "airports": [
+        {"iata": "RAK", "icao": "GMMX", "name": "Marrakesh Menara Airport", "type": "International", "distance_km": 5, "intl_visitor_use": true, "priority": 1},
+        {"iata": "CMN", "icao": "GMMN", "name": "Mohammed V International Airport", "type": "International", "distance_km": 200, "intl_visitor_use": true, "priority": 3},
+        {"iata": "AGA", "icao": "GMAD", "name": "Agadir–Al Massira Airport", "type": "International", "distance_km": 190, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Jemaa el-Fnaa", "alt_name": "Djemaa el Fna", "category": "Market", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Jardin Majorelle", "alt_name": "Majorelle Garden Yves Saint Laurent", "category": "Park", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Bahia Palace", "alt_name": "Palais de la Bahia", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Koutoubia Mosque", "alt_name": "Koutoubia Minaret", "category": "Religious Site", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Marrakech Medina", "alt_name": "The Souks", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Saadian Tombs", "alt_name": "Tombeaux Saadiens", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Ben Youssef Madrasa", "alt_name": "Medersa Ben Youssef", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Ourika Valley Day Trip", "alt_name": "Atlas Mountains Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 8},
+        {"name": "YSL Museum Marrakech", "alt_name": "Musée Yves Saint Laurent", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Menara Gardens", "alt_name": "Jardin de la Menara", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "cairo-eg",
+      "city": "Cairo",
+      "aliases": ["Cairo", "Al-Qahirah", "Cairo, Egypt", "El Qahira"],
+      "country": "Egypt",
+      "country_code": "EG",
+      "region": "Greater Cairo",
+      "airports": [
+        {"iata": "CAI", "icao": "HECA", "name": "Cairo International Airport", "type": "International", "distance_km": 15, "intl_visitor_use": true, "priority": 1},
+        {"iata": "SPX", "icao": "HESX", "name": "Sphinx International Airport", "type": "International", "distance_km": 40, "intl_visitor_use": true, "priority": 2},
+        {"iata": "CCE", "icao": "HECP", "name": "Capital International Airport", "type": "Regional", "distance_km": 45, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Giza Pyramid Complex", "alt_name": "Pyramids of Giza and Sphinx", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "The Egyptian Museum", "alt_name": "Museum of Egyptian Antiquities Tahrir", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Khan el-Khalili", "alt_name": "Khan el Khalili Bazaar", "category": "Market", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Cairo Citadel", "alt_name": "Citadel of Saladin", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Mosque of Muhammad Ali", "alt_name": "Alabaster Mosque", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Grand Egyptian Museum", "alt_name": "GEM Giza", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "National Museum of Egyptian Civilization", "alt_name": "NMEC Fustat", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Coptic Cairo", "alt_name": "Old Cairo Hanging Church", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Saqqara and Memphis Day Trip", "alt_name": "Step Pyramid of Djoser Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 9},
+        {"name": "Cairo Tower", "alt_name": "Burj al-Qahira", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "johannesburg-za",
+      "city": "Johannesburg",
+      "aliases": ["Joburg", "Jozi", "Egoli", "Johannesburg, South Africa"],
+      "country": "South Africa",
+      "country_code": "ZA",
+      "region": "Gauteng",
+      "airports": [
+        {"iata": "JNB", "icao": "FAOR", "name": "O. R. Tambo International Airport", "type": "International", "distance_km": 20, "intl_visitor_use": true, "priority": 1},
+        {"iata": "HLA", "icao": "FALA", "name": "Lanseria International Airport", "type": "International", "distance_km": 30, "intl_visitor_use": true, "priority": 2},
+        {"iata": "PRY", "icao": "FAWB", "name": "Wonderboom Airport", "type": "Regional", "distance_km": 55, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Apartheid Museum", "alt_name": null, "category": "Museum", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Soweto and Mandela House Day Trip", "alt_name": "Mandela House Museum", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Cradle of Humankind Day Trip", "alt_name": "Maropeng and Sterkfontein Caves", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Constitution Hill Human Rights Precinct", "alt_name": "Constitution Hill Old Fort", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Gold Reef City", "alt_name": "Gold Reef Theme Park", "category": "Entertainment", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Maboneng Precinct", "alt_name": "Maboneng Arts District", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Nelson Mandela Square", "alt_name": "Sandton City Square", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Carlton Centre Viewpoint", "alt_name": "Top of Africa Carlton Center", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Walter Sisulu National Botanical Garden", "alt_name": "Walter Sisulu Botanical Gardens", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Hector Pieterson Memorial and Museum", "alt_name": "Hector Pieterson Soweto", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "new-york-us",
+      "city": "New York",
+      "aliases": ["New York City", "NYC", "The Big Apple", "New York, USA"],
+      "country": "United States",
+      "country_code": "US",
+      "region": "New York",
+      "airports": [
+        {"iata": "JFK", "icao": "KJFK", "name": "John F. Kennedy International Airport", "type": "International", "distance_km": 20, "intl_visitor_use": true, "priority": 1},
+        {"iata": "LGA", "icao": "KLGA", "name": "LaGuardia Airport", "type": "International", "distance_km": 12, "intl_visitor_use": true, "priority": 1},
+        {"iata": "EWR", "icao": "KEWR", "name": "Newark Liberty International Airport", "type": "International", "distance_km": 24, "intl_visitor_use": true, "priority": 1}
+      ],
+      "popular_spots": [
+        {"name": "Statue of Liberty", "alt_name": "Lady Liberty and Ellis Island", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Central Park", "alt_name": "New York Central Park", "category": "Park", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Metropolitan Museum of Art", "alt_name": "The Met", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Empire State Building", "alt_name": "Empire State", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Times Square", "alt_name": "Theatre District Crossroads", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Brooklyn Bridge", "alt_name": null, "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Museum of Modern Art", "alt_name": "MoMA", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "9/11 Memorial & Museum", "alt_name": "World Trade Center Memorial", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 8},
+        {"name": "High Line", "alt_name": "High Line Elevated Park", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Rockefeller Center", "alt_name": "Top of the Rock Observatory", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "los-angeles-us",
+      "city": "Los Angeles",
+      "aliases": ["LA", "L.A.", "City of Angels", "Los Angeles, USA"],
+      "country": "United States",
+      "country_code": "US",
+      "region": "California",
+      "airports": [
+        {"iata": "LAX", "icao": "KLAX", "name": "Los Angeles International Airport", "type": "International", "distance_km": 18, "intl_visitor_use": true, "priority": 1},
+        {"iata": "SNA", "icao": "KSNA", "name": "John Wayne Airport", "type": "International", "distance_km": 55, "intl_visitor_use": true, "priority": 2},
+        {"iata": "BUR", "icao": "KBUR", "name": "Hollywood Burbank Airport", "type": "International", "distance_km": 15, "intl_visitor_use": true, "priority": 2}
+      ],
+      "popular_spots": [
+        {"name": "Hollywood Walk of Fame", "alt_name": "Walk of Fame", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Griffith Observatory", "alt_name": "Griffith Park Observatory", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Getty Center", "alt_name": "The J. Paul Getty Museum", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Santa Monica Pier", "alt_name": "Santa Monica Beach Pier", "category": "Beach", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Universal Studios Hollywood", "alt_name": "Universal Studios LA", "category": "Entertainment", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Disneyland Resort Day Trip", "alt_name": "Disneyland Anaheim Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "LACMA", "alt_name": "Los Angeles County Museum of Art", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Venice Beach", "alt_name": "Venice Boardwalk", "category": "Beach", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Rodeo Drive", "alt_name": "Beverly Hills Rodeo Drive", "category": "Shopping", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "The Broad", "alt_name": "Broad Modern Art Museum", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "san-francisco-us",
+      "city": "San Francisco",
+      "aliases": ["SF", "San Fran", "The City by the Bay", "San Francisco, USA"],
+      "country": "United States",
+      "country_code": "US",
+      "region": "California",
+      "airports": [
+        {"iata": "SFO", "icao": "KSFO", "name": "San Francisco International Airport", "type": "International", "distance_km": 15, "intl_visitor_use": true, "priority": 1},
+        {"iata": "OAK", "icao": "KOAK", "name": "Oakland International Airport", "type": "International", "distance_km": 20, "intl_visitor_use": true, "priority": 2},
+        {"iata": "SJC", "icao": "KSJC", "name": "San Jose Mineta International Airport", "type": "International", "distance_km": 70, "intl_visitor_use": true, "priority": 2}
+      ],
+      "popular_spots": [
+        {"name": "Golden Gate Bridge", "alt_name": "The Golden Gate", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Alcatraz Island", "alt_name": "Alcatraz Penitentiary", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Fisherman's Wharf", "alt_name": "Pier 39", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Golden Gate Park", "alt_name": "SF Golden Gate Park", "category": "Park", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Lombard Street", "alt_name": "Crookedest Street in the World", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Chinatown San Francisco", "alt_name": "SF Chinatown", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Muir Woods and Sausalito Day Trip", "alt_name": "Muir Woods Giant Redwoods Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 7},
+        {"name": "Palace of Fine Arts", "alt_name": "SF Palace of Fine Arts", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Coit Tower", "alt_name": "Coit Tower Viewpoint", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "San Francisco Museum of Modern Art", "alt_name": "SFMOMA", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "miami-us",
+      "city": "Miami",
+      "aliases": ["Miami", "Miami Beach", "Magic City", "Miami, USA"],
+      "country": "United States",
+      "country_code": "US",
+      "region": "Florida",
+      "airports": [
+        {"iata": "MIA", "icao": "KMIA", "name": "Miami International Airport", "type": "International", "distance_km": 10, "intl_visitor_use": true, "priority": 1},
+        {"iata": "FLL", "icao": "KFLL", "name": "Fort Lauderdale-Hollywood International Airport", "type": "International", "distance_km": 40, "intl_visitor_use": true, "priority": 2},
+        {"iata": "PBI", "icao": "KPBI", "name": "Palm Beach International Airport", "type": "International", "distance_km": 110, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "South Beach", "alt_name": "SoBe", "category": "Beach", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Art Deco Historic District", "alt_name": "South Beach Art Deco", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Wynwood Walls", "alt_name": "Wynwood Arts District Museum", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Little Havana", "alt_name": "Calle Ocho Little Havana", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Vizcaya Museum and Gardens", "alt_name": "Vizcaya Villa Coconut Grove", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Everglades National Park Day Trip", "alt_name": "Everglades Airboat Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Bayside Marketplace", "alt_name": "Bayside Shopping Marina", "category": "Shopping", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Key West Day Trip", "alt_name": "Key West Florida Tour", "category": "Day Trip", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Pérez Art Museum Miami", "alt_name": "PAMM Downtown", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Coral Gables Venetian Pool", "alt_name": "Venetian Pool", "category": "Cultural Experience", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "las-vegas-us",
+      "city": "Las Vegas",
+      "aliases": ["Vegas", "Sin City", "Las Vegas, USA"],
+      "country": "United States",
+      "country_code": "US",
+      "region": "Nevada",
+      "airports": [
+        {"iata": "LAS", "icao": "KLAS", "name": "Harry Reid International Airport", "type": "International", "distance_km": 5, "intl_visitor_use": true, "priority": 1},
+        {"iata": "VGT", "icao": "KVGT", "name": "North Las Vegas Airport", "type": "Regional", "distance_km": 12, "intl_visitor_use": false, "priority": 3},
+        {"iata": "BLD", "icao": "KBLD", "name": "Boulder City Municipal Airport", "type": "Regional", "distance_km": 40, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "The Las Vegas Strip", "alt_name": "Las Vegas Boulevard Strip", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Bellagio Fountains", "alt_name": "Fountains of Bellagio Resort", "category": "Entertainment", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Fremont Street Experience", "alt_name": "Downtown Fremont Street Walk", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Grand Canyon Helicopter Tour Day Trip", "alt_name": "Grand Canyon West Rim Day Trip", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Hoover Dam Day Trip", "alt_name": "Hoover Dam National Historic Landmark", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "High Roller Observation Wheel", "alt_name": "The High Roller Wheel", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Mob Museum", "alt_name": "National Museum of Organized Crime", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "The Neon Museum", "alt_name": "Neon Boneyard", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Red Rock Canyon Day Trip", "alt_name": "Red Rock Canyon National Area", "category": "Day Trip", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Valley of Fire Day Trip", "alt_name": "Valley of Fire State Park", "category": "Day Trip", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "orlando-us",
+      "city": "Orlando",
+      "aliases": ["Orlando", "Theme Park Capital", "The City Beautiful", "Orlando, USA"],
+      "country": "United States",
+      "country_code": "US",
+      "region": "Florida",
+      "airports": [
+        {"iata": "MCO", "icao": "KMCO", "name": "Orlando International Airport", "type": "International", "distance_km": 10, "intl_visitor_use": true, "priority": 1},
+        {"iata": "SFB", "icao": "KSFB", "name": "Orlando Sanford International Airport", "type": "International", "distance_km": 30, "intl_visitor_use": true, "priority": 2},
+        {"iata": "MLB", "icao": "KMLB", "name": "Melbourne Orlando International Airport", "type": "International", "distance_km": 95, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Walt Disney World Resort", "alt_name": "Disney World Orlando", "category": "Entertainment", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Universal Orlando Resort", "alt_name": "Universal Studios and Islands of Adventure", "category": "Entertainment", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "SeaWorld Orlando", "alt_name": "SeaWorld Marine Park", "category": "Entertainment", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Kennedy Space Center Day Trip", "alt_name": "NASA Kennedy Space Center", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Discovery Cove", "alt_name": "Discovery Cove Dolphin Encounter", "category": "Entertainment", "tier": "Highly Recommended", "must_see": false, "priority": 5},
+        {"name": "Gatorland", "alt_name": "Gatorland Alligator Capital", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "ICON Park", "alt_name": "The Wheel at ICON Park", "category": "Entertainment", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Harry P. Leu Gardens", "alt_name": "Leu Gardens", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Lake Eola Park", "alt_name": "Lake Eola Downtown Orlando", "category": "Park", "tier": "Popular Local Experience", "must_see": false, "priority": 9},
+        {"name": "Winter Park Chain of Lakes Day Trip", "alt_name": "Winter Park Scenic Boat Tour", "category": "Day Trip", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "cancun-mx",
+      "city": "Cancun",
+      "aliases": ["Cancun", "Cancún", "Riviera Maya", "Cancun, Mexico"],
+      "country": "Mexico",
+      "country_code": "MX",
+      "region": "Quintana Roo",
+      "airports": [
+        {"iata": "CUN", "icao": "MMUN", "name": "Cancún International Airport", "type": "International", "distance_km": 15, "intl_visitor_use": true, "priority": 1},
+        {"iata": "CZM", "icao": "MMCZ", "name": "Cozumel International Airport", "type": "International", "distance_km": 80, "intl_visitor_use": true, "priority": 3},
+        {"iata": "TQO", "icao": "MMTU", "name": "Tulum Felipe Carrillo Puerto International Airport", "type": "International", "distance_km": 130, "intl_visitor_use": true, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Cancun Hotel Zone Beach Strip", "alt_name": "Zona Hotelera Playa", "category": "Beach", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Chichen Itza Day Trip", "alt_name": "Maya Ruins of Chichen Itza", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Tulum Archeological Site Day Trip", "alt_name": "Tulum Mayan Ruins", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Isla Mujeres Day Trip", "alt_name": "Isla Mujeres Playa Norte", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Cenote Ik Kil Day Trip", "alt_name": "Sacred Cenote Ik Kil", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Playa Delfines", "alt_name": "Dolphin Beach Lookout", "category": "Beach", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Xcaret Park Day Trip", "alt_name": "Xcaret Eco-Archaeological Theme Park", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 7},
+        {"name": "Museo Subacuático de Arte", "alt_name": "MUSA Undersea Art Museum", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Cancun Maya Museum", "alt_name": "Museo Maya de Cancún", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Mercado 28", "alt_name": "Market 28 Downtown Crafts Plaza", "category": "Market", "tier": "Popular Local Experience", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "mexico-city-mx",
+      "city": "Mexico City",
+      "aliases": ["CDMX", "Ciudad de México", "Mexico City", "México D.F."],
+      "country": "Mexico",
+      "country_code": "MX",
+      "region": "Distrito Federal",
+      "airports": [
+        {"iata": "MEX", "icao": "MMMX", "name": "Benito Juárez International Airport", "type": "International", "distance_km": 5, "intl_visitor_use": true, "priority": 1},
+        {"iata": "NLU", "icao": "MMSM", "name": "Felipe Ángeles International Airport", "type": "International", "distance_km": 40, "intl_visitor_use": true, "priority": 2},
+        {"iata": "TLC", "icao": "MMTO", "name": "Toluca International Airport", "type": "International", "distance_km": 45, "intl_visitor_use": true, "priority": 2}
+      ],
+      "popular_spots": [
+        {"name": "Zócalo", "alt_name": "Plaza de la Constitución and Cathedral", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Frida Kahlo Museum", "alt_name": "Museo Frida Kahlo Casa Azul", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Teotihuacan Pyramids Day Trip", "alt_name": "Pyramids of the Sun and Moon", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "National Museum of Anthropology", "alt_name": "Museo Nacional de Antropología", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Chapultepec Castle", "alt_name": "Castillo de Chapultepec", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Palacio de Bellas Artes", "alt_name": "Palace of Fine Arts Museum", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Xochimilco Floating Gardens Day Trip", "alt_name": "Xochimilco Trajineras Canal Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 7},
+        {"name": "Coyoacán", "alt_name": "Coyoacan Historic Quarter", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Basilica of Our Lady of Guadalupe", "alt_name": "Basílica de Guadalupe", "category": "Religious Site", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Paseo de la Reforma", "alt_name": "Reforma Blvd and Angel of Independence", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "rio-de-janeiro-br",
+      "city": "Rio de Janeiro",
+      "aliases": ["Rio", "Rio de Janeiro", "Cidade Maravilhosa", "Rio, Brazil"],
+      "country": "Brazil",
+      "country_code": "BR",
+      "region": "State of Rio de Janeiro",
+      "airports": [
+        {"iata": "GIG", "icao": "SBGL", "name": "Galeão - Antônio Carlos Jobim International Airport", "type": "International", "distance_km": 20, "intl_visitor_use": true, "priority": 1},
+        {"iata": "SDU", "icao": "SBRJ", "name": "Santos Dumont Airport", "type": "International", "distance_km": 2, "intl_visitor_use": true, "priority": 1},
+        {"iata": "BZC", "icao": "SBBZ", "name": "Umberto Modiano Airport (Búzios)", "type": "Regional", "distance_km": 130, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Christ the Redeemer", "alt_name": "Cristo Redentor", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Sugarloaf Mountain", "alt_name": "Pão de Açúcar", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Copacabana Beach", "alt_name": "Praia de Copacabana", "category": "Beach", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Ipanema Beach", "alt_name": "Praia de Ipanema", "category": "Beach", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Selarón Steps", "alt_name": "Escadaria Selarón", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Tijuca National Park", "alt_name": "Floresta da Tijuca", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Rio de Janeiro Botanical Garden", "alt_name": "Jardim Botânico", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Maracanã Stadium", "alt_name": "Estádio do Maracanã", "category": "Entertainment", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Museum of Tomorrow", "alt_name": "Museu do Amanhã", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Angra dos Reis Day Trip", "alt_name": "Ilha Grande Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 10}
+      ]
+    },
+    {
+      "id": "buenos-aires-ar",
+      "city": "Buenos Aires",
+      "aliases": ["Buenos Aires", "Capital Federal", "CABA", "Buenos Aires, Argentina"],
+      "country": "Argentina",
+      "country_code": "AR",
+      "region": "Autonomous City of Buenos Aires",
+      "airports": [
+        {"iata": "EZE", "icao": "SAEZ", "name": "Ministro Pistarini International Airport", "type": "International", "distance_km": 30, "intl_visitor_use": true, "priority": 1},
+        {"iata": "AEP", "icao": "SABE", "name": "Jorge Newbery Airfield", "type": "International", "distance_km": 6, "intl_visitor_use": true, "priority": 1},
+        {"iata": "EPA", "icao": "SADP", "name": "El Palomar Airport", "type": "Regional", "distance_km": 20, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Plaza de Mayo", "alt_name": "Casa Rosada and May Square", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Recoleta Cemetery", "alt_name": "Cementerio de la Recoleta Evita Tomb", "category": "Historic Site", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "La Boca and Caminito", "alt_name": "Caminito street museum", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Teatro Colón", "alt_name": "Colon Opera House", "category": "Cultural Experience", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Palermo Soho and Palermo Hollywood", "alt_name": "Palermo district boutiques and dining", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "San Telmo Fair and Plaza Dorrego", "alt_name": "San Telmo Antiques Market Sunday", "category": "Market", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Puerto Madero", "alt_name": "Puerto Madero Docklands Walk", "category": "Neighborhood", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Tigre Delta Day Trip", "alt_name": "Tigre River Cruise", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 8},
+        {"name": "MALBA", "alt_name": "Museum of Latin American Art", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Obelisco de Buenos Aires", "alt_name": "The Obelisk 9 de Julio Ave", "category": "Landmark", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "toronto-ca",
+      "city": "Toronto",
+      "aliases": ["Toronto", "TO", "T-Dot", "YYZ", "Toronto, Canada"],
+      "country": "Canada",
+      "country_code": "CA",
+      "region": "Ontario",
+      "airports": [
+        {"iata": "YYZ", "icao": "CYYZ", "name": "Toronto Pearson International Airport", "type": "International", "distance_km": 22, "intl_visitor_use": true, "priority": 1},
+        {"iata": "YTZ", "icao": "CYTZ", "name": "Billy Bishop Toronto City Airport", "type": "International", "distance_km": 2, "intl_visitor_use": true, "priority": 2},
+        {"iata": "YHM", "icao": "CYHM", "name": "John C. Munro Hamilton International Airport", "type": "International", "distance_km": 80, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "CN Tower", "alt_name": "Canadian National Tower", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Royal Ontario Museum", "alt_name": "ROM", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Ripley's Aquarium of Canada", "alt_name": "Ripley's Aquarium", "category": "Park", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Distillery Historic District", "alt_name": "The Distillery District", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Toronto Islands", "alt_name": "Centre Island", "category": "Park", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Niagara Falls Day Trip", "alt_name": "Niagara Falls Canada", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Art Gallery of Ontario", "alt_name": "AGO", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Casa Loma", "alt_name": "Toronto's Majestic Castle", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "St. Lawrence Market", "alt_name": null, "category": "Market", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Hockey Hall of Fame", "alt_name": "HHOF", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "sydney-au",
+      "city": "Sydney",
+      "aliases": ["Sydney", "The Harbour City", "Sydney, NSW", "Sydney, Australia"],
+      "country": "Australia",
+      "country_code": "AU",
+      "region": "New South Wales",
+      "airports": [
+        {"iata": "SYD", "icao": "YSSY", "name": "Sydney Kingsford Smith Airport", "type": "International", "distance_km": 8, "intl_visitor_use": true, "priority": 1},
+        {"iata": "BWU", "icao": "YSBK", "name": "Bankstown Airport", "type": "Regional", "distance_km": 22, "intl_visitor_use": false, "priority": 3},
+        {"iata": "NTL", "icao": "YWLM", "name": "Newcastle Airport", "type": "International", "distance_km": 140, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Sydney Opera House", "alt_name": "Opera House Bennelong Point", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Sydney Harbour Bridge", "alt_name": "The Coathanger Bridge Climb", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Bondi Beach", "alt_name": "Bondi Icebergs", "category": "Beach", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Darling Harbour", "alt_name": "Darling Harbour Boardwalk", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Royal Botanic Garden Sydney", "alt_name": "Sydney Botanic Gardens Mrs Macquarie's Chair", "category": "Park", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "The Rocks", "alt_name": "Historic Rocks Precinct", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Blue Mountains Day Trip", "alt_name": "Katoomba Three Sisters Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 7},
+        {"name": "Taronga Zoo Sydney", "alt_name": "Taronga Zoo Harbour Views", "category": "Park", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Manly Beach and Ferry", "alt_name": "Manly Beach Ferry Ride", "category": "Beach", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Sydney Tower Eye", "alt_name": "Sydney Tower Observation Deck", "category": "Viewpoint", "tier": "Highly Recommended", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "melbourne-au",
+      "city": "Melbourne",
+      "aliases": ["Melbourne", "Melbourne, Victoria", "Cultural Capital of Australia"],
+      "country": "Australia",
+      "country_code": "AU",
+      "region": "Victoria",
+      "airports": [
+        {"iata": "MEL", "icao": "YMML", "name": "Melbourne Airport", "type": "International", "distance_km": 23, "intl_visitor_use": true, "priority": 1},
+        {"iata": "AVV", "icao": "YMAV", "name": "Avalon Airport", "type": "International", "distance_km": 50, "intl_visitor_use": true, "priority": 2},
+        {"iata": "MEB", "icao": "YMEN", "name": "Essendon Fields Airport", "type": "Regional", "distance_km": 11, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Federation Square", "alt_name": "Fed Square", "category": "Landmark", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Royal Botanic Gardens Victoria", "alt_name": "Melbourne Botanic Gardens", "category": "Park", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "National Gallery of Victoria", "alt_name": "NGV International", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Queen Victoria Market", "alt_name": "Vic Market", "category": "Market", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Melbourne Laneways", "alt_name": "Hosier Lane Street Art", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Great Ocean Road Day Trip", "alt_name": "Twelve Apostles Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 6},
+        {"name": "Melbourne Cricket Ground", "alt_name": "The MCG", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Shrine of Remembrance", "alt_name": "War Memorial", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "Phillip Island Penguin Parade Day Trip", "alt_name": "Phillip Island Tour", "category": "Day Trip", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "St Kilda Beach", "alt_name": "St Kilda Pier", "category": "Beach", "tier": "Popular Local Experience", "must_see": false, "priority": 10}
+      ]
+    },
+    {
+      "id": "auckland-nz",
+      "city": "Auckland",
+      "aliases": ["Auckland", "Tāmaki Makaurau", "City of Sails", "Auckland, NZ"],
+      "country": "New Zealand",
+      "country_code": "NZ",
+      "region": "Auckland Region",
+      "airports": [
+        {"iata": "AKL", "icao": "NZAA", "name": "Auckland Airport", "type": "International", "distance_km": 21, "intl_visitor_use": true, "priority": 1},
+        {"iata": "HLZ", "icao": "NZHN", "name": "Hamilton International Airport", "type": "International", "distance_km": 110, "intl_visitor_use": false, "priority": 3},
+        {"iata": "TRG", "icao": "NZTG", "name": "Tauranga Airport", "type": "Regional", "distance_km": 150, "intl_visitor_use": false, "priority": 3}
+      ],
+      "popular_spots": [
+        {"name": "Sky Tower", "alt_name": "SkyCity Tower", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 1},
+        {"name": "Auckland War Memorial Museum", "alt_name": "Auckland Museum", "category": "Museum", "tier": "Must See", "must_see": true, "priority": 2},
+        {"name": "Waiheke Island Day Trip", "alt_name": "Waiheke Island Vineyards", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 3},
+        {"name": "Mount Eden", "alt_name": "Maungawhau", "category": "Viewpoint", "tier": "Must See", "must_see": true, "priority": 4},
+        {"name": "Viaduct Harbour", "alt_name": "Viaduct Basin Waterfront", "category": "Neighborhood", "tier": "Must See", "must_see": true, "priority": 5},
+        {"name": "Rangitoto Island Day Trip", "alt_name": "Rangitoto Volcano", "category": "Day Trip", "tier": "Highly Recommended", "must_see": false, "priority": 6},
+        {"name": "Auckland Art Gallery Toi o Tāmaki", "alt_name": "Auckland Art Gallery", "category": "Museum", "tier": "Highly Recommended", "must_see": false, "priority": 7},
+        {"name": "Piha Beach Day Trip", "alt_name": "Piha Black Sand Beach", "category": "Day Trip", "tier": "Highly Recommended", "must_see": false, "priority": 8},
+        {"name": "One Tree Hill", "alt_name": "Maungakiekie Cornwall Park", "category": "Historic Site", "tier": "Highly Recommended", "must_see": false, "priority": 9},
+        {"name": "Hobbiton Movie Set Day Trip", "alt_name": "Hobbiton Tour", "category": "Day Trip", "tier": "Must See", "must_see": true, "priority": 10}
+      ]
+    }
+  ]
+}

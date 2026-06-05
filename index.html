@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-accent="reef">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Itinera — AI Travel Planner</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- React 18 + Babel (CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.4/babel.min.js" crossorigin="anonymous"></script>
+
+  <style>
+    /* ───────────── Design tokens ───────────── */
+    :root{
+      --r-card: 22px;
+      --r-pill: 999px;
+      --shadow-sm: 0 1px 2px rgba(8,10,14,.04), 0 2px 8px rgba(8,10,14,.05);
+      --shadow-md: 0 6px 20px rgba(8,10,14,.10), 0 2px 6px rgba(8,10,14,.06);
+      --shadow-lg: 0 18px 50px rgba(8,10,14,.18), 0 6px 18px rgba(8,10,14,.10);
+    }
+    /* Light theme */
+    [data-theme="light"]{
+      --bg: 246 247 250;
+      --surface: 255 255 255;
+      --surface-2: 241 244 249;
+      --text: 22 26 33;
+      --muted: 99 109 126;
+      --faint: 138 147 162;
+      --border: 226 230 238;
+      --ring: 0 0 0;
+      --shadow-strength: 1;
+    }
+    /* Dark theme */
+    [data-theme="dark"]{
+      --bg: 13 15 20;
+      --surface: 22 25 32;
+      --surface-2: 31 35 45;
+      --text: 236 239 245;
+      --muted: 150 159 173;
+      --faint: 110 119 134;
+      --border: 42 48 60;
+      --ring: 255 255 255;
+      --shadow-strength: 2.4;
+    }
+    /* Accent palettes */
+    [data-accent="reef"]   { --accent: 13 178 162;  --accent-2: 255 107 94; }
+    [data-accent="sunset"] { --accent: 251 113 87;  --accent-2: 244 114 182; }
+    [data-accent="grape"]  { --accent: 139 102 246; --accent-2: 45 212 191; }
+    [data-accent="forest"] { --accent: 34 191 110;  --accent-2: 245 170 36; }
+
+    *{ box-sizing: border-box; }
+    html,body{ margin:0; padding:0; }
+    body{
+      font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+      background: rgb(var(--bg));
+      color: rgb(var(--text));
+      -webkit-font-smoothing: antialiased;
+      transition: background .4s ease, color .4s ease;
+    }
+    ::selection{ background: rgb(var(--accent) / .28); }
+
+    /* Scrollbar */
+    *::-webkit-scrollbar{ width:11px; height:11px; }
+    *::-webkit-scrollbar-thumb{ background: rgb(var(--muted) / .35); border-radius:99px; border:3px solid transparent; background-clip:content-box; }
+    *::-webkit-scrollbar-thumb:hover{ background: rgb(var(--muted) / .55); background-clip:content-box; }
+
+    /* ───────────── Animations ───────────── */
+    @keyframes riseIn { from{ transform: translateY(20px) scale(.983); } to{ transform: none; } }
+    @keyframes fadeIn { from{ transform: translateY(8px); } to{ transform: none; } }
+    @keyframes popIn  { from{ transform: scale(.94); } to{ transform: none; } }
+    @keyframes spin   { to { transform: rotate(360deg); } }
+
+    .anim-rise{ animation: riseIn .55s cubic-bezier(.22,.61,.36,1) both; }
+    .anim-fade{ animation: fadeIn .45s ease both; }
+    .anim-pop { animation: popIn .32s cubic-bezier(.34,1.56,.64,1) both; }
+    @media (prefers-reduced-motion: reduce){
+      .anim-rise,.anim-fade,.anim-pop{ animation:none !important; }
+    }
+
+    /* ───────────── Reusable surfaces ───────────── */
+    .card{
+      background: rgb(var(--surface));
+      border: 1px solid rgb(var(--border));
+      border-radius: var(--r-card);
+    }
+    .glass{
+      background: rgb(var(--surface) / .72);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+      backdrop-filter: blur(18px) saturate(160%);
+    }
+    .elev-md{ box-shadow: var(--shadow-md); }
+    .elev-lg{ box-shadow: var(--shadow-lg); }
+    .focus-ring:focus-visible{ outline:none; box-shadow: 0 0 0 3px rgb(var(--accent) / .35); }
+
+    /* Accent gradient text */
+    .grad-text{
+      background: linear-gradient(105deg, rgb(var(--accent)), rgb(var(--accent-2)));
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .btn-accent{
+      background: linear-gradient(120deg, rgb(var(--accent)), color-mix(in oklab, rgb(var(--accent)), rgb(var(--accent-2)) 55%));
+      color:#fff; border:none;
+      box-shadow: 0 8px 22px rgb(var(--accent) / .35);
+      transition: transform .18s cubic-bezier(.34,1.4,.64,1), box-shadow .18s, filter .18s;
+    }
+    .btn-accent:hover{ transform: translateY(-2px); box-shadow: 0 12px 30px rgb(var(--accent) / .45); filter: saturate(1.08); }
+    .btn-accent:active{ transform: translateY(0); }
+
+    /* striped placeholder used for image slots */
+    .ph-stripe{
+      background-image: repeating-linear-gradient(45deg, rgb(var(--muted)/.10) 0 12px, rgb(var(--muted)/.04) 12px 24px);
+    }
+
+    #root { min-height: 100vh; }
+    .page-enter { animation: riseIn .45s cubic-bezier(.22,.61,.36,1) both; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" data-presets="react">
+/* ═══════════════════ data — content + helpers ═══════════════════ */
+
+// Category metadata: label + hue used for pill badges
+const CATEGORIES = {
+  dining:      { label: "Dining",      hex: "#16a34a" },
+  cruise:      { label: "Cruise",      hex: "#2563eb" },
+  adventure:   { label: "Adventure",   hex: "#ea580c" },
+  relaxing:    { label: "Relaxing",    hex: "#7c3aed" },
+  sightseeing: { label: "Sightseeing", hex: "#db2777" },
+};
+const KIDS = { label: "Kids-Friendly", hex: "#d97706" };
+
+// Currencies — base prices stored in USD
+const CURRENCIES = {
+  USD: { symbol: "$",  rate: 1,     name: "US Dollar" },
+  INR: { symbol: "₹",  rate: 83.4,  name: "Indian Rupee" },
+  EUR: { symbol: "€",  rate: 0.92,  name: "Euro" },
+  GBP: { symbol: "£",  rate: 0.79,  name: "British Pound" },
+};
+function money(usd, cur) {
+  const c = CURRENCIES[cur];
+  const v = usd * c.rate;
+  const rounded = cur === "INR" ? Math.round(v / 10) * 10 : Math.round(v);
+  return c.symbol + rounded.toLocaleString("en-US");
+}
+
+// Typeahead corpus — destinations, airports, local spots
+const PLACES = [
+  { name: "Kyoto, Japan",        kind: "city",    airport: "KIX · Kansai Intl", emoji: "🏯" },
+  { name: "Lisbon, Portugal",    kind: "city",    airport: "LIS · Humberto Delgado", emoji: "🚋" },
+  { name: "Reykjavík, Iceland",  kind: "city",    airport: "KEF · Keflavík Intl", emoji: "🌋" },
+  { name: "Bali, Indonesia",     kind: "island",  airport: "DPS · Ngurah Rai Intl", emoji: "🌴" },
+  { name: "Marrakech, Morocco",  kind: "city",    airport: "RAK · Menara", emoji: "🕌" },
+  { name: "Santorini, Greece",   kind: "island",  airport: "JTR · Santorini Natl", emoji: "🏖️" },
+  { name: "Queenstown, NZ",      kind: "city",    airport: "ZQN · Queenstown", emoji: "🏔️" },
+  { name: "Barcelona, Spain",    kind: "city",    airport: "BCN · El Prat", emoji: "🎨" },
+  { name: "Fushimi Inari Shrine",kind: "spot",    near: "Kyoto", emoji: "⛩️" },
+  { name: "Belém Tower",         kind: "spot",    near: "Lisbon", emoji: "🗼" },
+  { name: "Blue Lagoon",         kind: "spot",    near: "Reykjavík", emoji: "♨️" },
+  { name: "Jemaa el-Fnaa",       kind: "spot",    near: "Marrakech", emoji: "🪔" },
+];
+
+// Gradient cover per destination (CSS background)
+const COVERS = {
+  Kyoto:      "linear-gradient(135deg,#7b2d4e,#c2410c 55%,#f59e0b)",
+  Lisbon:     "linear-gradient(135deg,#0e7490,#0891b2 45%,#fbbf24)",
+  Reykjavik:  "linear-gradient(140deg,#1e3a8a,#0ea5e9 55%,#a5f3fc)",
+  Bali:       "linear-gradient(135deg,#047857,#10b981 50%,#fde68a)",
+  Marrakech:  "linear-gradient(135deg,#9a3412,#dc2626 50%,#f59e0b)",
+  Generic:    "linear-gradient(135deg,#5b21b6,#0d9488 55%,#fcd34d)",
+};
+
+// ───────────── Featured itineraries (full plans) ─────────────
+const TRIPS = [
+  {
+    id: "kyoto", city: "Kyoto", country: "Japan", cover: COVERS.Kyoto,
+    persona: "Culture", days: 5, tagline: "Temples, tea houses & lantern-lit alleys",
+    omitted: [
+      { time: "Afternoon", title: "Nijō Castle nightingale floors", cat: "sightseeing", cost: 9, tip: "The squeaking floors were a deliberate intruder alarm — listen for them." },
+      { time: "Evening",   title: "Pontochō kaiseki dinner", cat: "dining", cost: 95, tip: "Riverside terraces open in summer; book the kawayuka seating for the breeze." },
+      { time: "Morning",   title: "Saihō-ji moss garden", cat: "relaxing", cost: 30, tip: "Requires a postcard reservation in advance — copy a sutra before you enter." },
+    ],
+    plan: [
+      { day: 1, title: "Eastern Higashiyama", items: [
+        { time: "9:00 AM",  title: "Kiyomizu-dera at opening", cat: "sightseeing", cost: 4, tip: "Arrive 15 min early to beat the tour buses and catch soft morning light on the veranda." },
+        { time: "12:30 PM", title: "Noodles on Ninenzaka", cat: "dining", cost: 18, tip: "The stepped lane bans rolling suitcases — go hands-free. Try the yuba udon." },
+        { time: "3:00 PM",  title: "Kennin-ji zen gardens", cat: "relaxing", cost: 6, tip: "Kyoto's oldest zen temple is rarely crowded — sit with the twin-dragon ceiling." },
+        { time: "7:00 PM",  title: "Gion lantern stroll", cat: "sightseeing", cost: 0, tip: "Hanami-kōji glows after dark; be respectful — geiko are working, not posing." },
+      ]},
+      { day: 2, title: "Arashiyama & bamboo", items: [
+        { time: "8:00 AM",  title: "Bamboo Grove early walk", cat: "sightseeing", cost: 0, tip: "The grove is busiest by 10 — the 8am hush and filtered light are worth the alarm." },
+        { time: "10:30 AM", title: "Hozugawa river boat", cat: "cruise", cost: 45, tip: "A 2-hr traditional flat-boat down the gorge; sit on the right for the best canyon views.", kids: true },
+        { time: "1:30 PM",  title: "Tofu lunch by the river", cat: "dining", cost: 28, tip: "Arashiyama is famed for yudofu — the set lunches are light and surprisingly filling." },
+        { time: "4:00 PM",  title: "Monkey Park Iwatayama", cat: "adventure", cost: 6, tip: "A 20-min uphill hike rewards you with a city panorama and free-roaming macaques.", kids: true },
+      ]},
+      { day: 3, title: "Fushimi & sake", items: [
+        { time: "7:30 AM",  title: "Fushimi Inari summit", cat: "adventure", cost: 0, tip: "The full 10,000-gate loop takes ~2 hrs — go at dawn and you'll have torii to yourself." },
+        { time: "12:00 PM", title: "Street food at the base", cat: "dining", cost: 14, tip: "Grilled quail and inari sushi are the local specialties right by the shrine." },
+        { time: "3:00 PM",  title: "Sake district tasting", cat: "relaxing", cost: 22, tip: "Fushimi's soft water makes a delicate sake — flights run small, so pace yourself." },
+      ]},
+      { day: 4, title: "Golden temples", items: [
+        { time: "9:00 AM",  title: "Kinkaku-ji golden pavilion", cat: "sightseeing", cost: 5, tip: "The gold leaf is brightest under a clear morning sky reflected in the mirror pond." },
+        { time: "12:00 PM", title: "Zen lunch in Kitayama", cat: "dining", cost: 24, tip: "Shojin-ryori is the Buddhist vegetarian cuisine the monks here actually eat." },
+        { time: "2:30 PM",  title: "Ryoan-ji rock garden", cat: "relaxing", cost: 5, tip: "Fifteen stones, but you can only ever see fourteen at once — find your angle." },
+      ]},
+      { day: 5, title: "Tea & farewell", items: [
+        { time: "10:00 AM", title: "Matcha workshop in Uji", cat: "relaxing", cost: 40, tip: "Whisk your own bowl where Japanese tea culture began — the bitterness mellows fast.", kids: true },
+        { time: "1:00 PM",  title: "Nishiki Market crawl", cat: "dining", cost: 30, tip: "'Kyoto's kitchen' is five blocks of samples — go hungry and graze slowly." },
+        { time: "4:00 PM",  title: "Kamo River sunset walk", cat: "relaxing", cost: 0, tip: "Locals line the banks at dusk, evenly spaced — join them and watch the herons." },
+      ]},
+    ],
+  },
+  {
+    id: "lisbon", city: "Lisbon", country: "Portugal", cover: COVERS.Lisbon,
+    persona: "Foodie", days: 2, tagline: "Tiles, tram 28 & custard tarts",
+    omitted: [
+      { time: "Evening", title: "Fado dinner in Alfama", cat: "dining", cost: 55, tip: "The mournful guitar is best in a tiny tavern, not a tourist hall — ask your host." },
+      { time: "Morning", title: "LX Factory market", cat: "sightseeing", cost: 0, tip: "A converted industrial complex of bookshops and brunch under the bridge." },
+      { time: "Afternoon", title: "Time Out Market tasting", cat: "dining", cost: 40, tip: "Thirty of the city's best chefs under one roof — split plates to try more." },
+    ],
+    plan: [
+      { day: 1, title: "Alfama & the river", items: [
+        { time: "9:00 AM",  title: "Ride tram 28 uphill", cat: "sightseeing", cost: 3, tip: "Board at Martim Moniz before crowds for a seat — it's a rolling tour of the old city.", kids: true },
+        { time: "11:00 AM", title: "São Jorge Castle views", cat: "sightseeing", cost: 12, tip: "The ramparts give the best panorama of the red rooftops tumbling to the Tagus." },
+        { time: "1:30 PM",  title: "Seafood at Cais do Sodré", cat: "dining", cost: 35, tip: "Grilled sardines are the icon, but the clams à bulhão pato steal the meal." },
+        { time: "5:00 PM",  title: "Tagus sunset cruise", cat: "cruise", cost: 38, tip: "A 2-hr sailboat under the 25 de Abril bridge — golden hour hits the tiles just right.", kids: true },
+      ]},
+      { day: 2, title: "Belém & pastries", items: [
+        { time: "9:30 AM",  title: "Pastéis de Belém, warm", cat: "dining", cost: 6, tip: "Get them dusted with cinnamon and eaten on the spot — the line moves fast." },
+        { time: "11:00 AM", title: "Jerónimos Monastery", cat: "sightseeing", cost: 14, tip: "The Manueline cloister carvings reward a slow lap — look for ropes and sea monsters." },
+        { time: "2:00 PM",  title: "Belém Tower riverside", cat: "relaxing", cost: 8, tip: "Skip the cramped interior climb; the waterfront lawn is the real photo spot." },
+      ]},
+    ],
+  },
+  {
+    id: "reykjavik", city: "Reykjavík", country: "Iceland", cover: COVERS.Reykjavik,
+    persona: "Adventure", days: 4, tagline: "Waterfalls, geysers & northern lights",
+    omitted: [
+      { time: "Night",   title: "Northern lights chase", cat: "adventure", cost: 95, tip: "Aurora needs dark, clear skies — guides track the forecast and drive you to the gap in the clouds." },
+      { time: "Morning", title: "Snæfellsnes peninsula", cat: "sightseeing", cost: 120, tip: "'Iceland in miniature' — a long but jaw-dropping day of coast, craters and cliffs." },
+      { time: "Afternoon", title: "Whale watching, Faxaflói", cat: "cruise", cost: 90, tip: "Minke and humpback sightings peak in summer — dress one layer warmer than you think.", kids: true },
+    ],
+    plan: [
+      { day: 1, title: "Reykjavík arrival", items: [
+        { time: "11:00 AM", title: "Hallgrímskirkja tower", cat: "sightseeing", cost: 9, tip: "The basalt-column church elevator gives a candy-colored rooftop panorama." },
+        { time: "1:00 PM",  title: "Harbour lobster soup", cat: "dining", cost: 22, tip: "The little red shack by the docks does the city's best bowl — order extra bread." },
+        { time: "4:00 PM",  title: "Blue Lagoon soak", cat: "relaxing", cost: 75, tip: "Pre-book a slot; the silica mud mask is included and the swim-up bar is cash-free." },
+      ]},
+      { day: 2, title: "The Golden Circle", items: [
+        { time: "9:00 AM",  title: "Þingvellir rift valley", cat: "sightseeing", cost: 0, tip: "Walk between two tectonic plates — the boardwalk path is stroller-friendly.", kids: true },
+        { time: "12:00 PM", title: "Geysir eruptions", cat: "adventure", cost: 0, tip: "Strokkur blows every 6–10 min — stand upwind and have the camera ready.", kids: true },
+        { time: "2:30 PM",  title: "Gullfoss waterfall", cat: "sightseeing", cost: 0, tip: "The two-tiered falls roar loudest in summer melt — the upper path stays drier." },
+        { time: "7:00 PM",  title: "Lamb stew supper", cat: "dining", cost: 32, tip: "Icelandic lamb is free-roaming and herb-fed — the slow-cooked kjötsúpa is comfort itself." },
+      ]},
+      { day: 3, title: "South coast", items: [
+        { time: "8:30 AM",  title: "Seljalandsfoss walk-behind", cat: "adventure", cost: 0, tip: "You can circle behind the curtain of water — you will get wet, so pack a shell." },
+        { time: "11:30 AM", title: "Reynisfjara black sand", cat: "sightseeing", cost: 0, tip: "Stunning basalt stacks, but never turn your back on the sneaker waves — they're lethal." },
+        { time: "3:00 PM",  title: "Sólheimajökull glacier hike", cat: "adventure", cost: 110, tip: "Crampons and guide provided; the blue ice and ash layers tell a climate story." },
+      ]},
+      { day: 4, title: "Slow morning", items: [
+        { time: "10:00 AM", title: "Sky Lagoon infinity edge", cat: "relaxing", cost: 70, tip: "The seven-step ritual ends with a sauna facing the ocean — go before the airport run." },
+        { time: "1:00 PM",  title: "Bistro brunch downtown", cat: "dining", cost: 28, tip: "Laugavegur's cafés do excellent skyr bowls and cardamom buns for the road." },
+      ]},
+    ],
+  },
+  {
+    id: "bali", city: "Bali", country: "Indonesia", cover: COVERS.Bali,
+    persona: "Relaxing", days: 5, tagline: "Rice terraces, reef & beach clubs",
+    omitted: [
+      { time: "Morning",  title: "Sunrise Mt Batur trek", cat: "adventure", cost: 65, tip: "A pre-dawn volcano summit with breakfast cooked in the steam vents — start at 3am." },
+      { time: "Afternoon",title: "Nusa Penida day boat", cat: "cruise", cost: 85, tip: "Kelingking cliff is the postcard; the crossing is choppy, so take a tablet beforehand." },
+      { time: "Evening",  title: "Jimbaran seafood grill", cat: "dining", cost: 45, tip: "Tables on the sand, fish picked from ice — go at sunset for the full effect." },
+    ],
+    plan: [
+      { day: 1, title: "Ubud calm", items: [
+        { time: "9:00 AM",  title: "Tegalalang rice terraces", cat: "sightseeing", cost: 5, tip: "Go early before the jungle-swing crowds; the morning haze over the paddies is magic." },
+        { time: "12:30 PM", title: "Warung organic lunch", cat: "dining", cost: 12, tip: "Nasi campur lets you point at a dozen dishes — the tempeh here is house-fermented." },
+        { time: "4:00 PM",  title: "Spa & flower bath", cat: "relaxing", cost: 35, tip: "Two-hour Balinese massages cost a fraction of home — book a couples room by the river." },
+      ]},
+      { day: 2, title: "Water temples", items: [
+        { time: "8:30 AM",  title: "Tirta Empul purification", cat: "relaxing", cost: 8, tip: "Bring a sarong and follow the spring sequence left to right — locals will guide you." },
+        { time: "11:30 AM", title: "Monkey Forest sanctuary", cat: "adventure", cost: 7, tip: "Keep sunglasses and snacks zipped away — the macaques are quick and unbothered.", kids: true },
+        { time: "6:30 PM",  title: "Sunset at Tanah Lot", cat: "sightseeing", cost: 6, tip: "The sea temple sits on a rock cut off at high tide — arrive 90 min before dusk." },
+      ]},
+      { day: 3, title: "Reef day", items: [
+        { time: "8:00 AM",  title: "Snorkel at Blue Lagoon", cat: "cruise", cost: 55, tip: "Calm, shallow and full of clownfish — the gentlest intro to Bali's reefs for kids.", kids: true },
+        { time: "1:00 PM",  title: "Beachfront grilled fish", cat: "dining", cost: 20, tip: "Padang Bai's warungs serve the morning catch — the sambal matah is the star." },
+        { time: "4:30 PM",  title: "Tidal-pool float", cat: "relaxing", cost: 0, tip: "Natural rock pools warm up by afternoon — a safe, calm swim away from the surf." },
+      ]},
+      { day: 4, title: "Seaside Canggu", items: [
+        { time: "9:30 AM",  title: "Surf lesson, Batu Bolong", cat: "adventure", cost: 40, tip: "The mellow beach break is forgiving for beginners — book the dawn session for glassy water." },
+        { time: "1:00 PM",  title: "Café brunch crawl", cat: "dining", cost: 18, tip: "Canggu invented the smoothie bowl craze — most spots do a great flat white too." },
+        { time: "5:00 PM",  title: "Beach club sundowner", cat: "relaxing", cost: 30, tip: "Day-beds need a minimum spend; the infinity pool faces straight into the sunset." },
+      ]},
+      { day: 5, title: "Cliffs & farewell", items: [
+        { time: "10:00 AM", title: "Uluwatu clifftop temple", cat: "sightseeing", cost: 7, tip: "Hold your bag tight near the monkeys; the Kecak fire dance at dusk is unforgettable." },
+        { time: "1:30 PM",  title: "Padang Padang beach", cat: "relaxing", cost: 2, tip: "Squeeze through the rock crevice to a tiny cove — go at low tide for the most sand." },
+      ]},
+    ],
+  },
+  {
+    id: "marrakech", city: "Marrakech", country: "Morocco", cover: COVERS.Marrakech,
+    persona: "Budget", days: 3, tagline: "Souks, riads & desert gateways",
+    omitted: [
+      { time: "Full day", title: "Atlas Mountains & Berber villages", cat: "adventure", cost: 60, tip: "A day trip to Imlil trades the city heat for mountain air and mint tea with a view." },
+      { time: "Evening",  title: "Rooftop tagine dinner", cat: "dining", cost: 22, tip: "Many riads serve on the roof at sunset — the call to prayer echoing across the medina is unreal." },
+      { time: "Morning",  title: "Hammam & scrub ritual", cat: "relaxing", cost: 25, tip: "The traditional steam-and-scrub leaves you glowing — go local for a tenth of the spa price." },
+    ],
+    plan: [
+      { day: 1, title: "Into the medina", items: [
+        { time: "10:00 AM", title: "Jemaa el-Fnaa square", cat: "sightseeing", cost: 0, tip: "By day it's juice stalls and snake charmers; come back after dark for the food-stall chaos.", kids: true },
+        { time: "1:00 PM",  title: "Souk bargaining lunch", cat: "dining", cost: 9, tip: "Start your counter-offer at a third of the asking price, and always with a smile." },
+        { time: "4:00 PM",  title: "Bahia Palace courtyards", cat: "sightseeing", cost: 7, tip: "The zellij tilework and painted cedar ceilings are the city's finest — go late for soft light." },
+      ]},
+      { day: 2, title: "Gardens & color", items: [
+        { time: "9:00 AM",  title: "Jardin Majorelle blues", cat: "relaxing", cost: 16, tip: "Buy timed tickets online; the cobalt villa and cactus garden are calmest right at opening." },
+        { time: "12:30 PM", title: "Street msemen & tea", cat: "dining", cost: 5, tip: "The flaky griddle bread with honey is a 50-cent breakfast that beats any café." },
+        { time: "3:30 PM",  title: "Tanneries & leather souk", cat: "sightseeing", cost: 4, tip: "Vendors hand you mint to mask the smell — a small tip is expected for the rooftop view." },
+      ]},
+      { day: 3, title: "Desert edge", items: [
+        { time: "8:00 AM",  title: "Agafay desert camel ride", cat: "adventure", cost: 35, tip: "The rocky 'mini-Sahara' is an hour out — sunrise rides skip the heat and the crowds.", kids: true },
+        { time: "1:00 PM",  title: "Lunch under the tents", cat: "dining", cost: 18, tip: "Camp lunches come with live gnawa music — the slow-cooked lamb mechoui is the order." },
+      ]},
+    ],
+  },
+];
+
+// ───────────── Generator (for the form) ─────────────
+const ACTIVITY_POOL = {
+  Budget: [
+    { time: "9:00 AM",  title: "Free walking tour of the old town", cat: "sightseeing", cost: 5, tip: "Tip-based tours cover the history in 2 hrs — a cheap way to map the city on day one." },
+    { time: "1:00 PM",  title: "Street-food market crawl", cat: "dining", cost: 10, tip: "Eat where the lunchtime queue is locals, not menus in five languages." },
+    { time: "4:00 PM",  title: "Public park & viewpoint", cat: "relaxing", cost: 0, tip: "Most cities hide a free hilltop lookout — best an hour before sunset." },
+    { time: "7:00 PM",  title: "Neighbourhood night market", cat: "sightseeing", cost: 8, tip: "Markets buzz after dark — graze on small plates instead of one big meal." },
+  ],
+  "Mid-range": [
+    { time: "9:30 AM",  title: "Signature museum & galleries", cat: "sightseeing", cost: 18, tip: "Book the first entry slot to have the headline rooms briefly to yourself." },
+    { time: "1:00 PM",  title: "Bistro lunch in the centre", cat: "dining", cost: 28, tip: "The fixed-price lunch menu is the best value a good kitchen offers all day." },
+    { time: "3:30 PM",  title: "Guided river cruise", cat: "cruise", cost: 35, tip: "An hour on the water reframes the whole city — sit up top if the weather holds.", kids: true },
+    { time: "8:00 PM",  title: "Rooftop dinner with a view", cat: "dining", cost: 45, tip: "Reserve a table timed to sunset — the skyline does half the work." },
+  ],
+  Luxurious: [
+    { time: "10:00 AM", title: "Private guided heritage tour", cat: "sightseeing", cost: 120, tip: "A private guide skips every line and tailors the route to what you actually love." },
+    { time: "1:30 PM",  title: "Tasting menu at a top table", cat: "dining", cost: 160, tip: "Book weeks ahead and mention any allergies — the pairing flight is worth it." },
+    { time: "4:00 PM",  title: "Spa & thermal circuit", cat: "relaxing", cost: 90, tip: "Arrive early to use the pools before your treatment — it's included, most skip it." },
+    { time: "7:30 PM",  title: "Sunset champagne sail", cat: "cruise", cost: 140, tip: "Charter the small boat for golden hour — far calmer than the big party catamarans." },
+  ],
+  Adventure: [
+    { time: "7:30 AM",  title: "Sunrise summit hike", cat: "adventure", cost: 25, tip: "Start before dawn with a headlamp — you'll beat the heat and earn the view." },
+    { time: "12:00 PM", title: "Trailhead picnic lunch", cat: "dining", cost: 14, tip: "Pack high-energy snacks; mountain cafés are scarce and pricey." },
+    { time: "2:30 PM",  title: "Kayak or canyoning session", cat: "adventure", cost: 60, tip: "Guides supply gear — wear quick-dry layers and clip your phone to a leash.", kids: true },
+    { time: "6:00 PM",  title: "Riverside camp dinner", cat: "dining", cost: 22, tip: "Eat where the day's effort earns it — simple food tastes incredible outdoors." },
+  ],
+};
+
+function generateItinerary(form) {
+  const cityName = (form.destination || "Your City").split(",")[0].trim();
+  const persona = form.persona || "Mid-range";
+  const pool = ACTIVITY_POOL[persona] || ACTIVITY_POOL["Mid-range"];
+  const hasKids = (form.kids || 0) > 0;
+  const dayTitles = ["Arrival & first taste", "City highlights", "Hidden corners", "Nature & escape", "Markets & farewell", "Slow exploring", "Final adventures"];
+  const nDays = Math.max(1, Math.min(form.days || 3, 7));
+  const plan = [];
+  for (let d = 0; d < nDays; d++) {
+    const rotated = pool.map((a, i) => pool[(i + d) % pool.length]);
+    let items = rotated.map((a) => ({ ...a }));
+    if (!hasKids) items = items.map((it) => ({ ...it, kids: false }));
+    plan.push({ day: d + 1, title: dayTitles[d] || `Day ${d + 1}`, items });
+  }
+  const omitted = [
+    { time: "Evening",  title: `Live music night in ${cityName}`, cat: "relaxing", cost: 20, tip: "Ask your host for the bar locals actually go to, not the one on the flyer." },
+    { time: "Morning",  title: "Day trip to the nearby coast", cat: "adventure", cost: 45, tip: "Trains leave hourly — go early and you'll have the beach before the crowds." },
+    { time: "Afternoon",title: "Local cooking class", cat: "dining", cost: 55, tip: "You shop the market first, then cook — the recipes travel home with you.", kids: hasKids },
+  ];
+  return {
+    id: "custom", city: cityName,
+    country: form.destination && form.destination.includes(",") ? form.destination.split(",")[1].trim() : "",
+    cover: COVERS[cityName] || COVERS.Generic,
+    persona, days: nDays,
+    tagline: `${persona} trip · tailored to your inputs`,
+    plan, omitted,
+  };
+}
+
+// ───────────── Packing logic ─────────────
+function buildPacking(form) {
+  const start = form.startDate ? new Date(form.startDate) : new Date();
+  const month = start.getMonth();
+  const cold = [10, 11, 0, 1, 2].includes(month);
+  const kids = (form.kids || 0) > 0;
+  const dest = (form.destination || "").toLowerCase();
+  const beachy = /bali|santorini|lisbon|barcelona/.test(dest);
+
+  const seasonal = cold
+    ? { heading: "Cold-weather layers", icon: "snow", items: [
+        "Insulated jacket + packable down", "Thermal base layers (2)",
+        "Beanie, gloves & wool socks", "Waterproof boots",
+      ]}
+    : { heading: "Warm-weather kit", icon: "sun", items: [
+        "Breathable light clothing", "SPF 50 sunscreen + after-sun",
+        "Sunglasses & wide-brim hat",
+        beachy ? "Swimwear & quick-dry towel" : "Refillable water bottle",
+      ]};
+
+  const childcare = kids ? { heading: "Travelling with kids", icon: "kids", items: [
+    "Each child's passport + copies", "Consent / custody documentation",
+    "Snacks, wipes & entertainment", "Child meds & first-aid basics",
+  ]} : null;
+
+  const essentials = { heading: "Always-on essentials", icon: "shield", items: [
+    "Passport valid 6+ months", "Travel insurance documents",
+    "Terminal & transit maps offline", "Cards + a little local cash",
+  ]};
+
+  return [seasonal, childcare, essentials].filter(Boolean);
+}
+
+Object.assign(window, {
+  CATEGORIES, KIDS, CURRENCIES, money, PLACES, COVERS, TRIPS,
+  generateItinerary, buildPacking,
+});
+
+/* ═══════════════════ ui — shared building blocks ═══════════════════ */
+
+const ICON_PATHS = {
+  sun: "M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M18.4 5.6l1.4-1.4M4.2 19.8l1.4-1.4 M12 7.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z",
+  moon: "M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z",
+  plane: "M10.5 13.5 3 11l2-3 6 1 4.5-5.5a2 2 0 0 1 3 2.6L14 11l1 6-3 1.5-1.5-5Z",
+  calendar: "M7 3v3M17 3v3M4 8h16M5 6h14a1 1 0 0 1 1 1v12a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1Z",
+  minus: "M5 12h14",
+  plus: "M12 5v14M5 12h14",
+  chevron: "m9 6 6 6-6 6",
+  chevronDown: "m6 9 6 6 6-6",
+  check: "m5 12.5 4.5 4.5L19 7",
+  wand: "m5 19 9-9M14 6l1.2-2.6L18 2.2 15.4 1 14.2-1.6 13 1 10.4 2.2 13 3.4 14 6ZM18 11l.7-1.6L20.4 8.7 18.8 8 18 6.3 17.2 8l-1.6.7 1.6.7L18 11Z",
+  back: "m15 18-6-6 6-6",
+  pin: "M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11Z M12 12.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z",
+  clock: "M12 7v5l3 2 M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z",
+  search: "M11 18a7 7 0 1 0 0-14 7 7 0 0 0 0 14ZM20 20l-4-4",
+  kids: "M9 10h.01M15 10h.01M9.5 15a3.5 3.5 0 0 0 5 0 M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z",
+  sparkle: "M12 3v6M12 15v6M3 12h6M15 12h6 M7 7l3 3M14 14l3 3M17 7l-3 3M10 14l-3 3",
+  sun2: "M12 4V2M12 22v-2M4 12H2M22 12h-2M5.6 5.6 4.2 4.2M19.8 19.8l-1.4-1.4M18.4 5.6l1.4-1.4M4.2 19.8l1.4-1.4 M12 7.5a4.5 4.5 0 1 0 0 9 4.5 4.5 0 0 0 0-9Z",
+  snow: "M12 2v20M4 6l16 12M20 6 4 18M12 2l-2.5 2.5M12 2l2.5 2.5M12 22l-2.5-2.5M12 22l2.5-2.5",
+  shield: "M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z M9 12l2 2 4-4",
+  shell: "M12 21V3M12 21c-5 0-9-4-9-9a9 9 0 0 1 18 0c0 5-4 9-9 9ZM6.5 9.5 12 12M17.5 9.5 12 12M9 17l3-5M15 17l-3-5",
+  coins: "M9 14a6 6 0 1 0 0-12 6 6 0 0 0 0 12ZM15 22a6 6 0 0 0 0-12M9 8h.01",
+  trash: "M4 7h16M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 7l1 13a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1l1-13",
+  globe: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM3 12h18M12 3c2.5 2.5 4 6 4 9s-1.5 6.5-4 9c-2.5-2.5-4-6-4-9s1.5-6.5 4-9Z",
+  star: "m12 3 2.6 5.6 6.1.7-4.5 4.1 1.2 6L12 16.9 6.6 19.5l1.2-6L3.3 9.3l6.1-.7L12 3Z",
+  edit: "M4 20h4L19 9a2 2 0 0 0-3-3L5 16v4ZM14 7l3 3",
+};
+
+function Icon({ name, size = 20, stroke = 2, fill = "none", className = "", style = {} }) {
+  const d = ICON_PATHS[name] || "";
+  return (
+    <svg viewBox="0 0 24 24" width={size} height={size} className={className}
+         style={{ display: "block", ...style }} fill={fill}
+         stroke="currentColor" strokeWidth={stroke} strokeLinecap="round" strokeLinejoin="round">
+      {d.split(" M").map((seg, i) => <path key={i} d={(i === 0 ? "" : "M") + seg} />)}
+    </svg>
+  );
+}
+
+function hexRgb(hex) {
+  const h = hex.replace("#", "");
+  const n = parseInt(h.length === 3 ? h.replace(/./g, (c) => c + c) : h, 16);
+  return `${(n >> 16) & 255} ${(n >> 8) & 255} ${n & 255}`;
+}
+
+function CategoryPill({ cat, variant = "soft", size = "md" }) {
+  const meta = window.CATEGORIES[cat];
+  if (!meta) return null;
+  const rgb = hexRgb(meta.hex);
+  const pad = size === "sm" ? "3px 9px" : "4px 11px";
+  const fs = size === "sm" ? 11 : 12;
+  let style;
+  if (variant === "solid") {
+    style = { background: `rgb(${rgb})`, color: "#fff", border: "1px solid transparent" };
+  } else if (variant === "outline") {
+    style = { background: "transparent", color: `rgb(${rgb})`, border: `1.5px solid rgb(${rgb} / .55)` };
+  } else {
+    style = { background: `rgb(${rgb} / .15)`, color: `rgb(${rgb})`, border: `1px solid rgb(${rgb} / .28)` };
+  }
+  return (
+    <span style={{
+      ...style, display: "inline-flex", alignItems: "center", gap: 6,
+      padding: pad, fontSize: fs, fontWeight: 600, borderRadius: 999, lineHeight: 1,
+      letterSpacing: ".01em", whiteSpace: "nowrap",
+    }}>
+      <span style={{ width: 6, height: 6, borderRadius: 99, background: variant === "solid" ? "#fff" : `rgb(${rgb})`, opacity: variant === "outline" ? 1 : .9 }} />
+      {meta.label}
+    </span>
+  );
+}
+
+function KidsBadge({ variant = "soft", size = "md" }) {
+  const rgb = hexRgb(window.KIDS.hex);
+  const fs = size === "sm" ? 11 : 12;
+  let style;
+  if (variant === "solid") style = { background: `rgb(${rgb})`, color: "#fff" };
+  else if (variant === "outline") style = { background: "transparent", color: `rgb(${rgb})`, border: `1.5px solid rgb(${rgb} / .55)` };
+  else style = { background: `rgb(${rgb} / .15)`, color: `rgb(${rgb})`, border: `1px solid rgb(${rgb} / .28)` };
+  return (
+    <span style={{
+      ...style, display: "inline-flex", alignItems: "center", gap: 5,
+      padding: size === "sm" ? "3px 8px" : "4px 10px", fontSize: fs, fontWeight: 600,
+      borderRadius: 999, lineHeight: 1, whiteSpace: "nowrap",
+    }}>
+      <Icon name="kids" size={fs + 2} stroke={2.2} />
+      {window.KIDS.label}
+    </span>
+  );
+}
+
+function Stepper({ label, sub, value, onChange, min = 0, max = 12 }) {
+  const btn = (dir, disabled, icon) => (
+    <button type="button" disabled={disabled}
+      onClick={() => onChange(Math.max(min, Math.min(max, value + dir)))}
+      className="focus-ring"
+      style={{
+        width: 36, height: 36, borderRadius: 12, display: "grid", placeItems: "center",
+        border: "1px solid rgb(var(--border))", background: "rgb(var(--surface-2))",
+        color: disabled ? "rgb(var(--faint))" : "rgb(var(--text))",
+        cursor: disabled ? "not-allowed" : "pointer", opacity: disabled ? .5 : 1,
+        transition: "transform .12s, background .15s, border-color .15s",
+      }}
+      onMouseDown={(e) => !disabled && (e.currentTarget.style.transform = "scale(.9)")}
+      onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+      onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+    >
+      <Icon name={icon} size={18} stroke={2.4} />
+    </button>
+  );
+  return (
+    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 4px" }}>
+      <div>
+        <div style={{ fontWeight: 600, fontSize: 15 }}>{label}</div>
+        {sub && <div style={{ fontSize: 12.5, color: "rgb(var(--muted))", marginTop: 2 }}>{sub}</div>}
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+        {btn(-1, value <= min, "minus")}
+        <span style={{ minWidth: 26, textAlign: "center", fontWeight: 700, fontSize: 18, fontVariantNumeric: "tabular-nums",
+          color: value > 0 ? "rgb(var(--accent))" : "rgb(var(--faint))" }}>{value}</span>
+        {btn(1, value >= max, "plus")}
+      </div>
+    </div>
+  );
+}
+
+function Cover({ gradient, label, sub, height = 170, big = false }) {
+  return (
+    <div style={{
+      position: "relative", height, borderRadius: big ? 0 : "var(--r-card)",
+      background: gradient, overflow: "hidden",
+    }}>
+      <div style={{ position: "absolute", inset: 0,
+        background: "radial-gradient(120% 90% at 85% 10%, rgba(255,255,255,.35), transparent 55%), radial-gradient(80% 70% at 10% 100%, rgba(0,0,0,.28), transparent 60%)" }} />
+      <div style={{ position: "absolute", inset: 0, opacity: .5,
+        backgroundImage: "repeating-linear-gradient(115deg, rgba(255,255,255,.10) 0 2px, transparent 2px 22px)" }} />
+      {label && (
+        <div style={{ position: "absolute", left: 18, bottom: 14, color: "#fff", textShadow: "0 2px 12px rgba(0,0,0,.35)" }}>
+          <div style={{ fontWeight: 800, fontSize: big ? 40 : 22, letterSpacing: "-.02em", lineHeight: 1.05 }}>{label}</div>
+          {sub && <div style={{ fontSize: big ? 15 : 12.5, opacity: .92, marginTop: 4, fontWeight: 500 }}>{sub}</div>}
+        </div>
+      )}
+    </div>
+  );
+}
+
+Object.assign(window, { Icon, hexRgb, CategoryPill, KidsBadge, Stepper, Cover });
+
+/* ═══════════════════ Landing — featured wall ═══════════════════ */
+
+function FeaturedCard({ trip, big, index, onOpen, cur }) {
+  const [hover, setHover] = React.useState(false);
+  const total = (trip.plan || []).reduce((s, d) => s + d.items.reduce((a, it) => a + it.cost, 0), 0);
+  return (
+    <button
+      onClick={() => onOpen(trip.id)}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      className="card focus-ring anim-rise"
+      style={{
+        textAlign: "left", padding: 0, overflow: "hidden", cursor: "pointer",
+        display: "flex", flexDirection: "column",
+        gridColumn: big ? "span 2" : "span 1",
+        gridRow: big ? "span 2" : "span 1",
+        animationDelay: `${index * 70}ms`,
+        boxShadow: hover ? "var(--shadow-lg)" : "var(--shadow-sm)",
+        transform: hover ? "translateY(-6px)" : "none",
+        transition: "transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s",
+        borderColor: hover ? "rgb(var(--accent) / .5)" : "rgb(var(--border))",
+      }}
+    >
+      <div style={{ position: "relative", overflow: "hidden" }}>
+        <Cover gradient={trip.cover} label={trip.city} sub={`${trip.country} · ${trip.days} ${trip.days === 1 ? "day" : "days"}`}
+          height={big ? 300 : 168} big={big} />
+        <span style={{
+          position: "absolute", top: 14, left: 14, padding: "5px 11px", borderRadius: 999,
+          fontSize: 12, fontWeight: 700, color: "#fff",
+          background: "rgba(0,0,0,.32)", backdropFilter: "blur(8px)",
+          border: "1px solid rgba(255,255,255,.25)",
+        }}>{trip.persona}</span>
+        <span style={{
+          position: "absolute", top: 14, right: 14, width: 34, height: 34, borderRadius: 999,
+          display: "grid", placeItems: "center", color: "#fff",
+          background: "rgba(0,0,0,.32)", backdropFilter: "blur(8px)",
+          border: "1px solid rgba(255,255,255,.25)",
+          transform: hover ? "translateX(2px)" : "none", transition: "transform .25s",
+        }}><Icon name="chevron" size={17} stroke={2.5} /></span>
+      </div>
+      <div style={{ padding: big ? "20px 22px 22px" : "15px 17px 17px", display: "flex", flexDirection: "column", gap: 10, flex: 1 }}>
+        <div style={{ fontSize: big ? 16 : 14, color: "rgb(var(--muted))", fontWeight: 500, lineHeight: 1.45 }}>
+          {trip.tagline}
+        </div>
+        <div style={{ marginTop: "auto", display: "flex", alignItems: "center", justifyContent: "space-between", paddingTop: 4 }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 6, fontSize: 13, fontWeight: 600,
+            color: hover ? "rgb(var(--accent))" : "rgb(var(--text))", transition: "color .2s" }}>
+            <Icon name="wand" size={15} /> View full plan
+          </span>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "rgb(var(--muted))" }}>
+            from {window.money(total, cur)}
+          </span>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function Landing({ onOpenTrip, onPlan, cur }) {
+  const trips = window.TRIPS;
+  return (
+    <div className="anim-fade" style={{ maxWidth: 1180, margin: "0 auto", padding: "0 24px 80px" }}>
+      <section style={{ position: "relative", padding: "64px 0 52px", textAlign: "center" }}>
+        <div style={{ position: "absolute", inset: "0 0 auto 0", height: 320, zIndex: -1, pointerEvents: "none",
+          background: "radial-gradient(60% 100% at 50% 0%, rgb(var(--accent) / .16), transparent 70%), radial-gradient(40% 80% at 78% 10%, rgb(var(--accent-2) / .12), transparent 70%)" }} />
+        <div className="anim-rise" style={{ display: "inline-flex", alignItems: "center", gap: 8, padding: "7px 14px",
+          borderRadius: 999, border: "1px solid rgb(var(--border))", background: "rgb(var(--surface))",
+          fontSize: 13, fontWeight: 600, color: "rgb(var(--muted))", marginBottom: 26, boxShadow: "var(--shadow-sm)" }}>
+          <Icon name="sparkle" size={15} style={{ color: "rgb(var(--accent))" }} />
+          AI-built day-by-day plans in seconds
+        </div>
+        <h1 className="anim-rise" style={{ fontSize: "clamp(40px, 6vw, 68px)", lineHeight: 1.02, letterSpacing: "-.035em",
+          fontWeight: 800, margin: "0 0 18px", animationDelay: "60ms" }}>
+          Plan a trip you'll<br />actually want to take.
+        </h1>
+        <p className="anim-rise" style={{ fontSize: "clamp(16px,2vw,19px)", color: "rgb(var(--muted))", maxWidth: 560,
+          margin: "0 auto 30px", lineHeight: 1.5, animationDelay: "120ms" }}>
+          Tell <span className="grad-text" style={{ fontWeight: 700 }}>Itinera</span> your destination, dates and vibe —
+          get a smart, day-by-day itinerary with live pricing and a packing list.
+        </p>
+        <div className="anim-rise" style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", animationDelay: "180ms" }}>
+          <button onClick={onPlan} className="btn-accent focus-ring" style={{ display: "inline-flex", alignItems: "center", gap: 9,
+            padding: "15px 26px", borderRadius: 16, fontSize: 16, fontWeight: 700, cursor: "pointer" }}>
+            <Icon name="wand" size={19} /> Plan my trip
+          </button>
+          <button onClick={() => onOpenTrip(trips[0].id)} className="focus-ring" style={{ display: "inline-flex", alignItems: "center", gap: 9,
+            padding: "15px 24px", borderRadius: 16, fontSize: 16, fontWeight: 700, cursor: "pointer",
+            background: "rgb(var(--surface))", color: "rgb(var(--text))", border: "1px solid rgb(var(--border))" }}>
+            Browse a sample <Icon name="chevron" size={16} stroke={2.4} />
+          </button>
+        </div>
+      </section>
+
+      <section>
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 18, gap: 12, flexWrap: "wrap" }}>
+          <h2 style={{ fontSize: 24, fontWeight: 800, letterSpacing: "-.02em", margin: 0 }}>Featured itineraries</h2>
+          <span style={{ fontSize: 14, color: "rgb(var(--muted))", fontWeight: 500 }}>Open any plan to explore it live</span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(248px, 1fr))", gridAutoRows: "1fr", gap: 18 }}>
+          {trips.map((t, i) => (
+            <FeaturedCard key={t.id} trip={t} big={i === 0} index={i} onOpen={onOpenTrip} cur={cur} />
+          ))}
+        </div>
+      </section>
+    </div>
+  );
+}
+
+Object.assign(window, { Landing });
+
+/* ═══════════════════ TripForm — trip input form ═══════════════════ */
+
+const PERSONA_META = [
+  { id: "Budget",     icon: "coins",  color: "#16a34a", desc: "Street food, hostels, smart choices" },
+  { id: "Mid-range",  icon: "star",   color: "#2563eb", desc: "Comfy stays, curated dining" },
+  { id: "Luxurious",  icon: "sparkle",color: "#9333ea", desc: "5-star, private guides, the best" },
+  { id: "Adventure",  icon: "shell",  color: "#ea580c", desc: "Hikes, water sports, wild stays" },
+];
+
+function dateKey(d) { return d ? d.toDateString() : ""; }
+
+function DateRangePicker({ startDate, endDate, onChange }) {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const [view, setView] = React.useState(() => {
+    const d = new Date(); return { y: d.getFullYear(), m: d.getMonth() };
+  });
+  const [hover, setHover] = React.useState(null);
+
+  const getDays = (y, m) => {
+    const first = new Date(y, m, 1);
+    const pad = first.getDay();
+    const count = new Date(y, m + 1, 0).getDate();
+    const arr = Array(pad).fill(null);
+    for (let i = 1; i <= count; i++) arr.push(new Date(y, m, i));
+    return arr;
+  };
+
+  const prevM = () => setView(v => v.m === 0 ? { y: v.y - 1, m: 11 } : { y: v.y, m: v.m - 1 });
+  const nextM = () => setView(v => v.m === 11 ? { y: v.y + 1, m: 0 } : { y: v.y, m: v.m + 1 });
+
+  const handleClick = (d) => {
+    if (!d || d < today) return;
+    if (!startDate || (startDate && endDate)) { onChange(d, null); }
+    else if (d < startDate) { onChange(d, null); }
+    else { onChange(startDate, d); }
+  };
+
+  const days = getDays(view.y, view.m);
+  const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const DAYS = ["Su","Mo","Tu","We","Th","Fr","Sa"];
+  const rangeEnd = hover || endDate;
+
+  return (
+    <div style={{ background: "rgb(var(--surface-2))", borderRadius: 18, padding: 16, border: "1px solid rgb(var(--border))" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 14 }}>
+        <button type="button" onClick={prevM} className="focus-ring" style={calBtnSt}>
+          <Icon name="back" size={16} stroke={2.5} />
+        </button>
+        <span style={{ fontWeight: 700, fontSize: 15, letterSpacing: "-.01em" }}>
+          {MONTHS[view.m]} {view.y}
+        </span>
+        <button type="button" onClick={nextM} className="focus-ring" style={calBtnSt}>
+          <Icon name="chevron" size={16} stroke={2.5} />
+        </button>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 2, marginBottom: 4 }}>
+        {DAYS.map(d => <div key={d} style={{ textAlign:"center", fontSize:11.5, fontWeight:700, color:"rgb(var(--faint))", padding:"4px 0" }}>{d}</div>)}
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 2 }}>
+        {days.map((d, i) => {
+          if (!d) return <div key={`e${i}`} />;
+          const past = d < today;
+          const isStart = startDate && dateKey(d) === dateKey(startDate);
+          const isEnd = endDate && dateKey(d) === dateKey(endDate);
+          const isToday = dateKey(d) === dateKey(today);
+          const inRange = startDate && rangeEnd && d > startDate && d < rangeEnd;
+          return (
+            <button type="button" key={i} onClick={() => handleClick(d)}
+              onMouseEnter={() => !endDate && startDate && setHover(d)}
+              onMouseLeave={() => setHover(null)}
+              className="focus-ring"
+              style={{
+                border: "none", borderRadius: (isStart || isEnd) ? 12 : inRange ? 0 : 10,
+                padding: "8px 0", fontSize: 13.5, fontWeight: isStart || isEnd ? 700 : isToday ? 600 : 500,
+                cursor: past ? "not-allowed" : "pointer",
+                opacity: past ? .3 : 1,
+                background: (isStart || isEnd) ? "rgb(var(--accent))" : inRange ? "rgb(var(--accent) / .15)" : "transparent",
+                color: (isStart || isEnd) ? "#fff" : "inherit",
+                position: "relative",
+                transition: "background .12s, color .12s",
+              }}>
+              {d.getDate()}
+              {isToday && !isStart && !isEnd && (
+                <span style={{ position:"absolute", bottom:3, left:"50%", transform:"translateX(-50%)",
+                  width:4, height:4, borderRadius:99, background:"rgb(var(--accent))" }} />
+              )}
+            </button>
+          );
+        })}
+      </div>
+      <div style={{ marginTop: 12, display: "flex", gap: 8, fontSize: 13, fontWeight: 600 }}>
+        <span style={{ flex:1, padding:"8px 12px", borderRadius:10, background:"rgb(var(--surface))",
+          border:`1.5px solid ${startDate ? "rgb(var(--accent))" : "rgb(var(--border))"}`,
+          color: startDate ? "rgb(var(--accent))" : "rgb(var(--faint))" }}>
+          {startDate ? startDate.toLocaleDateString("en-US",{month:"short",day:"numeric"}) : "Start date"}
+        </span>
+        <span style={{ display:"grid", placeItems:"center", color:"rgb(var(--faint))" }}>→</span>
+        <span style={{ flex:1, padding:"8px 12px", borderRadius:10, background:"rgb(var(--surface))",
+          border:`1.5px solid ${endDate ? "rgb(var(--accent))" : "rgb(var(--border))"}`,
+          color: endDate ? "rgb(var(--accent))" : "rgb(var(--faint))" }}>
+          {endDate ? endDate.toLocaleDateString("en-US",{month:"short",day:"numeric"}) : "End date"}
+        </span>
+      </div>
+    </div>
+  );
+}
+const calBtnSt = {
+  width:32, height:32, borderRadius:10, display:"grid", placeItems:"center",
+  border:"1px solid rgb(var(--border))", background:"rgb(var(--surface))", cursor:"pointer",
+};
+
+function DestinationField({ value, onChange }) {
+  const [open, setOpen] = React.useState(false);
+  const [q, setQ] = React.useState(value || "");
+  const ref = React.useRef(null);
+
+  const results = React.useMemo(() => {
+    if (q.length < 1) return window.PLACES.filter(p => p.kind === "city").slice(0, 6);
+    const lower = q.toLowerCase();
+    return window.PLACES.filter(p => p.name.toLowerCase().includes(lower)).slice(0, 7);
+  }, [q]);
+
+  React.useEffect(() => {
+    const handler = (e) => { if (ref.current && !ref.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const select = (p) => { setQ(p.name); onChange(p.name); setOpen(false); };
+
+  return (
+    <div ref={ref} style={{ position: "relative" }}>
+      <div style={{ position: "relative" }}>
+        <Icon name="globe" size={18} style={{ position:"absolute", left:14, top:"50%", transform:"translateY(-50%)",
+          color:"rgb(var(--muted))", pointerEvents:"none" }} />
+        <input type="text" value={q} placeholder="Where are you going?"
+          onChange={e => { setQ(e.target.value); onChange(e.target.value); setOpen(true); }}
+          onFocus={() => setOpen(true)}
+          className="focus-ring"
+          style={{ width:"100%", padding:"14px 14px 14px 44px", borderRadius:16, fontSize:15, fontWeight:500,
+            background:"rgb(var(--surface))", border:"1.5px solid rgb(var(--border))", color:"rgb(var(--text))",
+            outline:"none", boxSizing:"border-box", transition:"border-color .2s" }}
+          onMouseEnter={e => e.target.style.borderColor = "rgb(var(--muted))"}
+          onMouseLeave={e => e.target.style.borderColor = "rgb(var(--border))"}
+        />
+        <Icon name="search" size={16} style={{ position:"absolute", right:14, top:"50%", transform:"translateY(-50%)",
+          color:"rgb(var(--faint))", pointerEvents:"none" }} />
+      </div>
+      {open && results.length > 0 && (
+        <div className="card elev-lg anim-pop" style={{ position:"absolute", top:"calc(100% + 8px)", left:0, right:0, zIndex:999, overflow:"hidden", padding:6 }}>
+          {results.map((p, i) => (
+            <button key={i} type="button" onClick={() => select(p)}
+              style={{ display:"flex", alignItems:"center", gap:12, width:"100%", textAlign:"left",
+                padding:"10px 12px", borderRadius:12, border:"none", background:"transparent", cursor:"pointer", color:"rgb(var(--text))" }}
+              onMouseEnter={e => e.currentTarget.style.background = "rgb(var(--surface-2))"}
+              onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
+              <span style={{ fontSize:22, lineHeight:1 }}>{p.emoji}</span>
+              <div>
+                <div style={{ fontWeight:600, fontSize:14 }}>{p.name}</div>
+                {p.airport && <div style={{ fontSize:12, color:"rgb(var(--muted))", marginTop:2 }}>{p.airport}</div>}
+                {p.near && <div style={{ fontSize:12, color:"rgb(var(--muted))", marginTop:2 }}>Near {p.near}</div>}
+              </div>
+              <span style={{ marginLeft:"auto", fontSize:11, fontWeight:600, padding:"3px 8px", borderRadius:999,
+                background:"rgb(var(--surface-2))", color:"rgb(var(--muted))", border:"1px solid rgb(var(--border))" }}>
+                {p.kind}
+              </span>
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function PersonaGrid({ value, onChange, style: pStyle }) {
+  if (pStyle === "chips") {
+    return (
+      <div style={{ display:"flex", gap:10, flexWrap:"wrap" }}>
+        {PERSONA_META.map(p => {
+          const sel = value === p.id;
+          return (
+            <button key={p.id} type="button" onClick={() => onChange(p.id)} className="focus-ring"
+              style={{ display:"inline-flex", alignItems:"center", gap:8, padding:"10px 18px",
+                borderRadius:999, border:`2px solid ${sel ? p.color : "rgb(var(--border))"}`,
+                background: sel ? `${p.color}18` : "rgb(var(--surface))",
+                color: sel ? p.color : "rgb(var(--muted))",
+                fontWeight:700, fontSize:14, cursor:"pointer", transition:"all .18s" }}>
+              <Icon name={p.icon} size={16} stroke={2.2} />
+              {p.id}
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+  if (pStyle === "tiles") {
+    return (
+      <div style={{ display:"grid", gridTemplateColumns:"repeat(4,1fr)", gap:10 }}>
+        {PERSONA_META.map(p => {
+          const sel = value === p.id;
+          const rgb = window.hexRgb(p.color);
+          return (
+            <button key={p.id} type="button" onClick={() => onChange(p.id)} className="focus-ring"
+              style={{ border:`2px solid ${sel ? p.color : "transparent"}`, borderRadius:18,
+                background: `linear-gradient(145deg, rgb(${rgb}/.18), rgb(${rgb}/.06))`,
+                padding:"20px 12px", cursor:"pointer", display:"flex", flexDirection:"column",
+                alignItems:"center", gap:10, transition:"all .2s",
+                boxShadow: sel ? `0 4px 18px rgb(${rgb}/.35)` : "none" }}>
+              <span style={{ color:p.color, background:`rgb(${rgb}/.18)`, width:44, height:44,
+                borderRadius:14, display:"grid", placeItems:"center" }}>
+                <Icon name={p.icon} size={22} stroke={2} />
+              </span>
+              <span style={{ fontSize:13, fontWeight:700, color:"rgb(var(--text))" }}>{p.id}</span>
+            </button>
+          );
+        })}
+      </div>
+    );
+  }
+  return (
+    <div style={{ display:"grid", gridTemplateColumns:"repeat(2,1fr)", gap:12 }}>
+      {PERSONA_META.map(p => {
+        const sel = value === p.id;
+        const rgb = window.hexRgb(p.color);
+        return (
+          <button key={p.id} type="button" onClick={() => onChange(p.id)} className="card focus-ring"
+            style={{ display:"flex", alignItems:"center", gap:14, padding:"14px 16px",
+              border:`2px solid ${sel ? p.color : "rgb(var(--border))"}`,
+              cursor:"pointer", textAlign:"left", transition:"all .2s",
+              background: sel ? `rgb(${rgb}/.10)` : "rgb(var(--surface))",
+              boxShadow: sel ? `0 0 0 4px rgb(${rgb}/.15), var(--shadow-sm)` : "var(--shadow-sm)" }}>
+            <span style={{ width:40, height:40, borderRadius:12, display:"grid", placeItems:"center",
+              background:`rgb(${rgb}/.18)`, color:p.color, flexShrink:0 }}>
+              <Icon name={p.icon} size={20} stroke={2} />
+            </span>
+            <div>
+              <div style={{ fontWeight:700, fontSize:14, color: sel ? p.color : "rgb(var(--text))" }}>{p.id}</div>
+              <div style={{ fontSize:12.5, color:"rgb(var(--muted))", marginTop:3, lineHeight:1.4 }}>{p.desc}</div>
+            </div>
+            {sel && <Icon name="check" size={18} stroke={2.5} style={{ marginLeft:"auto", color:p.color, flexShrink:0 }} />}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function FormSection({ label, children, hint }) {
+  return (
+    <div style={{ display:"flex", flexDirection:"column", gap:12 }}>
+      <div style={{ display:"flex", alignItems:"baseline", gap:8 }}>
+        <label style={{ fontWeight:700, fontSize:15, letterSpacing:"-.01em" }}>{label}</label>
+        {hint && <span style={{ fontSize:12.5, color:"rgb(var(--muted))" }}>{hint}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+function TripForm({ onGenerate, personaStyle }) {
+  const [dest, setDest] = React.useState("");
+  const [startDate, setStartDate] = React.useState(null);
+  const [endDate, setEndDate] = React.useState(null);
+  const [adults_m, setAdultsM] = React.useState(1);
+  const [adults_f, setAdultsF] = React.useState(1);
+  const [kids, setKids] = React.useState(0);
+  const [persona, setPersona] = React.useState("Mid-range");
+  const [mustHave, setMustHave] = React.useState("");
+  const [loading, setLoading] = React.useState(false);
+
+  const days = (startDate && endDate) ? Math.max(1, Math.round((endDate - startDate) / 86400000)) : 0;
+
+  const handleGenerate = () => {
+    if (!dest) { alert("Please enter a destination."); return; }
+    setLoading(true);
+    setTimeout(() => {
+      const form = { destination: dest, startDate, endDate, days: days || 3, adults_m, adults_f, kids, persona, mustHave };
+      onGenerate(form);
+      setLoading(false);
+    }, 1400);
+  };
+
+  return (
+    <div className="anim-fade" style={{ maxWidth: 780, margin: "0 auto", padding: "32px 24px 80px" }}>
+      <h2 style={{ fontSize: 30, fontWeight: 800, letterSpacing: "-.03em", margin: "0 0 6px" }}>Plan your trip</h2>
+      <p style={{ fontSize: 15, color: "rgb(var(--muted))", margin: "0 0 36px" }}>Fill in the details below — our AI handles the rest.</p>
+
+      <div style={{ display:"flex", flexDirection:"column", gap:32 }}>
+        <FormSection label="Where to?" hint="Search a city, island or local spot">
+          <DestinationField value={dest} onChange={setDest} />
+        </FormSection>
+
+        <div style={{ height:1, background:"rgb(var(--border))" }} />
+
+        <FormSection label="When?" hint={days > 0 ? `${days} night${days !== 1 ? "s" : ""}` : "Click a start then end date"}>
+          <DateRangePicker startDate={startDate} endDate={endDate}
+            onChange={(s, e) => { setStartDate(s); setEndDate(e); }} />
+        </FormSection>
+
+        <div style={{ height:1, background:"rgb(var(--border))" }} />
+
+        <FormSection label="Who's coming?">
+          <div className="card" style={{ padding:"0 20px", overflow:"hidden" }}>
+            {[
+              { label:"Adults (Male)",   sub:"18+",  val:adults_m, set:setAdultsM },
+              { label:"Adults (Female)", sub:"18+",  val:adults_f, set:setAdultsF },
+              { label:"Kids",            sub:"under 18", val:kids, set:setKids },
+            ].map((r, i) => (
+              <div key={i}>
+                {i > 0 && <div style={{ height:1, background:"rgb(var(--border))" }} />}
+                <Stepper label={r.label} sub={r.sub} value={r.val} onChange={r.set} />
+              </div>
+            ))}
+          </div>
+        </FormSection>
+
+        <div style={{ height:1, background:"rgb(var(--border))" }} />
+
+        <FormSection label="Travel persona" hint="Defines your activity + accommodation tier">
+          <PersonaGrid value={persona} onChange={setPersona} style={personaStyle} />
+        </FormSection>
+
+        <div style={{ height:1, background:"rgb(var(--border))" }} />
+
+        <FormSection label="Must-haves" hint="Optional — anything specific you don't want to miss">
+          <textarea value={mustHave} onChange={e => setMustHave(e.target.value)}
+            placeholder="e.g. a rooftop dinner, a day at the beach, skip temples..."
+            rows={3} className="focus-ring"
+            style={{ resize:"vertical", padding:"14px 16px", borderRadius:16, fontSize:14.5,
+              background:"rgb(var(--surface))", border:"1.5px solid rgb(var(--border))",
+              color:"rgb(var(--text))", outline:"none", fontFamily:"inherit", lineHeight:1.6,
+              width:"100%", boxSizing:"border-box", transition:"border-color .2s" }}
+            onMouseEnter={e => e.target.style.borderColor = "rgb(var(--muted))"}
+            onMouseLeave={e => e.target.style.borderColor = "rgb(var(--border))"}
+          />
+        </FormSection>
+
+        <button type="button" onClick={handleGenerate} disabled={loading}
+          className="btn-accent focus-ring"
+          style={{ padding:"18px 0", borderRadius:18, fontSize:17, fontWeight:800,
+            cursor: loading ? "wait" : "pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:12,
+            opacity: loading ? .8 : 1, transition:"opacity .2s" }}>
+          {loading ? (
+            <>
+              <svg width="20" height="20" viewBox="0 0 24 24" style={{ animation:"spin .9s linear infinite" }}>
+                <circle cx="12" cy="12" r="10" fill="none" stroke="rgba(255,255,255,.35)" strokeWidth="2.5" />
+                <path d="M12 2a10 10 0 0 1 10 10" fill="none" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" />
+              </svg>
+              Building your itinerary…
+            </>
+          ) : (
+            <><Icon name="wand" size={20} /> Generate Itinerary</>
+          )}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { TripForm });
+
+/* ═══════════════════ Itinerary — the core screen ═══════════════════ */
+
+function ActivityCard({ item, currency, pillStyle, animDelay }) {
+  const [expanded, setExpanded] = React.useState(false);
+  const [hover, setHover] = React.useState(false);
+  return (
+    <div className="card anim-rise"
+      style={{ padding: 0, overflow: "hidden", animationDelay: `${animDelay}ms`,
+        boxShadow: hover || expanded ? "var(--shadow-md)" : "var(--shadow-sm)",
+        transform: hover ? "translateY(-2px)" : "none",
+        transition: "transform .25s cubic-bezier(.22,.61,.36,1), box-shadow .25s, border-color .2s",
+        borderColor: expanded ? "rgb(var(--accent) / .45)" : hover ? "rgb(var(--muted) / .5)" : "rgb(var(--border))",
+        cursor: "pointer" }}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      onClick={() => setExpanded(e => !e)}
+    >
+      <div style={{ padding: "14px 16px", display: "flex", alignItems: "flex-start", gap: 12 }}>
+        <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: 6, minWidth: 68 }}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "rgb(var(--accent))", background: "rgb(var(--accent) / .12)",
+            padding: "4px 8px", borderRadius: 8, whiteSpace: "nowrap", border: "1px solid rgb(var(--accent) / .25)" }}>
+            {item.time}
+          </span>
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontWeight: 700, fontSize: 15, lineHeight: 1.3, marginBottom: 8 }}>{item.title}</div>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, alignItems: "center" }}>
+            <CategoryPill cat={item.cat} variant={pillStyle} size="sm" />
+            {item.kids && <KidsBadge variant={pillStyle} size="sm" />}
+          </div>
+        </div>
+        <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 8 }}>
+          <span style={{ fontWeight: 700, fontSize: 14.5, color: item.cost === 0 ? "rgb(var(--accent))" : "rgb(var(--text))" }}>
+            {item.cost === 0 ? "Free" : window.money(item.cost, currency)}
+          </span>
+          <Icon name="chevronDown" size={16} stroke={2.5} style={{
+            color: "rgb(var(--faint))", transform: expanded ? "rotate(180deg)" : "none",
+            transition: "transform .25s cubic-bezier(.22,.61,.36,1)" }} />
+        </div>
+      </div>
+      <div style={{ maxHeight: expanded ? 120 : 0, overflow: "hidden",
+        transition: "max-height .35s cubic-bezier(.22,.61,.36,1)" }}>
+        <div style={{ padding: "0 16px 14px", display: "flex", gap: 10, alignItems: "flex-start" }}>
+          <div style={{ flexShrink: 0, width: 28, height: 28, borderRadius: 10, background: "rgb(var(--accent) / .12)",
+            display: "grid", placeItems: "center", color: "rgb(var(--accent))" }}>
+            <Icon name="sparkle" size={14} stroke={2} />
+          </div>
+          <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.6, color: "rgb(var(--muted))", fontStyle: "italic" }}>
+            {item.tip}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function DaySection({ day, dayNum, currency, pillStyle }) {
+  return (
+    <div style={{ display: "flex", gap: 0 }}>
+      <div style={{ width: 48, flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center" }}>
+        <div style={{ width: 36, height: 36, borderRadius: 12, background: "linear-gradient(135deg, rgb(var(--accent)), rgb(var(--accent-2)))",
+          display: "grid", placeItems: "center", color: "#fff", fontWeight: 800, fontSize: 15, flexShrink: 0,
+          boxShadow: "0 4px 12px rgb(var(--accent) / .35)", zIndex: 1 }}>
+          {dayNum}
+        </div>
+        <div style={{ width: 2, flex: 1, background: "linear-gradient(rgb(var(--accent) / .3), rgb(var(--border) / .4))",
+          margin: "6px 0", borderRadius: 99 }} />
+      </div>
+      <div style={{ flex: 1, minWidth: 0, paddingLeft: 12 }}>
+        <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between", marginBottom: 12, gap: 8 }}>
+          <h3 style={{ margin: 0, fontWeight: 800, fontSize: 18, letterSpacing: "-.02em" }}>
+            Day {dayNum} — <span style={{ fontWeight: 600, color: "rgb(var(--muted))" }}>{day.title}</span>
+          </h3>
+          <span style={{ fontSize: 13, fontWeight: 600, color: "rgb(var(--muted))", whiteSpace: "nowrap" }}>
+            {window.money(day.items.reduce((s, it) => s + it.cost, 0), currency)}
+          </span>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+          {day.items.map((it, i) => (
+            <ActivityCard key={i} item={it} currency={currency} pillStyle={pillStyle}
+              animDelay={dayNum * 60 + i * 50} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function OmittedCard({ item, currency, pillStyle }) {
+  const [added, setAdded] = React.useState(false);
+  return (
+    <div className="card" style={{ padding: "13px 14px", display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: 8 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontWeight: 700, fontSize: 13.5, lineHeight: 1.3, marginBottom: 5 }}>{item.title}</div>
+          <CategoryPill cat={item.cat} variant={pillStyle} size="sm" />
+        </div>
+        <span style={{ fontWeight: 700, fontSize: 13, flexShrink: 0 }}>{window.money(item.cost, currency)}</span>
+      </div>
+      <div style={{ fontSize: 12, color: "rgb(var(--muted))", lineHeight: 1.5 }}>{item.tip}</div>
+      <button type="button" onClick={() => setAdded(true)} disabled={added} className="focus-ring"
+        style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 7, padding: "8px 0",
+          borderRadius: 10, border: `1.5px solid ${added ? "rgb(var(--accent))" : "rgb(var(--border))"}`,
+          background: added ? "rgb(var(--accent) / .12)" : "transparent",
+          color: added ? "rgb(var(--accent))" : "rgb(var(--muted))", fontWeight: 700, fontSize: 13,
+          cursor: added ? "default" : "pointer", transition: "all .2s" }}>
+        <Icon name={added ? "check" : "plus"} size={15} stroke={2.5} />
+        {added ? "Added!" : "+ Add to plan"}
+      </button>
+    </div>
+  );
+}
+
+function PackingSection({ section }) {
+  const [checked, setChecked] = React.useState({});
+  const ICONS = { sun: "sun2", snow: "snow", kids: "kids", shield: "shield" };
+  return (
+    <div className="card" style={{ padding: "18px 20px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+        <span style={{ width: 34, height: 34, borderRadius: 11, background: "rgb(var(--accent) / .14)",
+          display: "grid", placeItems: "center", color: "rgb(var(--accent))", flexShrink: 0 }}>
+          <Icon name={ICONS[section.icon] || "sparkle"} size={18} stroke={2} />
+        </span>
+        <span style={{ fontWeight: 800, fontSize: 15, letterSpacing: "-.01em" }}>{section.heading}</span>
+        <span style={{ marginLeft: "auto", fontSize: 12, color: "rgb(var(--muted))", fontWeight: 600 }}>
+          {Object.values(checked).filter(Boolean).length}/{section.items.length} packed
+        </span>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {section.items.map((item, i) => (
+          <label key={i} style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
+            <span onClick={() => setChecked(c => ({ ...c, [i]: !c[i] }))}
+              style={{ width: 22, height: 22, borderRadius: 7, border: `2px solid ${checked[i] ? "rgb(var(--accent))" : "rgb(var(--border))"}`,
+                display: "grid", placeItems: "center", flexShrink: 0, transition: "all .18s",
+                background: checked[i] ? "rgb(var(--accent))" : "transparent" }}>
+              {checked[i] && <Icon name="check" size={13} stroke={2.8} style={{ color: "#fff" }} />}
+            </span>
+            <span style={{ fontSize: 14, fontWeight: 500, lineHeight: 1.4,
+              color: checked[i] ? "rgb(var(--faint))" : "rgb(var(--text))",
+              textDecoration: checked[i] ? "line-through" : "none", transition: "color .2s" }}>
+              {item}
+            </span>
+          </label>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function Itinerary({ trip, currency, setCurrency, pillStyle, form }) {
+  const grandTotal = trip.plan.reduce((s, d) => s + d.items.reduce((a, it) => a + it.cost, 0), 0);
+  const packingSections = window.buildPacking(form || {});
+  const CURR = window.CURRENCIES;
+
+  return (
+    <div className="anim-fade" style={{ maxWidth: 1180, margin: "0 auto", padding: "0 24px 80px" }}>
+      <div style={{ marginBottom: 32, borderRadius: 24, overflow: "hidden", position: "relative" }}>
+        <Cover gradient={trip.cover} label={`${trip.city}${trip.country ? ", " + trip.country : ""}`}
+          sub={`${trip.days} ${trip.days === 1 ? "day" : "days"} · ${trip.persona} · ${window.money(grandTotal, currency)} est.`}
+          height={220} big />
+        <div style={{ position: "absolute", top: 16, right: 16, display: "flex", gap: 8 }}>
+          <div className="glass" style={{ display: "flex", borderRadius: 14, overflow: "hidden",
+            border: "1px solid rgba(255,255,255,.3)", boxShadow: "var(--shadow-sm)" }}>
+            {Object.keys(CURR).map(c => (
+              <button key={c} type="button" onClick={() => setCurrency(c)}
+                style={{ padding: "8px 12px", border: "none", cursor: "pointer", fontWeight: 700, fontSize: 13,
+                  background: currency === c ? "rgba(255,255,255,.85)" : "transparent",
+                  color: currency === c ? "#111" : "rgba(255,255,255,.85)",
+                  transition: "all .18s" }}>
+                {CURR[c].symbol} {c}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <p style={{ margin: "0 0 28px", fontSize: 16, color: "rgb(var(--muted))", fontStyle: "italic" }}>
+        {trip.tagline}
+      </p>
+
+      <div className="itin-grid" style={{ display: "grid", gridTemplateColumns: "1fr 320px", gap: 28, alignItems: "start" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+          {trip.plan.map((day) => (
+            <DaySection key={day.day} day={day} dayNum={day.day} currency={currency} pillStyle={pillStyle} />
+          ))}
+
+          <div className="card" style={{ padding: "20px 22px" }}>
+            <div style={{ fontWeight: 800, fontSize: 16, marginBottom: 16, letterSpacing: "-.01em" }}>
+              Cost breakdown
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {trip.plan.map(day => {
+                const t = day.items.reduce((a, it) => a + it.cost, 0);
+                return (
+                  <div key={day.day} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                    <span style={{ fontSize: 14, color: "rgb(var(--muted))", fontWeight: 500 }}>
+                      Day {day.day} — {day.title}
+                    </span>
+                    <span style={{ fontSize: 14, fontWeight: 700 }}>{window.money(t, currency)}</span>
+                  </div>
+                );
+              })}
+              <div style={{ height: 1, background: "rgb(var(--border))", margin: "4px 0" }} />
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <span style={{ fontSize: 16, fontWeight: 800, letterSpacing: "-.01em" }}>Total estimate</span>
+                <span className="grad-text" style={{ fontSize: 22, fontWeight: 900, letterSpacing: "-.03em" }}>
+                  {window.money(grandTotal, currency)}
+                </span>
+              </div>
+              <p style={{ margin: 0, fontSize: 12, color: "rgb(var(--faint))", lineHeight: 1.5 }}>
+                Prices are estimates per person, excluding flights and accommodation.
+              </p>
+            </div>
+          </div>
+
+          <div>
+            <h3 style={{ fontWeight: 800, fontSize: 20, letterSpacing: "-.02em", marginBottom: 16 }}>
+              Before you go ✈️
+            </h3>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: 14 }}>
+              {packingSections.map((s, i) => <PackingSection key={i} section={s} />)}
+            </div>
+          </div>
+        </div>
+
+        <div className="itin-side" style={{ display: "flex", flexDirection: "column", gap: 16, position: "sticky", top: 100 }}>
+          <div style={{ fontWeight: 800, fontSize: 16, letterSpacing: "-.01em", display: "flex", alignItems: "center", gap: 8 }}>
+            <Icon name="edit" size={17} style={{ color: "rgb(var(--accent))" }} />
+            Didn't fit the schedule
+          </div>
+          <p style={{ margin: "0 0 4px", fontSize: 13, color: "rgb(var(--muted))", lineHeight: 1.5 }}>
+            Great options that didn't make the cut — add any of these to your plan.
+          </p>
+          {(trip.omitted || []).map((item, i) => (
+            <OmittedCard key={i} item={item} currency={currency} pillStyle={pillStyle} />
+          ))}
+
+          <div className="card" style={{ padding: "16px 18px", marginTop: 8 }}>
+            <div style={{ fontWeight: 700, fontSize: 13, marginBottom: 12, color: "rgb(var(--muted))" }}>QUICK STATS</div>
+            {[
+              { label: "Activities", val: trip.plan.reduce((s, d) => s + d.items.length, 0) },
+              { label: "Free activities", val: trip.plan.reduce((s, d) => s + d.items.filter(it => it.cost === 0).length, 0) },
+              { label: "Kids-friendly", val: trip.plan.reduce((s, d) => s + d.items.filter(it => it.kids).length, 0) },
+              { label: "Dining spots", val: trip.plan.reduce((s, d) => s + d.items.filter(it => it.cat === "dining").length, 0) },
+            ].map(row => (
+              <div key={row.label} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0",
+                borderBottom: "1px solid rgb(var(--border))" }}>
+                <span style={{ fontSize: 13, color: "rgb(var(--muted))", fontWeight: 500 }}>{row.label}</span>
+                <span style={{ fontSize: 14, fontWeight: 800 }}>{row.val}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { Itinerary });
+
+/* ═══════════════════ app — shell + routing ═══════════════════ */
+
+// Baked-in design decisions from the Claude Design session:
+// dark by default · reef accent (teal + coral) · soft pills · card persona layout.
+const DESIGN = { accent: "reef", pillStyle: "soft", personaStyle: "cards" };
+
+function Logo({ onClick }) {
+  return (
+    <div onClick={onClick} style={{ display: "flex", alignItems: "center", gap: 10, cursor: "pointer" }}>
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect width="32" height="32" rx="10" fill="url(#lg)" />
+        <path d="M16 8l3 8-3 3-3-3 3-8Z" fill="white" opacity=".95" />
+        <path d="M16 24l-3-8 3-3 3 3-3 8Z" fill="white" opacity=".55" />
+        <path d="M8 16l8-3 3 3-3 3-8-3Z" fill="white" opacity=".75" />
+        <path d="M24 16l-8 3-3-3 3-3 8 3Z" fill="white" opacity=".4" />
+        <defs>
+          <linearGradient id="lg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+            <stop stopColor="rgb(var(--accent))" />
+            <stop offset="1" stopColor="rgb(var(--accent-2))" />
+          </linearGradient>
+        </defs>
+      </svg>
+      <span style={{ fontWeight: 800, fontSize: 20, letterSpacing: "-.03em" }}>
+        Itin<span className="grad-text">era</span>
+      </span>
+    </div>
+  );
+}
+
+function Header({ page, onHome, onPlan, theme, toggleTheme, currency, setCurrency }) {
+  const CURR = window.CURRENCIES;
+  return (
+    <header className="glass" style={{
+      position: "sticky", top: 0, zIndex: 100,
+      borderBottom: "1px solid rgb(var(--border))",
+      padding: "0 24px",
+      display: "flex", alignItems: "center", height: 64, gap: 12,
+    }}>
+      <div style={{ flex: "0 0 auto" }}><Logo onClick={onHome} /></div>
+
+      <nav style={{ display: "flex", alignItems: "center", gap: 6, marginLeft: 8 }}>
+        {page !== "landing" && (
+          <button type="button" onClick={onHome} className="focus-ring"
+            style={{ display: "flex", alignItems: "center", gap: 6, padding: "7px 13px",
+              borderRadius: 12, border: "1px solid rgb(var(--border))",
+              background: "rgb(var(--surface))", fontSize: 13.5, fontWeight: 600,
+              color: "rgb(var(--muted))", cursor: "pointer" }}>
+            <Icon name="back" size={15} stroke={2.5} /> Home
+          </button>
+        )}
+      </nav>
+
+      <div style={{ flex: 1 }} />
+
+      <div style={{ display: "flex", borderRadius: 12, overflow: "hidden",
+        border: "1px solid rgb(var(--border))", background: "rgb(var(--surface-2))" }}>
+        {Object.keys(CURR).map(c => (
+          <button key={c} type="button" onClick={() => setCurrency(c)} className="focus-ring"
+            style={{ padding: "7px 10px", border: "none", cursor: "pointer", fontWeight: 700, fontSize: 12.5,
+              background: currency === c ? "rgb(var(--accent))" : "transparent",
+              color: currency === c ? "#fff" : "rgb(var(--muted))", transition: "all .18s",
+              borderRadius: currency === c ? 10 : 0 }}>
+            {CURR[c].symbol} {c}
+          </button>
+        ))}
+      </div>
+
+      {page !== "form" && (
+        <button type="button" onClick={onPlan} className="btn-accent focus-ring"
+          style={{ display: "flex", alignItems: "center", gap: 8, padding: "9px 18px",
+            borderRadius: 12, fontSize: 14, fontWeight: 700, cursor: "pointer" }}>
+          <Icon name="wand" size={16} /> Plan a trip
+        </button>
+      )}
+
+      <button type="button" onClick={toggleTheme} className="focus-ring"
+        style={{ width: 40, height: 40, borderRadius: 12, display: "grid", placeItems: "center",
+          border: "1px solid rgb(var(--border))", background: "rgb(var(--surface))",
+          cursor: "pointer", color: "rgb(var(--muted))" }}>
+        <Icon name={theme === "dark" ? "sun" : "moon"} size={18} stroke={2} />
+      </button>
+    </header>
+  );
+}
+
+function App() {
+  const [theme, setTheme] = React.useState("dark");
+  const [page, setPage] = React.useState("landing"); // landing | form | itinerary
+  const [currentTrip, setCurrentTrip] = React.useState(null);
+  const [currency, setCurrency] = React.useState("USD");
+  const [lastForm, setLastForm] = React.useState({});
+
+  React.useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    document.documentElement.setAttribute("data-accent", DESIGN.accent);
+  }, [theme]);
+
+  const scrollTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const goHome = () => { setPage("landing"); scrollTop(); };
+  const goPlan = () => { setPage("form"); scrollTop(); };
+
+  const openTrip = (tripId) => {
+    const trip = window.TRIPS.find(tr => tr.id === tripId);
+    if (trip) { setCurrentTrip(trip); setPage("itinerary"); scrollTop(); }
+  };
+
+  const generateTrip = (form) => {
+    setLastForm(form);
+    setCurrentTrip(window.generateItinerary(form));
+    setPage("itinerary");
+    scrollTop();
+  };
+
+  const toggleTheme = () => setTheme(t => t === "dark" ? "light" : "dark");
+
+  return (
+    <div style={{ minHeight: "100vh" }}>
+      <Header page={page} onHome={goHome} onPlan={goPlan}
+        theme={theme} toggleTheme={toggleTheme}
+        currency={currency} setCurrency={setCurrency} />
+      <main>
+        {page === "landing" && (
+          <Landing onOpenTrip={openTrip} onPlan={goPlan} cur={currency} />
+        )}
+        {page === "form" && (
+          <TripForm onGenerate={generateTrip} personaStyle={DESIGN.personaStyle} />
+        )}
+        {page === "itinerary" && currentTrip && (
+          <Itinerary trip={currentTrip} currency={currency} setCurrency={setCurrency}
+            pillStyle={DESIGN.pillStyle} form={lastForm} />
+        )}
+      </main>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+
+  <style>
+    /* Responsive: collapse the itinerary two-column layout on narrow screens */
+    @media (max-width: 880px){
+      .itin-grid{ grid-template-columns: 1fr !important; }
+      .itin-side{ position: static !important; }
+    }
+  </style>
+</body>
+</html>

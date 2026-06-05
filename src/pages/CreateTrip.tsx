@@ -54,7 +54,6 @@ export function CreateTripPage() {
       return
     }
 
-    // Generate itinerary days
     const start = new Date(startDate + 'T00:00:00')
     const end = new Date(endDate + 'T00:00:00')
     const days: { trip_id: string; day_date: string; day_number: number; notes: string }[] = []
@@ -80,18 +79,18 @@ export function CreateTripPage() {
     <div style={styles.page}>
       <div style={styles.card}>
         <button onClick={() => navigate('/dashboard')} style={styles.backBtn}>
-          &larr; Back to Dashboard
+          &larr; Back to My Trips
         </button>
 
-        <h1 style={styles.heading}>Create New Trip</h1>
-        <p style={styles.subheading}>Fill in the details to start planning</p>
+        <h1 style={styles.heading}>Plan a New Trip</h1>
+        <p style={styles.subheading}>Where are you headed? Fill in the details to get started.</p>
 
         <form onSubmit={handleSubmit} style={styles.form}>
           {error && <div style={styles.error}>{error}</div>}
 
           <Input
             label="Destination"
-            placeholder="e.g. Tokyo, Japan"
+            placeholder="e.g. Tuscany, Italy"
             value={destination}
             onChange={(e) => setDestination(e.target.value)}
             required
@@ -118,7 +117,7 @@ export function CreateTripPage() {
 
           <TextArea
             label="Notes (optional)"
-            placeholder="Any important details, booking references, reminders..."
+            placeholder="Booking references, reminders, ideas..."
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
           />
@@ -136,13 +135,13 @@ const styles: Record<string, React.CSSProperties> = {
   page: {
     maxWidth: '600px',
     margin: '0 auto',
-    padding: '40px 32px',
+    padding: '48px 32px',
   },
   card: {
     background: 'var(--bg-card)',
     border: '1px solid var(--border)',
-    borderRadius: '16px',
-    padding: '40px',
+    borderRadius: '20px',
+    padding: '44px',
   },
   backBtn: {
     background: 'transparent',
@@ -150,24 +149,26 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-secondary)',
     fontSize: '14px',
     cursor: 'pointer',
-    marginBottom: '24px',
+    marginBottom: '28px',
     padding: 0,
   },
   heading: {
-    fontSize: '28px',
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '30px',
     fontWeight: 700,
-    letterSpacing: '-0.5px',
+    letterSpacing: '-0.3px',
     marginBottom: '8px',
+    color: 'var(--cream)',
   },
   subheading: {
     color: 'var(--text-secondary)',
     fontSize: '14px',
-    marginBottom: '32px',
+    marginBottom: '36px',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px',
+    gap: '22px',
   },
   row: {
     display: 'flex',
@@ -177,10 +178,10 @@ const styles: Record<string, React.CSSProperties> = {
     flex: 1,
   },
   error: {
-    background: 'rgba(248, 113, 113, 0.1)',
+    background: 'rgba(196, 107, 107, 0.12)',
     color: 'var(--error)',
-    padding: '10px 14px',
-    borderRadius: '8px',
+    padding: '12px 16px',
+    borderRadius: '12px',
     fontSize: '13px',
   },
 }

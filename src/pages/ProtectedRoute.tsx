@@ -5,7 +5,19 @@ export function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth()
 
   if (loading) {
-    return <div style={{ textAlign: 'center', padding: '80px', color: 'var(--text-secondary)' }}>Loading...</div>
+    return (
+      <div
+        style={{
+          textAlign: 'center',
+          padding: '80px',
+          color: '#b8a99a',
+          fontFamily: "'Playfair Display', Georgia, serif",
+          fontSize: '18px',
+        }}
+      >
+        Loading...
+      </div>
+    )
   }
 
   if (!user) {

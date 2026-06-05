@@ -41,8 +41,8 @@ export function SignupPage() {
   return (
     <div style={styles.page}>
       <div style={styles.card}>
-        <h1 style={styles.heading}>Create your account</h1>
-        <p style={styles.subheading}>Start planning your trips with Itinera</p>
+        <h1 style={styles.heading}>Begin your journey</h1>
+        <p style={styles.subheading}>Create an account to start planning your trips</p>
 
         <form onSubmit={handleSignup} style={styles.form}>
           {error && <div style={styles.error}>{error}</div>}
@@ -76,7 +76,7 @@ export function SignupPage() {
         </form>
 
         <p style={styles.footer}>
-          Already have an account? <Link to="/login">Log in</Link>
+          Already have an account? <Link to="/login">Sign in</Link>
         </p>
       </div>
     </div>
@@ -85,7 +85,7 @@ export function SignupPage() {
 
 const styles: Record<string, React.CSSProperties> = {
   page: {
-    minHeight: 'calc(100vh - 64px)',
+    minHeight: 'calc(100vh - 68px)',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -94,37 +94,39 @@ const styles: Record<string, React.CSSProperties> = {
   card: {
     background: 'var(--bg-card)',
     border: '1px solid var(--border)',
-    borderRadius: '16px',
-    padding: '40px',
+    borderRadius: '20px',
+    padding: '44px',
     width: '100%',
-    maxWidth: '420px',
+    maxWidth: '440px',
   },
   heading: {
-    fontSize: '28px',
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '30px',
     fontWeight: 700,
     marginBottom: '8px',
-    letterSpacing: '-0.5px',
+    letterSpacing: '-0.3px',
+    color: 'var(--cream)',
   },
   subheading: {
     color: 'var(--text-secondary)',
     fontSize: '14px',
-    marginBottom: '32px',
+    marginBottom: '36px',
   },
   form: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '20px',
+    gap: '22px',
   },
   error: {
-    background: 'rgba(248, 113, 113, 0.1)',
+    background: 'rgba(196, 107, 107, 0.12)',
     color: 'var(--error)',
-    padding: '10px 14px',
-    borderRadius: '8px',
+    padding: '12px 16px',
+    borderRadius: '12px',
     fontSize: '13px',
   },
   footer: {
     textAlign: 'center',
-    marginTop: '24px',
+    marginTop: '28px',
     fontSize: '14px',
     color: 'var(--text-secondary)',
   },

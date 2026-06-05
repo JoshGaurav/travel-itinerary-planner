@@ -9,28 +9,29 @@ export function LandingPage() {
   return (
     <div style={styles.page}>
       <section style={styles.hero}>
+        <div style={styles.heroOverlay} />
         <div style={styles.heroContent}>
-          <div style={styles.badge}>Plan your next adventure</div>
+          <p style={styles.heroEyebrow}>Your journey starts here</p>
           <h1 style={styles.heading}>
-            Travel plans,<br />
-            <span style={styles.gradient}>beautifully organized</span>
+            Where will your<br />
+            next story take you?
           </h1>
           <p style={styles.subheading}>
-            Itinera helps you create detailed itineraries, manage activities day by day,
-            and keep all your travel plans in one place.
+            Itinera helps you craft thoughtful itineraries — day by day, moment by moment —
+            so you can focus on the experience, not the planning.
           </p>
           <div style={styles.ctas}>
             {user ? (
               <Button size="lg" onClick={() => navigate('/dashboard')}>
-                Go to Dashboard
+                Go to My Trips
               </Button>
             ) : (
               <>
                 <Button size="lg" onClick={() => navigate('/signup')}>
-                  Get started free
+                  Start planning free
                 </Button>
                 <Button variant="secondary" size="lg" onClick={() => navigate('/login')}>
-                  Log in
+                  Sign in
                 </Button>
               </>
             )}
@@ -38,15 +39,19 @@ export function LandingPage() {
         </div>
         <div style={styles.heroVisual}>
           <div style={styles.mockCard}>
-            <div style={styles.mockHeader}>
-              <div style={styles.mockDot} />
-              <span style={{ color: 'var(--text-muted)', fontSize: '12px' }}>Tokyo, Japan</span>
+            <div style={styles.mockImage}>
+              <span style={styles.mockImageLabel}>Kyoto, Japan</span>
             </div>
             <div style={styles.mockBody}>
-              {['Visit Senso-ji Temple', 'Shibuya Crossing', 'Ramen at Ichiran', 'Tokyo Tower at sunset'].map((item, i) => (
+              <p style={styles.mockDay}>Day 1 — Morning</p>
+              {[
+                { time: '8:00', activity: 'Fushimi Inari Shrine' },
+                { time: '11:30', activity: 'Tea ceremony in Gion' },
+                { time: '1:00', activity: 'Lunch at Nishiki Market' },
+              ].map((item, i) => (
                 <div key={i} style={styles.mockItem}>
-                  <div style={styles.mockTime}>{['09:00', '13:00', '15:00', '18:00'][i]}</div>
-                  <div style={styles.mockActivity}>{item}</div>
+                  <span style={styles.mockTime}>{item.time}</span>
+                  <span style={styles.mockActivity}>{item.activity}</span>
                 </div>
               ))}
             </div>
@@ -55,7 +60,7 @@ export function LandingPage() {
       </section>
 
       <section style={styles.features}>
-        <h2 style={styles.featuresHeading}>Everything you need for the perfect trip</h2>
+        <h2 style={styles.featuresHeading}>Plan with warmth, travel with ease</h2>
         <div style={styles.featureGrid}>
           {features.map((f, i) => (
             <div key={i} style={styles.featureCard}>
@@ -66,14 +71,31 @@ export function LandingPage() {
           ))}
         </div>
       </section>
+
+      <footer style={styles.footer}>
+        <span style={styles.footerLogo}>Itinera</span>
+        <span style={styles.footerText}>Travel beautifully planned.</span>
+      </footer>
     </div>
   )
 }
 
 const features = [
-  { icon: '🗺', title: 'Organized Itineraries', desc: 'Plan each day with activities, times, and locations all in one view.' },
-  { icon: '📅', title: 'Flexible Scheduling', desc: 'Add, reorder, and adjust activities as your plans evolve.' },
-  { icon: '📝', title: 'Trip Notes', desc: 'Keep important details, booking references, and reminders handy.' },
+  {
+    icon: '🗺',
+    title: 'Day-by-Day Itineraries',
+    desc: 'Organize each day with activities, times, and places — see your whole trip at a glance.',
+  },
+  {
+    icon: '✏',
+    title: 'Flexible & Simple',
+    desc: 'Add, rearrange, or remove activities whenever inspiration strikes. No rigidity, just flow.',
+  },
+  {
+    icon: '📝',
+    title: 'Notes & Details',
+    desc: 'Keep booking references, reservation numbers, and little reminders all in one spot.',
+  },
 ]
 
 const styles: Record<string, React.CSSProperties> = {
@@ -86,45 +108,41 @@ const styles: Record<string, React.CSSProperties> = {
     justifyContent: 'space-between',
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '80px 32px 60px',
-    gap: '64px',
+    padding: '72px 32px 80px',
+    gap: '56px',
   },
+  heroOverlay: {},
   heroContent: {
     flex: 1,
     maxWidth: '520px',
   },
-  badge: {
-    display: 'inline-block',
-    background: 'var(--accent-glow)',
+  heroEyebrow: {
+    fontSize: '14px',
+    fontWeight: 500,
     color: 'var(--accent)',
-    fontSize: '13px',
-    fontWeight: 600,
-    padding: '6px 16px',
-    borderRadius: '20px',
-    marginBottom: '24px',
-  },
-  heading: {
-    fontSize: '52px',
-    fontWeight: 700,
-    lineHeight: 1.1,
-    letterSpacing: '-1.5px',
-    color: 'var(--text-primary)',
+    letterSpacing: '2px',
+    textTransform: 'uppercase',
     marginBottom: '20px',
   },
-  gradient: {
-    background: 'linear-gradient(135deg, var(--gradient-start), var(--gradient-end))',
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
+  heading: {
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '52px',
+    fontWeight: 700,
+    lineHeight: 1.15,
+    letterSpacing: '-0.5px',
+    color: 'var(--cream)',
+    marginBottom: '20px',
   },
   subheading: {
-    fontSize: '18px',
-    lineHeight: 1.6,
+    fontSize: '17px',
+    lineHeight: 1.7,
     color: 'var(--text-secondary)',
     marginBottom: '36px',
   },
   ctas: {
     display: 'flex',
     gap: '16px',
+    flexWrap: 'wrap',
   },
   heroVisual: {
     flex: 1,
@@ -133,40 +151,48 @@ const styles: Record<string, React.CSSProperties> = {
   },
   mockCard: {
     background: 'var(--bg-card)',
-    borderRadius: '16px',
+    borderRadius: '20px',
     border: '1px solid var(--border)',
     width: '100%',
     maxWidth: '380px',
     overflow: 'hidden',
-    boxShadow: '0 20px 60px rgba(0,0,0,0.4)',
+    boxShadow: '0 24px 64px rgba(0,0,0,0.35), 0 0 0 1px rgba(196, 132, 92, 0.08)',
   },
-  mockHeader: {
+  mockImage: {
+    height: '120px',
+    background: 'linear-gradient(135deg, #3d2e22 0%, #2a221c 50%, #3a302a 100%)',
     display: 'flex',
-    alignItems: 'center',
-    gap: '10px',
-    padding: '16px 20px',
-    borderBottom: '1px solid var(--border)',
+    alignItems: 'flex-end',
+    padding: '12px 20px',
   },
-  mockDot: {
-    width: '8px',
-    height: '8px',
-    borderRadius: '50%',
-    background: 'var(--accent)',
+  mockImageLabel: {
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '18px',
+    fontWeight: 600,
+    color: 'var(--cream)',
   },
   mockBody: {
-    padding: '16px 20px',
+    padding: '20px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px',
+    gap: '16px',
+  },
+  mockDay: {
+    fontSize: '12px',
+    fontWeight: 600,
+    color: 'var(--accent)',
+    textTransform: 'uppercase',
+    letterSpacing: '1px',
   },
   mockItem: {
     display: 'flex',
     alignItems: 'center',
-    gap: '12px',
+    gap: '14px',
+    padding: '6px 0',
   },
   mockTime: {
-    fontSize: '12px',
-    color: 'var(--accent)',
+    fontSize: '13px',
+    color: 'var(--amber)',
     fontWeight: 600,
     minWidth: '40px',
   },
@@ -180,11 +206,12 @@ const styles: Record<string, React.CSSProperties> = {
     padding: '80px 32px',
   },
   featuresHeading: {
-    fontSize: '32px',
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '34px',
     fontWeight: 700,
     textAlign: 'center',
     marginBottom: '48px',
-    letterSpacing: '-0.5px',
+    letterSpacing: '-0.3px',
   },
   featureGrid: {
     display: 'grid',
@@ -194,22 +221,47 @@ const styles: Record<string, React.CSSProperties> = {
   featureCard: {
     background: 'var(--bg-card)',
     border: '1px solid var(--border)',
-    borderRadius: '12px',
-    padding: '32px',
-    transition: 'transform 0.2s, border-color 0.2s',
+    borderRadius: '20px',
+    padding: '36px',
+    transition: 'transform 0.25s, border-color 0.25s',
   },
   featureIcon: {
     fontSize: '28px',
-    marginBottom: '16px',
+    marginBottom: '18px',
   },
   featureTitle: {
-    fontSize: '18px',
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '20px',
     fontWeight: 600,
-    marginBottom: '8px',
+    marginBottom: '10px',
+    color: 'var(--cream)',
   },
   featureDesc: {
     fontSize: '14px',
     color: 'var(--text-secondary)',
-    lineHeight: 1.6,
+    lineHeight: 1.7,
+  },
+  footer: {
+    maxWidth: '1200px',
+    margin: '0 auto',
+    padding: '40px 32px',
+    borderTop: '1px solid var(--border)',
+    display: 'flex',
+    alignItems: 'center',
+    gap: '16px',
+  },
+  footerLogo: {
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '20px',
+    fontWeight: 700,
+    color: 'var(--cream)',
+  },
+  footerText: {
+    fontSize: '14px',
+    color: 'var(--text-muted)',
+    fontStyle: 'italic',
   },
 }
+
+
+export { LandingPage }

@@ -122,7 +122,7 @@ export function ItineraryPage() {
   }
 
   if (loading) {
-    return <div style={styles.loading}>Loading...</div>
+    return <div style={styles.loading}>Loading your itinerary...</div>
   }
 
   if (!trip) {
@@ -134,7 +134,7 @@ export function ItineraryPage() {
       <div style={styles.header}>
         <div>
           <button onClick={() => navigate('/dashboard')} style={styles.backBtn}>
-            &larr; Dashboard
+            &larr; My Trips
           </button>
           <h1 style={styles.heading}>{trip.destination}</h1>
           <p style={styles.dates}>
@@ -188,7 +188,7 @@ export function ItineraryPage() {
                   />
                   <div style={styles.addRow}>
                     <Input
-                      placeholder="Time (e.g. 09:00)"
+                      placeholder="Time"
                       type="time"
                       value={newTime}
                       onChange={(e) => setNewTime(e.target.value)}
@@ -237,10 +237,10 @@ const styles: Record<string, React.CSSProperties> = {
   page: {
     maxWidth: '900px',
     margin: '0 auto',
-    padding: '40px 32px',
+    padding: '48px 32px',
   },
   header: {
-    marginBottom: '40px',
+    marginBottom: '44px',
   },
   backBtn: {
     background: 'transparent',
@@ -248,14 +248,16 @@ const styles: Record<string, React.CSSProperties> = {
     color: 'var(--text-secondary)',
     fontSize: '14px',
     cursor: 'pointer',
-    marginBottom: '12px',
+    marginBottom: '16px',
     padding: 0,
   },
   heading: {
-    fontSize: '36px',
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '40px',
     fontWeight: 700,
     letterSpacing: '-1px',
     marginBottom: '8px',
+    color: 'var(--cream)',
   },
   dates: {
     color: 'var(--text-secondary)',
@@ -271,64 +273,68 @@ const styles: Record<string, React.CSSProperties> = {
   timeline: {
     display: 'flex',
     flexDirection: 'column',
-    gap: '32px',
+    gap: '28px',
   },
   daySection: {
     background: 'var(--bg-card)',
     border: '1px solid var(--border)',
-    borderRadius: '12px',
+    borderRadius: '20px',
     overflow: 'hidden',
   },
   dayHeader: {
     display: 'flex',
     alignItems: 'center',
-    gap: '12px',
-    padding: '16px 20px',
+    gap: '14px',
+    padding: '18px 24px',
     borderBottom: '1px solid var(--border)',
     background: 'var(--bg-secondary)',
   },
   dayBadge: {
     background: 'var(--accent)',
-    color: '#fff',
+    color: 'var(--warm-white)',
     fontSize: '12px',
     fontWeight: 700,
-    padding: '4px 10px',
-    borderRadius: '6px',
+    padding: '5px 12px',
+    borderRadius: '10px',
+    letterSpacing: '0.02em',
   },
   dayDate: {
-    fontSize: '15px',
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '16px',
     fontWeight: 500,
     color: 'var(--text-secondary)',
   },
   activitiesList: {
-    padding: '16px 20px',
+    padding: '20px 24px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px',
+    gap: '14px',
   },
   activityCard: {
     display: 'flex',
     alignItems: 'flex-start',
-    gap: '16px',
-    padding: '12px 16px',
+    gap: '18px',
+    padding: '14px 18px',
     background: 'var(--bg-input)',
-    borderRadius: '8px',
+    borderRadius: '14px',
     border: '1px solid var(--border)',
   },
   activityTime: {
-    color: 'var(--accent)',
+    color: 'var(--amber)',
     fontSize: '13px',
     fontWeight: 600,
-    minWidth: '60px',
+    minWidth: '64px',
     paddingTop: '2px',
   },
   activityContent: {
     flex: 1,
   },
   activityTitle: {
-    fontSize: '15px',
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '16px',
     fontWeight: 600,
     marginBottom: '2px',
+    color: 'var(--cream)',
   },
   activityLocation: {
     fontSize: '12px',
@@ -343,39 +349,39 @@ const styles: Record<string, React.CSSProperties> = {
     background: 'transparent',
     border: 'none',
     color: 'var(--text-muted)',
-    fontSize: '18px',
+    fontSize: '20px',
     cursor: 'pointer',
     padding: '0 4px',
     lineHeight: 1,
-    transition: 'color 0.2s',
+    transition: 'color 0.25s',
   },
   addBtn: {
     background: 'transparent',
     border: '1px dashed var(--border)',
-    borderRadius: '8px',
+    borderRadius: '14px',
     color: 'var(--text-muted)',
-    padding: '10px 16px',
+    padding: '12px 18px',
     fontSize: '13px',
     cursor: 'pointer',
     width: '100%',
     textAlign: 'left',
-    transition: 'all 0.2s',
+    transition: 'all 0.25s',
   },
   addForm: {
     background: 'var(--bg-input)',
-    borderRadius: '8px',
+    borderRadius: '14px',
     border: '1px solid var(--border)',
-    padding: '16px',
+    padding: '18px',
     display: 'flex',
     flexDirection: 'column',
-    gap: '12px',
+    gap: '14px',
   },
   addRow: {
     display: 'flex',
-    gap: '12px',
+    gap: '14px',
   },
   addActions: {
     display: 'flex',
-    gap: '8px',
+    gap: '10px',
   },
 }

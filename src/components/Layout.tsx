@@ -20,19 +20,19 @@ export function Navbar() {
         {user ? (
           <>
             <NavLink to="/dashboard" style={({ isActive }) => ({ ...styles.link, ...(isActive ? styles.activeLink : {}) })}>
-              Dashboard
+              My Trips
             </NavLink>
             <button onClick={handleLogout} style={styles.logoutBtn}>
-              Log out
+              Sign out
             </button>
           </>
         ) : (
           <>
             <NavLink to="/login" style={({ isActive }) => ({ ...styles.link, ...(isActive ? styles.activeLink : {}) })}>
-              Log in
+              Sign in
             </NavLink>
             <NavLink to="/signup" style={styles.signupBtn}>
-              Sign up
+              Get started
             </NavLink>
           </>
         )}
@@ -47,18 +47,19 @@ const styles: Record<string, React.CSSProperties> = {
     alignItems: 'center',
     justifyContent: 'space-between',
     padding: '0 32px',
-    height: '64px',
-    background: 'rgba(10, 10, 15, 0.8)',
-    backdropFilter: 'blur(12px)',
+    height: '68px',
+    background: 'rgba(26, 23, 20, 0.85)',
+    backdropFilter: 'blur(16px)',
     borderBottom: '1px solid var(--border)',
     position: 'sticky',
     top: 0,
     zIndex: 100,
   },
   logo: {
-    fontSize: '22px',
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '24px',
     fontWeight: 700,
-    color: 'var(--text-primary)',
+    color: 'var(--cream)',
     textDecoration: 'none',
     letterSpacing: '-0.5px',
   },
@@ -72,32 +73,33 @@ const styles: Record<string, React.CSSProperties> = {
     textDecoration: 'none',
     fontSize: '14px',
     fontWeight: 500,
-    transition: 'color 0.2s',
+    transition: 'color 0.25s',
   },
   activeLink: {
-    color: 'var(--text-primary)',
+    color: 'var(--cream)',
   },
   signupBtn: {
     background: 'var(--accent)',
-    color: '#fff',
+    color: 'var(--warm-white)',
     border: 'none',
-    borderRadius: '8px',
-    padding: '8px 20px',
+    borderRadius: '12px',
+    padding: '9px 22px',
     fontSize: '14px',
     fontWeight: 600,
     cursor: 'pointer',
     textDecoration: 'none',
-    transition: 'background 0.2s',
+    transition: 'all 0.25s',
+    boxShadow: '0 2px 8px rgba(196, 132, 92, 0.25)',
   },
   logoutBtn: {
     background: 'transparent',
     color: 'var(--text-secondary)',
     border: '1px solid var(--border)',
-    borderRadius: '8px',
-    padding: '8px 20px',
+    borderRadius: '12px',
+    padding: '9px 22px',
     fontSize: '14px',
     fontWeight: 500,
     cursor: 'pointer',
-    transition: 'all 0.2s',
+    transition: 'all 0.25s',
   },
 }

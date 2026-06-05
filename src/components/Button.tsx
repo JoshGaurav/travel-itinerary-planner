@@ -27,21 +27,23 @@ export function Button({ variant = 'primary', size = 'md', loading, children, st
 
 const baseStyles: React.CSSProperties = {
   border: 'none',
-  borderRadius: '8px',
+  borderRadius: '12px',
   fontWeight: 600,
   cursor: 'pointer',
-  transition: 'all 0.2s ease',
+  transition: 'all 0.25s ease',
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
   gap: '8px',
   fontFamily: 'inherit',
+  letterSpacing: '0.01em',
 }
 
 const variantStyles: Record<string, React.CSSProperties> = {
   primary: {
     background: 'var(--accent)',
-    color: '#fff',
+    color: 'var(--warm-white)',
+    boxShadow: '0 2px 8px rgba(196, 132, 92, 0.25)',
   },
   secondary: {
     background: 'var(--bg-card)',
@@ -54,17 +56,18 @@ const variantStyles: Record<string, React.CSSProperties> = {
   },
   danger: {
     background: 'var(--error)',
-    color: '#fff',
+    color: 'var(--warm-white)',
   },
 }
 
 const sizeStyles: Record<string, React.CSSProperties> = {
-  sm: { padding: '6px 14px', fontSize: '13px' },
-  md: { padding: '10px 24px', fontSize: '14px' },
-  lg: { padding: '14px 32px', fontSize: '16px' },
+  sm: { padding: '8px 16px', fontSize: '13px' },
+  md: { padding: '11px 28px', fontSize: '14px' },
+  lg: { padding: '15px 36px', fontSize: '16px' },
 }
 
 const disabledStyles: React.CSSProperties = {
   opacity: 0.5,
   cursor: 'not-allowed',
+  boxShadow: 'none',
 }

@@ -45,16 +45,16 @@ const styles: Record<string, React.CSSProperties> = {
   input: {
     background: 'var(--bg-input)',
     border: '1px solid var(--border)',
-    borderRadius: '8px',
-    padding: '10px 14px',
+    borderRadius: '12px',
+    padding: '12px 16px',
     color: 'var(--text-primary)',
     fontSize: '14px',
     outline: 'none',
-    transition: 'border-color 0.2s',
+    transition: 'border-color 0.25s, box-shadow 0.25s',
     width: '100%',
   },
   textarea: {
-    minHeight: '80px',
+    minHeight: '88px',
     resize: 'vertical',
   },
   inputError: {

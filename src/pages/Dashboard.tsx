@@ -53,14 +53,14 @@ export function DashboardPage() {
   ]
 
   if (loading) {
-    return <div style={styles.loading}>Loading...</div>
+    return <div style={styles.loading}>Loading your trips...</div>
   }
 
   return (
     <div style={styles.page}>
       <div style={styles.header}>
         <div>
-          <h1 style={styles.heading}>Your Trips</h1>
+          <h1 style={styles.heading}>My Trips</h1>
           <p style={styles.subheading}>
             {trips.length === 0
               ? "You haven't created any trips yet"
@@ -74,8 +74,8 @@ export function DashboardPage() {
         <div style={styles.empty}>
           <div style={styles.emptyIcon}>✈</div>
           <h2 style={styles.emptyTitle}>No trips yet</h2>
-          <p style={styles.emptyDesc}>Create your first trip and start planning your itinerary.</p>
-          <Button onClick={() => navigate('/trips/new')}>Create your first trip</Button>
+          <p style={styles.emptyDesc}>Create your first trip and start planning something wonderful.</p>
+          <Button onClick={() => navigate('/trips/new')}>Plan your first trip</Button>
         </div>
       ) : (
         <div style={styles.grid}>
@@ -100,7 +100,7 @@ export function DashboardPage() {
                     View Itinerary
                   </Link>
                   <button onClick={() => handleDelete(trip.id)} style={styles.deleteBtn}>
-                    Delete
+                    Remove
                   </button>
                 </div>
               </div>
@@ -116,7 +116,7 @@ const styles: Record<string, React.CSSProperties> = {
   page: {
     maxWidth: '1200px',
     margin: '0 auto',
-    padding: '40px 32px',
+    padding: '48px 32px',
   },
   loading: {
     textAlign: 'center',
@@ -127,12 +127,14 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: '40px',
+    marginBottom: '48px',
   },
   heading: {
-    fontSize: '32px',
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '36px',
     fontWeight: 700,
     letterSpacing: '-0.5px',
+    color: 'var(--cream)',
   },
   subheading: {
     color: 'var(--text-secondary)',
@@ -145,17 +147,19 @@ const styles: Record<string, React.CSSProperties> = {
   },
   emptyIcon: {
     fontSize: '48px',
-    marginBottom: '16px',
+    marginBottom: '20px',
   },
   emptyTitle: {
-    fontSize: '24px',
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '26px',
     fontWeight: 600,
-    marginBottom: '8px',
+    marginBottom: '10px',
+    color: 'var(--cream)',
   },
   emptyDesc: {
     color: 'var(--text-secondary)',
-    fontSize: '14px',
-    marginBottom: '24px',
+    fontSize: '15px',
+    marginBottom: '28px',
   },
   grid: {
     display: 'grid',
@@ -165,23 +169,25 @@ const styles: Record<string, React.CSSProperties> = {
   card: {
     background: 'var(--bg-card)',
     border: '1px solid var(--border)',
-    borderRadius: '12px',
+    borderRadius: '20px',
     overflow: 'hidden',
-    transition: 'transform 0.2s, border-color 0.2s',
+    transition: 'transform 0.25s, border-color 0.25s',
     cursor: 'default',
   },
   cardImage: {
-    height: '160px',
+    height: '168px',
     backgroundSize: 'cover',
     backgroundPosition: 'center',
   },
   cardBody: {
-    padding: '20px',
+    padding: '24px',
   },
   cardTitle: {
-    fontSize: '18px',
+    fontFamily: "'Playfair Display', Georgia, serif",
+    fontSize: '20px',
     fontWeight: 600,
-    marginBottom: '6px',
+    marginBottom: '8px',
+    color: 'var(--cream)',
   },
   cardDates: {
     fontSize: '13px',
@@ -192,7 +198,7 @@ const styles: Record<string, React.CSSProperties> = {
     fontSize: '12px',
     color: 'var(--accent)',
     fontWeight: 600,
-    marginBottom: '16px',
+    marginBottom: '20px',
   },
   cardActions: {
     display: 'flex',
@@ -202,22 +208,23 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'inline-flex',
     alignItems: 'center',
     background: 'var(--accent)',
-    color: '#fff',
-    borderRadius: '8px',
-    padding: '8px 16px',
+    color: 'var(--warm-white)',
+    borderRadius: '12px',
+    padding: '9px 20px',
     fontSize: '13px',
     fontWeight: 600,
     textDecoration: 'none',
-    transition: 'background 0.2s',
+    transition: 'all 0.25s',
+    boxShadow: '0 2px 8px rgba(196, 132, 92, 0.2)',
   },
   deleteBtn: {
     background: 'transparent',
     color: 'var(--text-muted)',
     border: '1px solid var(--border)',
-    borderRadius: '8px',
-    padding: '8px 16px',
+    borderRadius: '12px',
+    padding: '9px 20px',
     fontSize: '13px',
     cursor: 'pointer',
-    transition: 'all 0.2s',
+    transition: 'all 0.25s',
   },
 }

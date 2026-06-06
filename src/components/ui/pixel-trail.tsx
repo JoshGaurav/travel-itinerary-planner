@@ -51,7 +51,7 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
         height: '100vh',
         pointerEvents: 'none',
         overflow: 'hidden',
-        zIndex: 0,
+        zIndex: 9999,
       }}
     >
       {Array.from({ length: rows }).map((_, rowIndex) => (
@@ -107,7 +107,7 @@ const PixelDot: React.FC<PixelDotProps> = React.memo(({ id, size, fadeDuration, 
         width: `${size}px`,
         height: `${size}px`,
         borderRadius: '50%',
-        background: color || 'var(--accent)',
+        background: color || 'rgba(196, 132, 92, 0.55)',
         flexShrink: 0,
       }}
       initial={{ opacity: 0 }}

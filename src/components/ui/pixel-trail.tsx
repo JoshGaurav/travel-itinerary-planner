@@ -1,19 +1,16 @@
-import React, { useCallback, useMemo, useRef, useEffect, useState } from 'react'
-import { motion, useAnimationControls } from 'framer-motion'
+import React, { useMemo, useRef, useEffect, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 
 interface PixelTrailProps {
   pixelSize?: number
   fadeDuration?: number
-  delay?: number
   pixelColor?: string
 }
 
 const PixelTrail: React.FC<PixelTrailProps> = ({
-  pixelSize = 40,
-  fadeDuration = 600,
-  delay = 200,
-  pixelColor,
+  pixelSize = 56,
+  fadeDuration = 900,
+  pixelColor = 'rgba(196, 132, 92, 0.6)',
 }) => {
   const trailId = useRef(uuidv4())
   const [dimensions, setDimensions] = useState({ width: 0, height: 0 })
@@ -29,15 +26,20 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
     const handleMouseMove = (e: MouseEvent) => {
       const x = Math.floor(e.clientX / pixelSize)
       const y = Math.floor(e.clientY / pixelSize)
-      const el = document.getElementById(`${trailId.current}-pixel-${x}-${y}`)
-      if (el) {
-        const fn = (el as any).__animatePixel
-        if (fn) fn()
-      }
+      const el = document.getElementById(`${trailId.current}-px-${x}-${y}`) as HTMLDivElement | null
+      if (!el) return
+
+      // Cancel any running animation by cloning, then re-trigger
+      el.style.transition = 'none'
+      el.style.opacity = '1'
+      // Force reflow so the opacity: 1 is painted before the transition kicks in
+      void el.offsetHeight
+      el.style.transition = `opacity ${fadeDuration}ms ease-out`
+      el.style.opacity = '0'
     }
     window.addEventListener('mousemove', handleMouseMove)
     return () => window.removeEventListener('mousemove', handleMouseMove)
-  }, [pixelSize])
+  }, [pixelSize, fadeDuration])
 
   const columns = useMemo(() => Math.ceil(dimensions.width / pixelSize), [dimensions.width, pixelSize])
   const rows = useMemo(() => Math.ceil(dimensions.height / pixelSize), [dimensions.height, pixelSize])
@@ -57,13 +59,17 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
       {Array.from({ length: rows }).map((_, rowIndex) => (
         <div key={rowIndex} style={{ display: 'flex' }}>
           {Array.from({ length: columns }).map((_, colIndex) => (
-            <PixelDot
+            <div
               key={`${colIndex}-${rowIndex}`}
-              id={`${trailId.current}-pixel-${colIndex}-${rowIndex}`}
-              size={pixelSize}
-              fadeDuration={fadeDuration}
-              delay={delay}
-              color={pixelColor}
+              id={`${trailId.current}-px-${colIndex}-${rowIndex}`}
+              style={{
+                width: `${pixelSize}px`,
+                height: `${pixelSize}px`,
+                borderRadius: '50%',
+                background: pixelColor,
+                flexShrink: 0,
+                opacity: 0,
+              }}
             />
           ))}
         </div>
@@ -72,50 +78,4 @@ const PixelTrail: React.FC<PixelTrailProps> = ({
   )
 }
 
-interface PixelDotProps {
-  id: string
-  size: number
-  fadeDuration: number
-  delay: number
-  color?: string
-}
-
-const PixelDot: React.FC<PixelDotProps> = React.memo(({ id, size, fadeDuration, delay, color }) => {
-  const controls = useAnimationControls()
-
-  const animatePixel = useCallback(() => {
-    controls.start({
-      opacity: [1, 0],
-      transition: { duration: fadeDuration / 1000, delay: delay / 1000 },
-    })
-  }, [controls, fadeDuration, delay])
-
-  const ref = useCallback(
-    (node: HTMLDivElement | null) => {
-      if (node) {
-        ;(node as any).__animatePixel = animatePixel
-      }
-    },
-    [animatePixel]
-  )
-
-  return (
-    <motion.div
-      id={id}
-      ref={ref}
-      style={{
-        width: `${size}px`,
-        height: `${size}px`,
-        borderRadius: '50%',
-        background: color || 'rgba(196, 132, 92, 0.55)',
-        flexShrink: 0,
-      }}
-      initial={{ opacity: 0 }}
-      animate={controls}
-      exit={{ opacity: 0 }}
-    />
-  )
-})
-
-PixelDot.displayName = 'PixelDot'
 export { PixelTrail }

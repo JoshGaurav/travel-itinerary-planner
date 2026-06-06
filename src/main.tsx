@@ -19,7 +19,7 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <AuthProvider>
         <Navbar />
-        <PixelTrail pixelSize={56} fadeDuration={900} delay={0} />
+        <PixelTrail pixelSize={56} fadeDuration={900} />
         <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />

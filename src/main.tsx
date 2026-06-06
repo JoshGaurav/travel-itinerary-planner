@@ -11,6 +11,7 @@ import { CreateTripPage } from './pages/CreateTrip'
 import { ItineraryPage } from './pages/Itinerary'
 import { ProtectedRoute } from './pages/ProtectedRoute'
 import { TravelAssistantPage } from './pages/TravelAssistant'
+import { PixelTrail } from './components/ui/pixel-trail'
 import './index.css'
 
 createRoot(document.getElementById('root')!).render(
@@ -18,36 +19,37 @@ createRoot(document.getElementById('root')!).render(
     <BrowserRouter>
       <AuthProvider>
         <Navbar />
+        <PixelTrail pixelSize={56} fadeDuration={800} delay={200} />
         <Routes>
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <DashboardPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/trips/new"
-            element={
-              <ProtectedRoute>
-                <CreateTripPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/trips/:id"
-            element={
-              <ProtectedRoute>
-                <ItineraryPage />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/assistant" element={<TravelAssistantPage />} />
-        </Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/signup" element={<SignupPage />} />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <DashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trips/new"
+              element={
+                <ProtectedRoute>
+                  <CreateTripPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/trips/:id"
+              element={
+                <ProtectedRoute>
+                  <ItineraryPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/assistant" element={<TravelAssistantPage />} />
+          </Routes>
       </AuthProvider>
     </BrowserRouter>
   </StrictMode>

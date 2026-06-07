@@ -1,0 +1,104 @@
+/* ───────────── Design tokens ───────────── */
+:root{
+  --r-card: 22px;
+  --r-pill: 999px;
+  --shadow-sm: 0 1px 2px rgba(8,10,14,.04), 0 2px 8px rgba(8,10,14,.05);
+  --shadow-md: 0 6px 20px rgba(8,10,14,.10), 0 2px 6px rgba(8,10,14,.06);
+  --shadow-lg: 0 18px 50px rgba(8,10,14,.18), 0 6px 18px rgba(8,10,14,.10);
+}
+
+/* Light theme */
+[data-theme="light"]{
+  --bg: 246 247 250;
+  --surface: 255 255 255;
+  --surface-2: 241 244 249;
+  --text: 22 26 33;
+  --muted: 99 109 126;
+  --faint: 138 147 162;
+  --border: 226 230 238;
+  --ring: 0 0 0;
+  --shadow-strength: 1;
+}
+/* Dark theme */
+[data-theme="dark"]{
+  --bg: 13 15 20;
+  --surface: 22 25 32;
+  --surface-2: 31 35 45;
+  --text: 236 239 245;
+  --muted: 150 159 173;
+  --faint: 110 119 134;
+  --border: 42 48 60;
+  --ring: 255 255 255;
+  --shadow-strength: 2.4;
+}
+
+/* Accent palettes */
+[data-accent="reef"]   { --accent: 13 178 162;  --accent-2: 255 107 94; }
+[data-accent="sunset"] { --accent: 251 113 87;  --accent-2: 244 114 182; }
+[data-accent="grape"]  { --accent: 139 102 246; --accent-2: 45 212 191; }
+[data-accent="forest"] { --accent: 34 191 110;  --accent-2: 245 170 36; }
+
+*{ box-sizing: border-box; }
+html,body{ margin:0; padding:0; }
+body{
+  font-family: "Plus Jakarta Sans", system-ui, -apple-system, sans-serif;
+  background: rgb(var(--bg));
+  color: rgb(var(--text));
+  -webkit-font-smoothing: antialiased;
+  transition: background .4s ease, color .4s ease;
+}
+::selection{ background: rgb(var(--accent) / .28); }
+
+/* Scrollbar */
+*::-webkit-scrollbar{ width:11px; height:11px; }
+*::-webkit-scrollbar-thumb{ background: rgb(var(--muted) / .35); border-radius:99px; border:3px solid transparent; background-clip:content-box; }
+*::-webkit-scrollbar-thumb:hover{ background: rgb(var(--muted) / .55); background-clip:content-box; }
+
+/* ───────────── Animations ───────────── */
+@keyframes riseIn { from{ transform: translateY(20px) scale(.983); } to{ transform: none; } }
+@keyframes fadeIn { from{ transform: translateY(8px); } to{ transform: none; } }
+@keyframes popIn  { from{ transform: scale(.94); } to{ transform: none; } }
+@keyframes drawLine { from{ transform: scaleY(0); } to{ transform: scaleY(1); } }
+@keyframes shimmer { from{ background-position: -200% 0; } to{ background-position: 200% 0; } }
+@keyframes floaty { 0%,100%{ transform: translateY(0); } 50%{ transform: translateY(-7px); } }
+
+.anim-rise{ animation: riseIn .55s cubic-bezier(.22,.61,.36,1) both; }
+.anim-fade{ animation: fadeIn .45s ease both; }
+.anim-pop { animation: popIn .32s cubic-bezier(.34,1.56,.64,1) both; }
+@media (prefers-reduced-motion: reduce){
+  .anim-rise,.anim-fade,.anim-pop{ animation:none !important; }
+}
+
+/* ───────────── Reusable surfaces ───────────── */
+.card{
+  background: rgb(var(--surface));
+  border: 1px solid rgb(var(--border));
+  border-radius: var(--r-card);
+}
+.glass{
+  background: rgb(var(--surface) / .72);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  backdrop-filter: blur(18px) saturate(160%);
+}
+.elev-md{ box-shadow: var(--shadow-md); }
+.elev-lg{ box-shadow: var(--shadow-lg); }
+.focus-ring:focus-visible{ outline:none; box-shadow: 0 0 0 3px rgb(var(--accent) / .35); }
+
+/* Accent gradient text */
+.grad-text{
+  background: linear-gradient(105deg, rgb(var(--accent)), rgb(var(--accent-2)));
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+}
+.btn-accent{
+  background: linear-gradient(120deg, rgb(var(--accent)), color-mix(in oklab, rgb(var(--accent)), rgb(var(--accent-2)) 55%));
+  color:#fff; border:none;
+  box-shadow: 0 8px 22px rgb(var(--accent) / .35);
+  transition: transform .18s cubic-bezier(.34,1.4,.64,1), box-shadow .18s, filter .18s;
+}
+.btn-accent:hover{ transform: translateY(-2px); box-shadow: 0 12px 30px rgb(var(--accent) / .45); filter: saturate(1.08); }
+.btn-accent:active{ transform: translateY(0); }
+
+/* striped placeholder used for image slots */
+.ph-stripe{
+  background-image: repeating-linear-gradient(45deg, rgb(var(--muted)/.10) 0 12px, rgb(var(--muted)/.04) 12px 24px);
+}

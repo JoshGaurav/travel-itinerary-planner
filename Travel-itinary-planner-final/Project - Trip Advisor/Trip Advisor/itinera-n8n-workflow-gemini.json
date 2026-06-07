@@ -1,0 +1,83 @@
+{
+  "name": "Itinera — AI Travel Planner (Gemini v6)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "99bbaeaf-ab85-4f65-8861-f02c43a664d2",
+        "responseMode": "lastNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "n1",
+      "name": "Receive trip request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [180, 300],
+      "webhookId": "99bbaeaf-ab85-4f65-8861-f02c43a664d2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Parse incoming body (sent as text/plain from the browser)\nconst raw = $('Receive trip request').item.json.body;\nlet body;\ntry { body = typeof raw === 'string' ? JSON.parse(raw) : (raw || {}); }\ncatch(e) { body = {}; }\n\nconst SYSTEM = `You are an expert travel planner. Return ONLY a valid JSON object — no markdown, no extra text.\n\nReturn this exact structure:\n{\n  \"id\": \"custom\",\n  \"city\": \"<city>\",\n  \"country\": \"<country>\",\n  \"persona\": \"<persona>\",\n  \"days\": 3,\n  \"tagline\": \"<one evocative sentence>\",\n  \"plan\": [\n    { \"day\": 1, \"title\": \"<Day title>\", \"items\": [\n      { \"time\": \"9:00 AM\", \"title\": \"<activity>\", \"cat\": \"<dining|cruise|adventure|relaxing|sightseeing>\", \"cost\": 0, \"tip\": \"<two specific sentences>\", \"kids\": false }\n    ]}\n  ],\n  \"omitted\": [\n    { \"time\": \"Evening\", \"title\": \"<backup>\", \"cat\": \"relaxing\", \"cost\": 20, \"tip\": \"<tip>\" }\n  ]\n}\nRules: 3-5 items/day, vary categories, exactly 3 omitted items, real place names.\nPersona: Budget=cheap, Mid-range=comfortable, Luxurious=premium, Adventure=active.`;\n\nconst dest = body.destination || 'Paris';\nconst days = body.days || 3;\nconst persona = body.persona || 'Mid-range';\nconst adults = (body.adults_m||0)+(body.adults_f||0)||2;\nconst kids = body.kids||0;\nconst dates = `${body.startDate||'flexible'} to ${body.endDate||'flexible'}`;\nconst must = body.mustHave||'none';\n\nconst userMsg = body._ping\n  ? `Say: {\"pong\":true,\"status\":\"ok\",\"city\":\"Test\",\"country\":\"OK\",\"persona\":\"Mid-range\",\"days\":1,\"tagline\":\"Connection test\",\"plan\":[{\"day\":1,\"title\":\"Test\",\"items\":[{\"time\":\"9:00 AM\",\"title\":\"Test activity\",\"cat\":\"sightseeing\",\"cost\":0,\"tip\":\"This is a test.\",\"kids\":false}]}],\"omitted\":[{\"time\":\"Evening\",\"title\":\"Test backup\",\"cat\":\"relaxing\",\"cost\":0,\"tip\":\"Test.\"},{\"time\":\"Morning\",\"title\":\"Test 2\",\"cat\":\"dining\",\"cost\":0,\"tip\":\"Test.\"},{\"time\":\"Afternoon\",\"title\":\"Test 3\",\"cat\":\"adventure\",\"cost\":0,\"tip\":\"Test.\"}]}`\n  : `Plan a ${days}-day ${persona} trip to ${dest}.\\nGroup: ${adults} adult(s), ${kids} kid(s). Dates: ${dates}. Must-haves: ${must}.`;\n\nreturn [{ json: {\n  geminiPayload: JSON.stringify({\n    contents: [{ role: 'user', parts: [{ text: userMsg }] }],\n    systemInstruction: { parts: [{ text: SYSTEM }] },\n    generationConfig: {\n      responseMimeType: 'application/json',\n      maxOutputTokens: 4096,\n      temperature: 0.7\n    }\n  })\n}}];"
+      },
+      "id": "n2",
+      "name": "Build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [420, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=YOUR_GEMINI_API_KEY_HERE",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "specifyBody": "string",
+        "body": "={{ $json.geminiPayload }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "json"
+            }
+          }
+        }
+      },
+      "id": "n4",
+      "name": "Call Gemini API",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "const r = $input.item.json;\n\nif (!r.candidates || !r.candidates.length) {\n  return [{ json: { error: true, message: 'Gemini returned no candidates. Check your API key. Response: ' + JSON.stringify(r).slice(0,300) } }];\n}\n\nconst text = r.candidates[0]?.content?.parts?.[0]?.text;\nif (!text) return [{ json: { error: true, message: 'Gemini returned empty text.' } }];\n\nlet trip;\ntry {\n  trip = JSON.parse(text.replace(/^```json\\s*/i,'').replace(/```\\s*$/i,'').trim());\n} catch(e) {\n  return [{ json: { error: true, message: 'Gemini output not valid JSON: ' + text.slice(0,200) } }];\n}\n\nif (!trip.plan || !Array.isArray(trip.plan)) {\n  return [{ json: { error: true, message: 'Missing plan array: ' + JSON.stringify(trip).slice(0,200) } }];\n}\nif (!Array.isArray(trip.omitted)) trip.omitted = [];\n\nconst validCats = new Set(['dining','cruise','adventure','relaxing','sightseeing']);\nfor (const day of trip.plan) {\n  for (const item of (day.items||[])) {\n    if (!validCats.has(item.cat)) item.cat = 'sightseeing';\n    if (typeof item.cost !== 'number') item.cost = 0;\n    if (typeof item.kids !== 'boolean') item.kids = false;\n    if (!item.tip) item.tip = 'A wonderful experience.';\n  }\n}\nif (trip.omitted.length < 3) {\n  while (trip.omitted.length < 3) trip.omitted.push({ time: 'Evening', title: 'Local evening activity', cat: 'relaxing', cost: 15, tip: 'Ask locals for recommendations.' });\n}\ntrip.id = trip.id || 'custom';\nreturn [{ json: trip }];"
+      },
+      "id": "n5",
+      "name": "Parse response",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [900, 300]
+    }
+  ],
+  "connections": {
+    "Receive trip request": {
+      "main": [[ { "node": "Build prompt",    "type": "main", "index": 0 } ]]
+    },
+    "Build prompt": {
+      "main": [[ { "node": "Call Gemini API", "type": "main", "index": 0 } ]]
+    },
+    "Call Gemini API": {
+      "main": [[ { "node": "Parse response",  "type": "main", "index": 0 } ]]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "tags": []
+}

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark" data-accent="reef">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Itinera — AI Travel Planner (Print)</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+
+  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js"
+    integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js"
+    integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm"
+    crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"
+    integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y"
+    crossorigin="anonymous"></script>
+
+  <style>
+    /* ── Print page layout ── */
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    body {
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    /* Freeze all animations at their end state */
+    @media print {
+      *, *::before, *::after {
+        animation-delay: -99s !important;
+        animation-duration: .001s !important;
+        animation-iteration-count: 1 !important;
+        animation-fill-mode: both !important;
+        animation-play-state: running !important;
+        transition-duration: 0s !important;
+      }
+
+      /* Static header for print */
+      .print-header { position: static !important; }
+
+      /* Section page breaks */
+      .print-section { break-before: page; break-inside: auto; }
+      .print-section:first-child { break-before: avoid; }
+
+      /* Don't split cards / activity rows across pages */
+      .card { break-inside: avoid; }
+
+      /* Collapse typeahead / dropdowns */
+      .print-hide { display: none !important; }
+
+      /* Shrink padding for tighter print */
+      main > div { padding-bottom: 24px !important; }
+
+      /* Sidebar doesn't need sticky in print */
+      [style*="position: sticky"] { position: static !important; top: auto !important; }
+
+      /* Expand all activity card tips visually */
+      .activity-tip { max-height: 120px !important; }
+
+      /* Currency switcher overlay not needed */
+      .currency-overlay { display: none !important; }
+    }
+
+    /* Screen only: visual separator between sections */
+    @media screen {
+      .print-section { border-top: 3px solid rgb(var(--accent)); margin-top: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel" src="tweaks-panel.jsx"></script>
+  <script type="text/babel" src="data.jsx"></script>
+  <script type="text/babel" src="ui.jsx"></script>
+  <script type="text/babel" src="Landing.jsx"></script>
+  <script type="text/babel" src="TripForm.jsx"></script>
+  <script type="text/babel" src="Itinerary.jsx"></script>
+
+  <script type="text/babel">
+    /* ── Minimal print header (no interactive state) ── */
+    function PrintHeader({ label }) {
+      return (
+        <header className="print-header glass"
+          style={{ borderBottom: "1px solid rgb(var(--border))", padding: "0 24px",
+            display: "flex", alignItems: "center", height: 56, gap: 12 }}>
+          <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
+            <rect width="32" height="32" rx="10" fill="url(#plg)" />
+            <path d="M16 8l3 8-3 3-3-3 3-8Z" fill="white" opacity=".95" />
+            <path d="M16 24l-3-8 3-3 3 3-3 8Z" fill="white" opacity=".55" />
+            <path d="M8 16l8-3 3 3-3 3-8-3Z" fill="white" opacity=".75" />
+            <path d="M24 16l-8 3-3-3 3-3 8 3Z" fill="white" opacity=".4" />
+            <defs>
+              <linearGradient id="plg" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+                <stop stopColor="rgb(13,178,162)" />
+                <stop offset="1" stopColor="rgb(255,107,94)" />
+              </linearGradient>
+            </defs>
+          </svg>
+          <span style={{ fontWeight: 800, fontSize: 18, letterSpacing: "-.03em" }}>
+            Itinera
+          </span>
+          {label && (
+            <span style={{ fontSize: 13, fontWeight: 600, color: "rgb(var(--muted))",
+              marginLeft: 8, padding: "4px 10px", borderRadius: 8,
+              background: "rgb(var(--surface-2))", border: "1px solid rgb(var(--border))" }}>
+              {label}
+            </span>
+          )}
+          <div style={{ flex: 1 }} />
+          <span style={{ fontSize: 12, color: "rgb(var(--faint))" }}>itinera.app</span>
+        </header>
+      );
+    }
+
+    /* ── Stripped-down static form for print ── */
+    function PrintForm() {
+      const PERSONA_META_PRINT = [
+        { id: "Budget",     icon: "coins",  color: "#16a34a", desc: "Street food, hostels, smart choices" },
+        { id: "Mid-range",  icon: "star",   color: "#2563eb", desc: "Comfy stays, curated dining", selected: true },
+        { id: "Luxurious",  icon: "sparkle",color: "#9333ea", desc: "5-star, private guides, the best" },
+        { id: "Adventure",  icon: "shell",  color: "#ea580c", desc: "Hikes, water sports, wild stays" },
+      ];
+      return (
+        <div style={{ maxWidth: 780, margin: "0 auto", padding: "28px 24px 40px" }}>
+          <h2 style={{ fontSize: 28, fontWeight: 800, letterSpacing: "-.03em", margin: "0 0 6px" }}>Plan your trip</h2>
+          <p style={{ fontSize: 14.5, color: "rgb(var(--muted))", margin: "0 0 32px" }}>Fill in the details — our AI handles the rest.</p>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+            {/* Destination */}
+            <div>
+              <label style={{ fontWeight: 700, fontSize: 14, display: "block", marginBottom: 10 }}>Where to?</label>
+              <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "13px 16px",
+                borderRadius: 16, border: "1.5px solid rgb(var(--accent))", background: "rgb(var(--surface))" }}>
+                <Icon name="globe" size={18} style={{ color: "rgb(var(--accent))" }} />
+                <span style={{ fontWeight: 600, color: "rgb(var(--accent))" }}>Kyoto, Japan</span>
+              </div>
+            </div>
+
+            <div style={{ height: 1, background: "rgb(var(--border))" }} />
+
+            {/* Dates */}
+            <div>
+              <label style={{ fontWeight: 700, fontSize: 14, display: "block", marginBottom: 10 }}>When?</label>
+              <div style={{ display: "flex", gap: 10 }}>
+                {["Jul 10, 2026", "Jul 15, 2026"].map((d, i) => (
+                  <div key={i} style={{ flex: 1, padding: "11px 14px", borderRadius: 12,
+                    border: "1.5px solid rgb(var(--accent))", background: "rgb(var(--surface))",
+                    fontWeight: 700, fontSize: 14, color: "rgb(var(--accent))" }}>{d}</div>
+                ))}
+              </div>
+              <p style={{ margin: "8px 0 0", fontSize: 12.5, color: "rgb(var(--muted))" }}>5 nights selected</p>
+            </div>
+
+            <div style={{ height: 1, background: "rgb(var(--border))" }} />
+
+            {/* Demographics */}
+            <div>
+              <label style={{ fontWeight: 700, fontSize: 14, display: "block", marginBottom: 10 }}>Who's coming?</label>
+              <div className="card" style={{ padding: "0 20px" }}>
+                {[
+                  { label: "Adults (Male)",   val: 1 },
+                  { label: "Adults (Female)", val: 1 },
+                  { label: "Kids",            val: 0 },
+                ].map((r, i) => (
+                  <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
+                    padding: "14px 0", borderBottom: i < 2 ? "1px solid rgb(var(--border))" : "none" }}>
+                    <span style={{ fontWeight: 600, fontSize: 14 }}>{r.label}</span>
+                    <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+                      <span style={{ width: 34, height: 34, borderRadius: 12, border: "1px solid rgb(var(--border))",
+                        display: "grid", placeItems: "center", background: "rgb(var(--surface-2))" }}>
+                        <Icon name="minus" size={17} stroke={2.4} style={{ color: "rgb(var(--faint))" }} />
+                      </span>
+                      <span style={{ fontWeight: 800, fontSize: 18, minWidth: 20, textAlign: "center",
+                        color: r.val > 0 ? "rgb(var(--accent))" : "rgb(var(--faint))" }}>{r.val}</span>
+                      <span style={{ width: 34, height: 34, borderRadius: 12, border: "1px solid rgb(var(--border))",
+                        display: "grid", placeItems: "center", background: "rgb(var(--surface-2))" }}>
+                        <Icon name="plus" size={17} stroke={2.4} />
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div style={{ height: 1, background: "rgb(var(--border))" }} />
+
+            {/* Persona */}
+            <div>
+              <label style={{ fontWeight: 700, fontSize: 14, display: "block", marginBottom: 10 }}>Travel persona</label>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+                {PERSONA_META_PRINT.map(p => {
+                  const rgb = window.hexRgb(p.color);
+                  return (
+                    <div key={p.id} className="card"
+                      style={{ display: "flex", alignItems: "center", gap: 12, padding: "13px 15px",
+                        border: `2px solid ${p.selected ? p.color : "rgb(var(--border))"}`,
+                        background: p.selected ? `rgb(${rgb}/.10)` : "rgb(var(--surface))" }}>
+                      <span style={{ width: 38, height: 38, borderRadius: 11, display: "grid", placeItems: "center",
+                        background: `rgb(${rgb}/.18)`, color: p.color, flexShrink: 0 }}>
+                        <Icon name={p.icon} size={19} stroke={2} />
+                      </span>
+                      <div>
+                        <div style={{ fontWeight: 700, fontSize: 13.5, color: p.selected ? p.color : "rgb(var(--text))" }}>{p.id}</div>
+                        <div style={{ fontSize: 12, color: "rgb(var(--muted))", marginTop: 2 }}>{p.desc}</div>
+                      </div>
+                      {p.selected && <Icon name="check" size={17} stroke={2.5} style={{ marginLeft: "auto", color: p.color }} />}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+
+            <div style={{ height: 1, background: "rgb(var(--border))" }} />
+
+            {/* Must-haves */}
+            <div>
+              <label style={{ fontWeight: 700, fontSize: 14, display: "block", marginBottom: 10 }}>Must-haves</label>
+              <div style={{ padding: "13px 16px", borderRadius: 16, border: "1.5px solid rgb(var(--border))",
+                background: "rgb(var(--surface))", fontSize: 14, color: "rgb(var(--muted))", lineHeight: 1.6, fontStyle: "italic" }}>
+                "A traditional tea ceremony, the bamboo forest at dawn, and at least one kaiseki dinner."
+              </div>
+            </div>
+
+            {/* CTA */}
+            <button className="btn-accent" style={{ padding: "17px 0", borderRadius: 16, fontSize: 16, fontWeight: 800,
+              display: "flex", alignItems: "center", justifyContent: "center", gap: 10, cursor: "default" }}>
+              <Icon name="wand" size={18} /> Generate Itinerary
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    /* ── Main print app ── */
+    function PrintApp() {
+      const kyoto = window.TRIPS[0];
+      const form = { destination: "Kyoto, Japan", startDate: new Date(2026, 6, 10), kids: 0 };
+
+      React.useEffect(() => {
+        document.fonts.ready.then(() => {
+          setTimeout(() => window.print(), 800);
+        });
+      }, []);
+
+      return (
+        <div style={{ minHeight: "100vh" }}>
+
+          {/* ── SECTION 1: Landing ── */}
+          <div>
+            <PrintHeader label="Landing — Featured wall" />
+            <Landing onOpenTrip={() => {}} onPlan={() => {}} cur="USD" />
+          </div>
+
+          {/* ── SECTION 2: Form ── */}
+          <div className="print-section">
+            <PrintHeader label="Screen 2 — Trip input form" />
+            <PrintForm />
+          </div>
+
+          {/* ── SECTION 3: Itinerary ── */}
+          <div className="print-section">
+            <PrintHeader label="Screen 3 — Itinerary view (Kyoto)" />
+            <Itinerary trip={kyoto} currency="USD" setCurrency={() => {}}
+              pillStyle="soft" form={form} onBack={() => {}} />
+          </div>
+
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<PrintApp />);
+  </script>
+</body>
+</html>

@@ -1,0 +1,117 @@
+{
+  "name": "Itinera — AI Travel Planner",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "99bbaeaf-ab85-4f65-8861-f02c43a664d2",
+        "responseMode": "responseNode",
+        "options": {
+          "allowedOrigins": "*"
+        }
+      },
+      "id": "b9a1f2e3-0001-4001-8001-aabbccddeeff",
+      "name": "Receive trip request",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [240, 300],
+      "webhookId": "99bbaeaf-ab85-4f65-8861-f02c43a664d2"
+    },
+    {
+      "parameters": {
+        "jsCode": "// ─────────────────────────────────────────────────────────────\n// Parse the incoming request body.\n// The app sends Content-Type: text/plain (to avoid CORS preflight),\n// so n8n delivers the raw JSON string in .body — we JSON.parse it.\n// ─────────────────────────────────────────────────────────────\nconst raw = $('Receive trip request').item.json.body;\n\n// Handle: already parsed object, plain text string, or missing\nlet body;\nif (typeof raw === 'string') {\n  try { body = JSON.parse(raw); } catch(e) { body = {}; }\n} else if (raw && typeof raw === 'object') {\n  body = raw;\n} else {\n  body = {};\n}\n\n// ── Respond immediately to pings (used by Test Connection button) ──\nif (body._ping) {\n  return [{ json: { pong: true, status: 'ok', message: 'Itinera n8n workflow is live.' } }];\n}\n\n// ─────────────────────────────────────────────────────────────\n// Build the OpenAI prompt\n// ─────────────────────────────────────────────────────────────\nconst SYSTEM_PROMPT = `You are an expert travel planner. Given trip inputs, return ONLY a single valid JSON object — no markdown fences, no prose, no comments, just raw JSON.\n\nReturn EXACTLY this structure:\n{\n  \"id\": \"custom\",\n  \"city\": \"<destination city name>\",\n  \"country\": \"<country name>\",\n  \"persona\": \"<same as input persona>\",\n  \"days\": <integer>,\n  \"tagline\": \"<one evocative sentence about this trip>\",\n  \"plan\": [\n    {\n      \"day\": <integer starting at 1>,\n      \"title\": \"<poetic day title e.g. Temples & Tea>\",\n      \"items\": [\n        {\n          \"time\": \"<e.g. 9:00 AM>\",\n          \"title\": \"<activity name using real place names>\",\n          \"cat\": \"<one of: dining | cruise | adventure | relaxing | sightseeing>\",\n          \"cost\": <integer USD per person for this activity only — 0 if free>,\n          \"tip\": \"<two insider sentences: practical advice, local knowledge. Non-obvious, specific>\",\n          \"kids\": <true if suitable for children, false otherwise>\n        }\n      ]\n    }\n  ],\n  \"omitted\": [\n    {\n      \"time\": \"<e.g. Evening>\",\n      \"title\": \"<great activity that didn't fit the schedule>\",\n      \"cat\": \"<valid category>\",\n      \"cost\": <integer USD>,\n      \"tip\": \"<brief practical tip>\"\n    }\n  ]\n}\n\nRules:\n- 3 to 5 items per day, vary categories\n- Exactly 3 items in omitted\n- Use real place names and authentic local recommendations\n- Costs = activity entry/experience per person only (no flights, no hotels)\n- Tips must be specific and non-obvious\n- Persona: Budget = cheap/free, Mid-range = mid-tier, Luxurious = premium, Adventure = active/outdoors`;\n\nconst days = body.days || 3;\nconst persona = body.persona || 'Mid-range';\nconst destination = body.destination || 'Paris';\nconst adults = (body.adults_m || 0) + (body.adults_f || 0) || 2;\nconst kids = body.kids || 0;\nconst mustHave = body.mustHave || 'none specified';\nconst start = body.startDate || 'flexible';\nconst end = body.endDate || 'flexible';\n\nconst userMessage = `Plan a ${days}-day ${persona} trip to ${destination}.\\nGroup: ${adults} adult(s), ${kids} kid(s).\\nDates: ${start} to ${end}.\\nMust-haves: ${mustHave}.`;\n\nreturn [{\n  json: {\n    _originalBody: body,\n    model: 'gpt-4o-mini',\n    response_format: { type: 'json_object' },\n    max_tokens: 4096,\n    messages: [\n      { role: 'system', content: SYSTEM_PROMPT },\n      { role: 'user',   content: userMessage }\n    ]\n  }\n}];"
+      },
+      "id": "b9a1f2e3-0002-4002-8002-aabbccddeeff",
+      "name": "Parse body + build prompt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [480, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ── Short-circuit: return pong immediately for _ping requests ──\nconst body = $input.item.json;\nif (body._originalBody && body._originalBody._ping) {\n  return [{ json: { pong: true, status: 'ok' } }];\n}\n// Otherwise pass through for the HTTP Request node\nreturn [{ json: body }];"
+      },
+      "id": "b9a1f2e3-0006-4006-8006-aabbccddeeff",
+      "name": "Ping check",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [720, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.openai.com/v1/chat/completions",
+        "authentication": "predefinedCredentialType",
+        "nodeCredentialType": "openAiApi",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={\"model\": {{ JSON.stringify($json.model) }}, \"response_format\": {{ JSON.stringify($json.response_format) }}, \"max_tokens\": {{ $json.max_tokens }}, \"messages\": {{ JSON.stringify($json.messages) }}}",
+        "options": {}
+      },
+      "id": "b9a1f2e3-0003-4003-8003-aabbccddeeff",
+      "name": "Call OpenAI",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [960, 300],
+      "credentials": {
+        "openAiApi": {
+          "id": "1",
+          "name": "OpenAI account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "jsCode": "// ─────────────────────────────────────────────────────────────\n// Parse the OpenAI response and return a clean trip object.\n// ─────────────────────────────────────────────────────────────\nconst response = $input.item.json;\n\n// Handle ping short-circuit\nif (response.pong) return [{ json: response }];\n\nif (!response.choices || response.choices.length === 0) {\n  throw new Error('OpenAI returned no choices. Response: ' + JSON.stringify(response).slice(0, 300));\n}\n\nconst content = response.choices[0].message.content;\nlet trip;\ntry {\n  trip = JSON.parse(content);\n} catch (e) {\n  // Strip markdown fences if present\n  const cleaned = content.replace(/^```json\\s*/i, '').replace(/```\\s*$/i, '').trim();\n  try {\n    trip = JSON.parse(cleaned);\n  } catch (e2) {\n    throw new Error('Failed to parse AI JSON. Content: ' + content.slice(0, 300));\n  }\n}\n\n// Validate and sanitise\nif (!trip.plan || !Array.isArray(trip.plan) || trip.plan.length === 0) {\n  throw new Error(\"AI response missing 'plan' array. Got: \" + JSON.stringify(trip).slice(0, 300));\n}\nif (!Array.isArray(trip.omitted)) trip.omitted = [];\n\nconst validCats = new Set(['dining','cruise','adventure','relaxing','sightseeing']);\nfor (const day of trip.plan) {\n  for (const item of (day.items || [])) {\n    if (!validCats.has(item.cat)) item.cat = 'sightseeing';\n    if (typeof item.cost !== 'number') item.cost = 0;\n    if (typeof item.kids !== 'boolean') item.kids = false;\n    if (!item.tip) item.tip = 'A wonderful experience worth your time.';\n  }\n}\n\ntrip.id = trip.id || 'custom';\n\nreturn [{ json: trip }];"
+      },
+      "id": "b9a1f2e3-0004-4004-8004-aabbccddeeff",
+      "name": "Parse + validate",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [1200, 300]
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "responseCode": 200,
+          "responseHeaders": {
+            "entries": [
+              { "name": "Access-Control-Allow-Origin",  "value": "*" },
+              { "name": "Access-Control-Allow-Methods", "value": "POST, OPTIONS" },
+              { "name": "Access-Control-Allow-Headers", "value": "Content-Type, Accept" },
+              { "name": "Content-Type",                 "value": "application/json" }
+            ]
+          }
+        }
+      },
+      "id": "b9a1f2e3-0005-4005-8005-aabbccddeeff",
+      "name": "Respond to browser",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [1440, 300]
+    }
+  ],
+  "connections": {
+    "Receive trip request": {
+      "main": [[ { "node": "Parse body + build prompt", "type": "main", "index": 0 } ]]
+    },
+    "Parse body + build prompt": {
+      "main": [[ { "node": "Ping check", "type": "main", "index": 0 } ]]
+    },
+    "Ping check": {
+      "main": [[ { "node": "Call OpenAI", "type": "main", "index": 0 } ]]
+    },
+    "Call OpenAI": {
+      "main": [[ { "node": "Parse + validate", "type": "main", "index": 0 } ]]
+    },
+    "Parse + validate": {
+      "main": [[ { "node": "Respond to browser", "type": "main", "index": 0 } ]]
+    }
+  },
+  "pinData": {},
+  "settings": { "executionOrder": "v1" },
+  "active": false,
+  "tags": []
+}
